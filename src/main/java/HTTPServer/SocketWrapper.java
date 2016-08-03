@@ -1,20 +1,18 @@
 package HTTPServer;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * Created by jphoenix on 8/1/16.
  */
-public class SocketWrapper implements Connectable {
+public class SocketWrapper implements Connectible {
 
     @Override
-    public InputStream getRequest() {
+    public String getRequest() {
         return null;
     }
 
     @Override
-    public OutputStream giveResponse() {
-        return null;
+    public void sendResponse(String response) {
     }
 }

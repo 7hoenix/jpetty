@@ -13,7 +13,7 @@ public class ServerSocketWrapper implements ServerConnectable {
         serverSocket = new ServerSocket(5000);
     }
 
-    public Connectable listenForRequest() throws IOException {
-        return (Connectable) serverSocket.accept();
+    public Connectible listenForRequest() throws IOException {
+        return (Connectible) serverSocket.accept();
     }
 }
