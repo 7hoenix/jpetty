@@ -18,13 +18,13 @@ public class Server {
     }
 
     public void run() throws IOException {
-        Connectable socketWrapper = serverSocket.listenForRequest();
-        InputStream request = socketWrapper.getRequest();
-        String response = handleRequest(request);
-        socketWrapper.giveResponse();
+        Connectible socketWrapper = serverSocket.listenForRequest();
+//        InputStream request = socketWrapper.getRequest();
+//        String response = handleRequest(request);
+//        socketWrapper.sendResponse(response);
     }
 
-    public String handleRequest(InputStream request) {
+    public String handleRequest(String request) {
         return "HTTP/1.1 200 OK\nUser-Agent: ServerCake\nContent-Type: text/html\n\n" +
                 "<html><body><h1>Hello world</h1></body></html>";
     }
