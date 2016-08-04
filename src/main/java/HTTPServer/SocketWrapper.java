@@ -9,7 +9,7 @@ public class SocketWrapper implements Connectible {
 
     @Override
     public String getRequest() {
-        return null;
+        return "GET /";
     }
 
     @Override
