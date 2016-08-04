@@ -19,7 +19,7 @@ public class Server {
 
     public void run() throws IOException {
         Connectible socketWrapper = serverSocket.listenForRequest();
-//        InputStream request = socketWrapper.getRequest();
+//        InputStream request = socketWrapper.receiveRequest();
 //        String response = handleRequest(request);
 //        socketWrapper.sendResponse(response);
     }
