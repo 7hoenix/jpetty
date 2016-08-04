@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 /**
  * Created by jphoenix on 7/28/16.
  */
-public class HttpServerTest extends TestCase {
+public class HTTPServerTest extends TestCase {
     public void testItCanListenForAClient() throws Exception {
         MockServerSocket serverSocket = new MockServerSocket();
         Server server = new Server(serverSocket);
