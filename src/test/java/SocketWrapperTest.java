@@ -1,37 +1,23 @@
 import HTTPServer.SocketWrapper;
+import com.oracle.tools.packager.IOUtils;
 import junit.framework.TestCase;
+import sun.nio.ch.IOUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by jphoenix on 8/2/16.
  */
 public class SocketWrapperTest extends TestCase {
-    public void testItImplementsGetRequest() throws Exception {
-        SocketWrapper socket = new SocketWrapper();
+    public void testItTakesAnInputStreamAndReturnsAString() throws Exception {
+        String arbitaryString = "hey there cake 1234";
+        InputStream stream = new ByteArrayInputStream(arbitaryString.getBytes(StandardCharsets.UTF_8));
+        SocketWrapper socket = new SocketWrapper(stream);
 
-        String request = socket.getRequest();
+        String request = socket.read();
 
-        assertEquals("GET /", request);
-    }
-
-    public void testItImplementsSendResponse() throws Exception {
-//        SocketWrapper socket = new SocketWrapper();
-//
-//        socket.sendResponse("<html>Hello world</html>");
-
-        Socket socket = new Socket("localhost", 8383);
-
-        String response = "GET /";
-        byte[] bytes = response.getBytes();
-
-        try (OutputStream out = socket.getOutputStream()) {
-            out.write(bytes);
-            System.out.println("hi");
-        }
+        assertEquals("hey there cake 1234", request);
     }
 }
