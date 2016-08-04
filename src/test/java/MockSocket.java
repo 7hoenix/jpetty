@@ -13,12 +13,16 @@ public class MockSocket implements Connectible {
         input = in;
     }
 
-    public String getRequest() {
+    public String read() {
         return input;
     }
 
-    public void sendResponse(String response) {
+    public void write(String response) {
         output = response;
+    }
+
+    public void close() {
+
     }
 
     public String getResponseValue() {
