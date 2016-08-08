@@ -1,4 +1,6 @@
+import HTTPServer.Connectible;
 import HTTPServer.Server;
+import HTTPServer.ServerConnectible;
 import junit.framework.TestCase;
 
 /**
@@ -15,16 +17,16 @@ public class HTTPServerTest extends TestCase {
     }
 
     public void testItSendsBackTheProperResponse() throws Exception {
-        String request = "GET / HTTP/1.1\nUser-Agent: Cake\nAccept-Language: en-us\n";
-        String properResponse = "HTTP/1.1 200 OK\nUser-Agent: ServerCake\nContent-Type: text/html\n\n" +
-                "<html><body><h1>Hello world</h1></body></html>";
+        String request = "GET / HTTP/1.1\r\nUser-Agent: Cake\r\nAccept-Language: en-us\r\n";
+        String properResponse = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
+                "<!DOCTYPE html><html lang=\"en\"><body><h1>Hello World</h1></body></html>";
         MockSocket socket = new MockSocket(request);
-        MockServerSocket serverSocket = new MockServerSocket(socket);
+        ServerConnectible serverSocket = new MockServerSocket(socket);
         Server server = new Server(serverSocket);
 
         server.run();
 
-        String response = socket.getResponseValue();
+        String response = socket.displayValue();
         assertEquals(properResponse, response);
     }
 }
