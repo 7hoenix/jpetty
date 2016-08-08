@@ -1,31 +1,32 @@
-import Server.SocketDriver;
-import Server.Server;
+import HTTPServer.Connectible;
+import HTTPServer.Server;
+import HTTPServer.ServerConnectible;
 import junit.framework.TestCase;
 
 /**
  * Created by jphoenix on 7/28/16.
  */
-public class HttpServerTest extends TestCase {
-    public void testItCanAcceptARequest() throws Exception {
-        MockSocket socket = new MockSocket();
-        Server s = new Server(socket);
+public class HTTPServerTest extends TestCase {
+    public void testItCanListenForAClient() throws Exception {
+        MockServerSocket serverSocket = new MockServerSocket();
+        Server server = new Server(serverSocket);
 
-        s.run();
+        server.run();
 
-        assertEquals(1, (int) socket.inputCalls);
-        assertEquals(1, (int) socket.outputCalls);
+        assertEquals(true, serverSocket.listening);
     }
 
-    private class MockSocket implements SocketDriver {
-        private Integer inputCalls = 0;
-        private Integer outputCalls = 0;
+    public void testItSendsBackTheProperResponse() throws Exception {
+        String request = "GET / HTTP/1.1\r\nUser-Agent: Cake\r\nAccept-Language: en-us\r\n";
+        String properResponse = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
+                "<!DOCTYPE html><html lang=\"en\"><body><h1>Hello World</h1></body></html>";
+        MockSocket socket = new MockSocket(request);
+        ServerConnectible serverSocket = new MockServerSocket(socket);
+        Server server = new Server(serverSocket);
 
-        public void getInputStream() {
-            inputCalls += 1;
-        }
+        server.run();
 
-        public void getOutputStream() {
-            outputCalls += 1;
-                                            }
+        String response = socket.displayValue();
+        assertEquals(properResponse, response);
     }
 }
