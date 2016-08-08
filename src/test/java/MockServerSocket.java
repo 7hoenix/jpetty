@@ -20,7 +20,7 @@ public class MockServerSocket implements ServerConnectible {
     }
 
     @Override
-    public Connectible listen()
+    public Connectible accept()
     {
         listening = true;
         return socket;
