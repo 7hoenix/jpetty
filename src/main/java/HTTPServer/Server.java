@@ -1,31 +1,31 @@
 package HTTPServer;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.ServerSocket;
 
 /**
  * Created by jphoenix on 8/1/16.
  */
 public class Server {
-    private ServerConnectable serverSocket;
+    private ServerConnectible serverSocket;
 
-    public Server(ServerConnectable sSocket) {
-        serverSocket = sSocket;
+    public static void main(String[] args) throws IOException {
+        ServerConnectible serverSocket = new ServerSocketWrapper();
+        Server server = new Server(serverSocket);
+        server.run();
     }
 
-    public Server() throws IOException {
-        serverSocket = new ServerSocketWrapper();
+    public Server(ServerConnectible serverSocket)
+    {
+        this.serverSocket = serverSocket;
     }
 
     public void run() throws IOException {
-        Connectible socketWrapper = serverSocket.listenForRequest();
-//        InputStream request = socketWrapper.receiveRequest();
-//        String response = handleRequest(request);
-//        socketWrapper.sendResponse(response);
-    }
-
-    public String handleRequest(String request) {
-        return "HTTP/1.1 200 OK\nUser-Agent: ServerCake\nContent-Type: text/html\n\n" +
-                "<html><body><h1>Hello world</h1></body></html>";
+        Connectible socket = serverSocket.listen();
+        System.out.println("connection accepted");
+        String request = socket.read();
+        HTTPRequestHandler handler = new HTTPRequestHandler();
+        String response = handler.handle(request);
+        socket.write(response);
     }
 }
