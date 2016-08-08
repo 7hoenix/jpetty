@@ -1,4 +1,3 @@
-import HTTPServer.Connectible;
 import HTTPServer.Server;
 import HTTPServer.ServerConnectible;
 import junit.framework.TestCase;
