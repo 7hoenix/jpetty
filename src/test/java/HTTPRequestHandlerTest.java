@@ -11,8 +11,8 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         String response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\rContent-Type: text/html\r\r" +
-                "<html><body><h1>Hello world</h1></body></html>", response);
+        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
+                "<!DOCTYPE html><html lang=\"en\"><body><h1>Hello World</h1></body></html>", response);
     }
 
     public void testItHandlesNotValid() throws Exception {
@@ -21,6 +21,6 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         String response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 404 NOT FOUND\r\r", response);
+        assertEquals("HTTP/1.1 404 NOT FOUND\r\n\r\n", response);
     }
 }
