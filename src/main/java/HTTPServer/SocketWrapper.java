@@ -7,6 +7,7 @@ import java.net.Socket;
  * Created by jphoenix on 8/1/16.
  */
 public class SocketWrapper implements Connectible {
+    private Socket socket;
     private InputStream inputStream;
     private OutputStream outputStream;
 
@@ -17,12 +18,7 @@ public class SocketWrapper implements Connectible {
     }
 
     public SocketWrapper(Socket socket) throws IOException {
-        this.inputStream = socket.getInputStream();
-        this.outputStream = socket.getOutputStream();
-    }
-
-    public SocketWrapper() throws IOException {
-        Socket socket = new Socket("localhost", 5000);
+        this.socket = socket;
         this.inputStream = socket.getInputStream();
         this.outputStream = socket.getOutputStream();
     }
@@ -36,12 +32,16 @@ public class SocketWrapper implements Connectible {
     @Override
     public void write(String response) throws IOException {
         outputStream.write(response.getBytes());
-        outputStream.close();
     }
 
+    @Override
     public void close()
     {
-
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private String convertStreamToString(InputStream input) throws IOException {
