@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class HTTPServerTest extends TestCase {
     public void testItCanListenForAClient() throws Exception {
         MockServerSocket serverSocket = new MockServerSocket();
-        Server server = new Server(serverSocket);
+        Server server = new Server(serverSocket, new String[0]);
 
         server.run();
 
@@ -21,7 +21,7 @@ public class HTTPServerTest extends TestCase {
                 "<!DOCTYPE html><html lang=\"en\"><body><h1>Hello World</h1></body></html>";
         MockSocket socket = new MockSocket(request);
         ServerConnectible serverSocket = new MockServerSocket(socket);
-        Server server = new Server(serverSocket);
+        Server server = new Server(serverSocket, new String[0]);
 
         server.run();
 
