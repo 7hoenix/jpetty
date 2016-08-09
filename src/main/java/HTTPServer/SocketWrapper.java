@@ -51,6 +51,7 @@ public class SocketWrapper implements Connectible {
         while ((line = reader.readLine()) != null) {
             out.append(line);
             if (line.isEmpty()) break;
+            out.append("\r\n");
         }
         return out.toString();
     }
