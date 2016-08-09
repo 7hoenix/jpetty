@@ -17,7 +17,7 @@ public class SocketWrapperTest extends TestCase {
 
         String request = socket.read();
 
-        assertEquals("hey there cake 1234", request);
+        assertEquals("hey there cake 1234\r\n", request);
     }
 
     public void testWriteTakesAStringAndWritesToAnOutputStream() throws Exception {
