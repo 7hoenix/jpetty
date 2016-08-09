@@ -1,25 +1,44 @@
 package HTTPServer;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by jphoenix on 8/4/16.
  */
 public class RequestParser {
-    private static final String LINE = "line";
-    private static final String HEADERS = "headers";
-    private static final String BODY = "body";
+    public HashMap requestMap;
 
-    public Map parse(String request) {
-        HashMap requestMap = new HashMap();
-        String[] splitForBody = request.split("\r\r");
-        if (splitForBody.length > 1) {
-            requestMap.put(BODY, splitForBody[1]);
+    private static final String STATUS = "status";
+    private static final String LINE = "line";
+    private static final String ACTION = "action";
+    private static final String PATH = "path";
+    private static final String SCHEME = "scheme";
+
+    public RequestParser() {
+        this.requestMap = new HashMap();
+    }
+
+    public HashMap parse(String request) {
+        if (requestIsValid(request)) {
+            parseLine(request);
+        } else {
+            requestMap.put(STATUS, "Request is invalid");
         }
-        String[] sections = splitForBody[0].split("\r");
-        requestMap.put(LINE, sections[0]);
-        requestMap.put(HEADERS, sections[1]);
         return requestMap;
+    }
+
+    private boolean requestIsValid(String request) {
+        String[] lines = request.split("\r\n");
+        String[] line = lines[0].split(" ");
+        return line.length == 3;
+    }
+
+    private void parseLine(String request) {
+        String[] lines = request.split("\r\n");
+        String[] line = lines[0].split(" ");
+        requestMap.put(LINE, lines[0]);
+        requestMap.put(ACTION, line[0]);
+        requestMap.put(PATH, line[1]);
+        requestMap.put(SCHEME, line[2]);
     }
 }

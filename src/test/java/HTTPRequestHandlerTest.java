@@ -6,7 +6,7 @@ import junit.framework.TestCase;
  */
 public class HTTPRequestHandlerTest extends TestCase {
     public void testItHandlesASimpleRequest() throws Exception {
-        String request = "GET /";
+        String request = "GET / HTTP/1.1";
         HTTPRequestHandler handler = new HTTPRequestHandler();
 
         String response = handler.handle(request);
@@ -16,7 +16,7 @@ public class HTTPRequestHandlerTest extends TestCase {
     }
 
     public void testItHandlesNotValid() throws Exception {
-        String request = "GET /cake";
+        String request = "GET /cake HTTP/1.1";
         HTTPRequestHandler handler = new HTTPRequestHandler();
 
         String response = handler.handle(request);
