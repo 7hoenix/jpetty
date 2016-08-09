@@ -16,7 +16,7 @@ public class MockServerSocket implements ServerConnectible {
 
     public MockServerSocket()
     {
-        this.socket = new MockSocket("GET /");
+        this.socket = new MockSocket("GET / HTTP/1.1");
     }
 
     @Override
