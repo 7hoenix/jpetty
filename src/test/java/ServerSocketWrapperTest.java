@@ -1,5 +1,3 @@
-import HTTPServer.Connectible;
-import HTTPServer.ServerConnectible;
 import HTTPServer.ServerSocketWrapper;
 import junit.framework.TestCase;
 
@@ -8,11 +6,12 @@ import junit.framework.TestCase;
  */
 public class ServerSocketWrapperTest extends TestCase {
     public void testItReturnsAConnectible() throws Exception {
-        Connectible socket = new MockSocket("cake");
-        ServerConnectible serverWrapper = new ServerSocketWrapper(socket);
+        MockSocket clientSocket = new MockSocket("cake");
+        new Thread(clientSocket).start();
+        ServerSocketWrapper wrappedServerSocket = new ServerSocketWrapper(-1);
 
-        Connectible newSocket = serverWrapper.accept();
+        wrappedServerSocket.accept();
 
-        assertEquals(newSocket, socket);
+        assertEquals(0, (int) wrappedServerSocket.connectionCount());
     }
 }
