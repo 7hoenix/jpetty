@@ -11,8 +11,9 @@ public class SocketWrapper implements Connectible {
     private InputStream inputStream;
     private OutputStream outputStream;
 
-    public SocketWrapper(InputStream inputStream, OutputStream outputStream)
+    public SocketWrapper(Socket socket, InputStream inputStream, OutputStream outputStream)
     {
+        this.socket = socket;
         this.inputStream = inputStream;
         this.outputStream = outputStream;
     }
@@ -38,7 +39,7 @@ public class SocketWrapper implements Connectible {
     public void close()
     {
         try {
-            this.socket.close();
+            socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

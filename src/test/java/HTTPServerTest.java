@@ -1,5 +1,4 @@
 import HTTPServer.Server;
-import HTTPServer.ServerConnectible;
 import junit.framework.TestCase;
 
 /**
@@ -7,12 +6,21 @@ import junit.framework.TestCase;
  */
 public class HTTPServerTest extends TestCase {
     public void testItCanListenForAClient() throws Exception {
-        MockServerSocket serverSocket = new MockServerSocket();
+        MockServerSocket serverSocket = new MockServerSocket(-1);
         Server server = new Server(serverSocket, new String[0]);
 
         server.run();
 
-        assertEquals(true, serverSocket.listening);
+        assertEquals(false, serverSocket.listening);
+    }
+
+    public void testItCanListenForTwoClients() throws Exception {
+        MockServerSocket serverSocket = new MockServerSocket(-2);
+        Server server = new Server(serverSocket, new String[0]);
+
+        server.run();
+
+        assertEquals(false, serverSocket.listening);
     }
 
     public void testItSendsBackTheProperResponse() throws Exception {
@@ -20,7 +28,7 @@ public class HTTPServerTest extends TestCase {
         String properResponse = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
                 "<!DOCTYPE html><html lang=\"en\"><body><h1>Hello World</h1></body></html>";
         MockSocket socket = new MockSocket(request);
-        ServerConnectible serverSocket = new MockServerSocket(socket);
+        MockServerSocket serverSocket = new MockServerSocket(socket, -1);
         Server server = new Server(serverSocket, new String[0]);
 
         server.run();

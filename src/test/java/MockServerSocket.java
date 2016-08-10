@@ -7,24 +7,39 @@ import HTTPServer.Connectible;
 public class MockServerSocket implements ServerConnectible {
 
     public boolean listening = false;
-    private Connectible socket;
+    private Connectible wrappedSocket;
+    private Integer connectionCount;
 
-    public MockServerSocket(MockSocket socket)
+    public MockServerSocket(Connectible wrappedSocket, Integer connectionCount)
     {
-        this.socket = socket;
+        this.wrappedSocket = wrappedSocket;
+        this.connectionCount = connectionCount;
     }
 
-    public MockServerSocket()
+    public MockServerSocket(Integer connectionCount)
     {
-        this.socket = new MockSocket("GET / HTTP/1.1");
+        this.wrappedSocket = new MockSocket("GET / HTTP/1.1");
+        this.connectionCount = connectionCount;
     }
 
     @Override
     public Connectible accept()
     {
+        connectionCount++;
         listening = true;
-        return socket;
+        return wrappedSocket;
     }
 
-    public void close() {}
+    @Override
+    public Boolean listening() {
+        if (connectionCount < 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void close() {
+        listening = false;
+    }
 }

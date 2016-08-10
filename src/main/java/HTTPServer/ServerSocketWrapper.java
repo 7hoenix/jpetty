@@ -7,19 +7,36 @@ import java.net.ServerSocket;
  * Created by jphoenix on 8/1/16.
  */
 public class ServerSocketWrapper implements ServerConnectible {
-    private Connectible socket;
+    private ServerSocket serverSocket;
+    private Integer connectionCount = 0;
 
-    public ServerSocketWrapper(Connectible socket) throws IOException {
-        this.socket = socket;
+    public ServerSocketWrapper(Integer connectionCount) throws IOException {
+        this.serverSocket = new ServerSocket(5000);
+        this.connectionCount = connectionCount;
     }
 
-    public ServerSocketWrapper() throws IOException {
-        this.socket = new SocketWrapper(new ServerSocket(5000).accept());
+    public ServerSocketWrapper(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
     }
 
     public Connectible accept() throws IOException {
-        return socket;
+        connectionCount++;
+        return new SocketWrapper(serverSocket.accept());
     }
 
-    public void close() {}
+    public Boolean listening() {
+        return true;
+    }
+
+    public Integer connectionCount() {
+        return connectionCount;
+    }
+
+    public void close() {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
