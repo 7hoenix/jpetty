@@ -39,6 +39,19 @@ public class HTTPRequestHandlerTest extends TestCase {
                 "</body></html>", response);
     }
 
+    public void testItIncludesALinkToNavigateUpTheChain() throws Exception {
+        String request = "GET /brians/ping-pong-equipment/lighting HTTP/1.1";
+        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+
+        String response = handler.handle(request);
+
+        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
+                "<!DOCTYPE html><html lang=\"en\"><body>" +
+                "<a href=\"http://localhost:5000/brians/ping-pong-equipment\">..</a>\r\n" +
+                "<a href=\"http://localhost:5000/brians/ping-pong-equipment/lighting/index.html\">index.html</a>\r\n" +
+                "</body></html>", response);
+    }
+
     public void testItReturnsAListingOfFilesAndDirectoriesIfGivenADirectory() throws Exception {
         String request = "GET /games HTTP/1.1";
         HTTPRequestHandler handler = new HTTPRequestHandler("public");

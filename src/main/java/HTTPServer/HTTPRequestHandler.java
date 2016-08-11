@@ -38,8 +38,12 @@ public class HTTPRequestHandler {
         String[] filesInDir = currentFile.list();
         String parentDir = currentFile.getParentFile().getName();
         String links = "";
+
         if (!parentDir.equals(rootDirectory)) {
-            links = links.concat("<a href=\"http://localhost:5000/" + parentDir + "\">..</a>\r\n");
+            String fullPath = currentFile.getParentFile().getPath();
+            Integer rootLength = rootDirectory.length();
+            String upOne = fullPath.substring(rootLength + 3);
+            links = links.concat("<a href=\"http://localhost:5000/" + upOne + "\">..</a>\r\n");
         }
         for (String file : filesInDir) {
             links = links.concat("<a href=\"http://localhost:5000" + parsedRequest.get("path") + "/" + file + "\">" + file + "</a>\r\n");
