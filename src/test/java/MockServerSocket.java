@@ -1,6 +1,9 @@
 import HTTPServer.ServerConnectible;
 import HTTPServer.Connectible;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 /**
  * Created by jphoenix on 8/1/16.
  */
@@ -18,7 +21,8 @@ public class MockServerSocket implements ServerConnectible {
 
     public MockServerSocket(Integer connectionCount)
     {
-        this.wrappedSocket = new MockSocket("GET / HTTP/1.1");
+        InputStream input = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
+        this.wrappedSocket = new MockSocket(input);
         this.connectionCount = connectionCount;
     }
 
