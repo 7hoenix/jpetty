@@ -25,14 +25,14 @@ public class SocketWrapper implements Connectible {
     }
 
     @Override
-    public String read() throws IOException
+    public InputStream getInputStream() throws IOException
     {
-        return convertStreamToString(inputStream);
+        return inputStream;
     }
 
     @Override
-    public void write(String response) throws IOException {
-        outputStream.write(response.getBytes());
+    public void write(byte[] response) throws IOException {
+        outputStream.write(response);
     }
 
     @Override
@@ -43,17 +43,5 @@ public class SocketWrapper implements Connectible {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private String convertStreamToString(InputStream input) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        StringBuilder out = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            if (line.isEmpty()) break;
-            out.append("\r\n");
-        }
-        return out.toString();
     }
 }
