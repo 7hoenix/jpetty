@@ -7,21 +7,22 @@ import java.net.Socket;
  * Created by jphoenix on 8/1/16.
  */
 public class MockSocket implements Connectible, Runnable {
-    private String input;
-    private String output;
+    private InputStream input;
+    private byte[] output;
     private Integer delay = 50;
 
-    public MockSocket(String input)
+    public MockSocket(InputStream input)
     {
         this.input = input;
     }
 
-    public String read()
+    public InputStream getInputStream()
     {
+
         return input;
     }
 
-    public void write(String response)
+    public void write(byte[] response)
     {
         this.output = response;
     }
@@ -31,9 +32,8 @@ public class MockSocket implements Connectible, Runnable {
 
     }
 
-    public String displayValue()
-    {
-        return output;
+    public String displayValue() throws UnsupportedEncodingException {
+        return new String(output, "UTF-8");
     }
 
     @Override
