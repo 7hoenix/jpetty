@@ -82,6 +82,7 @@ public class HTTPRequestHandler {
         supportedTypes.put("jpg", "image/jpeg");
         supportedTypes.put("gif", "image/gif");
         supportedTypes.put("png", "image/png");
+        supportedTypes.put("txt", "text/plain");
         String path = currentFile.getPath();
         int finalPeriod = path.lastIndexOf(".");
         String extensionType = path.substring(finalPeriod + 1);
