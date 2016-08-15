@@ -1,6 +1,7 @@
 package HTTPServer;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 
 /**
@@ -26,9 +27,9 @@ public class Server {
     public void run() throws IOException {
         while (wrappedServerSocket.listening().equals(true)) {
             Connectible wrappedSocket = wrappedServerSocket.accept();
-            String request = wrappedSocket.read();
+            InputStream request = wrappedSocket.getInputStream();
             HTTPRequestHandler handler = new HTTPRequestHandler(settings);
-            String response = handler.handle(request);
+            byte[] response = handler.handle(request);
             wrappedSocket.write(response);
         }
         wrappedServerSocket.close();
