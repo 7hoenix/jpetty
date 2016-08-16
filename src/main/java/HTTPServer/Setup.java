@@ -10,9 +10,17 @@ public class Setup {
 
     public Setup(String[] args) {
         if (pathGiven(args) && pathIsValid(args)) {
-            this.rootDirectory = args[0];
+            this.rootDirectory = stripEntry(args[0]);
         } else {
             this.rootDirectory = "public";
+        }
+    }
+
+    private String stripEntry(String arg) {
+        if (arg.endsWith("/")) {
+            return arg.substring(0, (arg.length() - 1));
+        } else {
+            return arg;
         }
     }
 
