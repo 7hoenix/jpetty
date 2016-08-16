@@ -26,7 +26,12 @@ public class HTTPRequestHandler {
         Map parsedRequest = parser.getParams();
         String uri = "./".concat(rootDirectory).concat((String) parsedRequest.get("path"));
         File currentFile = new File(uri);
-        if (parsedRequest.get("path").equals("/")) {
+        return route(currentFile, parsedRequest);
+    }
+
+    private byte[] route(File currentFile, Map parsedRequest) throws IOException {
+        File index = new File(currentFile.getPath().concat("/index.html"));
+        if (parsedRequest.get("path").equals("/") && index.exists()) {
             String route = "./".concat(rootDirectory).concat("/index.html");
             return writeFileContents(new File(route));
         } else if (currentFile.isDirectory()) {
@@ -40,17 +45,20 @@ public class HTTPRequestHandler {
 
     private byte[] generateDirectoryResponse(Map parsedRequest, File currentFile) {
         String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html><html lang=\"en\"><body>";
-        String[] filesInDir = currentFile.list();
+        File[] filesInDir = currentFile.listFiles(pathname -> !pathname.isHidden());
         String parentDir = currentFile.getParentFile().getName();
         String links = "";
-        if (!parentDir.equals(rootDirectory)) {
+        if (!parentDir.equals(rootDirectory) && parentDir.length() > 1) {
             String fullPath = currentFile.getParentFile().getPath();
             Integer rootLength = rootDirectory.length();
             String upOne = fullPath.substring(rootLength + 3);
             links = links.concat("<a href=\"http://localhost:5000/" + upOne + "\">..</a>\r\n");
         }
-        for (String file : filesInDir) {
-            links = links.concat("<a href=\"http://localhost:5000" + parsedRequest.get("path") + "/" + file + "\">" + file + "</a>\r\n");
+        String path = (String) parsedRequest.get("path");
+        if (path.equals("/"))
+            path = "";
+        for (File file : filesInDir) {
+            links = links.concat("<a href=\"http://localhost:5000" + path + "/" + file.getName() + "\">" + file.getName() + "</a>\r\n");
         }
         response += links + "</body></html>";
         return response.getBytes();
@@ -58,14 +66,14 @@ public class HTTPRequestHandler {
 
     private byte[] writeFileContents(File currentFile) throws IOException {
         byte[] fileInBytes = Files.readAllBytes(Paths.get(currentFile.getPath()));
-        byte[] response = addHeaders(currentFile, fileInBytes);
+        byte[] response = wrapHeaders(currentFile, fileInBytes);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(response);
         outputStream.write(fileInBytes);
         return outputStream.toByteArray();
     }
 
-    private byte[] addHeaders(File currentFile, byte[] fileInBytes) {
+    private byte[] wrapHeaders(File currentFile, byte[] fileInBytes) {
         String header = "HTTP/1.1 200 OK\r\n";
         header = wrapContentType(header, currentFile, fileInBytes);
         header += "\r\n\r\n";

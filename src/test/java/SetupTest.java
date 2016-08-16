@@ -14,6 +14,15 @@ public class SetupTest extends TestCase {
         assertEquals("src", setup.rootDirectory);
     }
 
+    public void testItCanHandleASlashOrNoSlash() throws Exception {
+        String[] args = new String[1];
+        args[0] = "src/";
+
+        Setup setup = new Setup(args);
+
+        assertEquals("src", setup.rootDirectory);
+    }
+
     public void testItDefaultsToPublic() throws Exception {
         String[] args = new String[0];
 
