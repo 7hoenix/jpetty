@@ -123,4 +123,17 @@ public class HTTPRequestHandlerTest extends TestCase {
         String responseHeader = new String(response, "UTF-8").split("\r\n\r\n")[0];
         assertEquals("HTTP/1.1 200 OK\r\nContent-Type: image/gif\r\nConnection: close\r\nContent-Length: 898055", responseHeader);
     }
+
+    public void testItCanHandleDifferentRoutes() throws Exception {
+        InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
+        HTTPRequestHandler handler = new HTTPRequestHandler("src");
+
+        byte[] response = handler.handle(request);
+
+        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
+                "<!DOCTYPE html><html lang=\"en\"><body>" +
+                "<a href=\"http://localhost:5000/main\">main</a>\r\n" +
+                "<a href=\"http://localhost:5000/test\">test</a>\r\n" +
+                "</body></html>", new String(response, "UTF-8"));
+    }
 }
