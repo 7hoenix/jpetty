@@ -12,14 +12,19 @@ public class Server {
     private Setup settings;
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(5000);
+        Setup settings = new Setup(args);
+        ServerSocket serverSocket = new ServerSocket(settings.port);
         ServerConnectible wrappedServerSocket = new ServerSocketWrapper(serverSocket);
-        Server server = new Server(wrappedServerSocket, args);
+        Server server = new Server(wrappedServerSocket, settings);
         server.run();
     }
 
-    public Server(ServerConnectible serverSocket, String[] args)
-    {
+    public Server(ServerConnectible serverSocket, Setup settings) {
+        this.wrappedServerSocket = serverSocket;
+        this.settings = settings;
+    }
+
+    public Server(ServerConnectible serverSocket, String[] args) {
         this.wrappedServerSocket = serverSocket;
         this.settings = new Setup(args);
     }
@@ -31,6 +36,7 @@ public class Server {
             HTTPRequestHandler handler = new HTTPRequestHandler(settings);
             byte[] response = handler.handle(request);
             wrappedSocket.write(response);
+            wrappedSocket.close();
         }
         wrappedServerSocket.close();
     }
