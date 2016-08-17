@@ -6,27 +6,39 @@ import java.io.File;
  * Created by jphoenix on 8/8/16.
  */
 public class Setup {
+    public String[] args;
     public File root;
     public int port;
+    public boolean autoIndex;
 
     public Setup(String[] args) {
-        assignPort(args);
-        assignRoot(args);
+        this.args = args;
+        this.port = assignPort(args);
+        this.root = assignRoot(args);
+        this.autoIndex = assignAutoIndex(args);
     }
 
-    private void assignPort(String[] args) {
-        if (flagFound(args, "-p")) {
-            this.port = Integer.parseInt(argAfterFlag(args, "-p"));
+    private boolean assignAutoIndex(String[] args) {
+        if (flagFound(args, "-ai")) {
+            return true;
         } else {
-            this.port = 5000;
+            return false;
         }
     }
 
-    private void assignRoot(String[] args) {
-        if (flagFound(args, "-d")) {
-            this.root = new File(stripEntry(argAfterFlag(args, "-d")));
+    private int assignPort(String[] args) {
+        if (flagFound(args, "-p")) {
+            return Integer.parseInt(argAfterFlag(args, "-p"));
         } else {
-            this.root = new File("public");
+            return 5000;
+        }
+    }
+
+    private File assignRoot(String[] args) {
+        if (flagFound(args, "-d")) {
+            return new File(stripEntry(argAfterFlag(args, "-d")));
+        } else {
+            return new File("public");
         }
     }
 

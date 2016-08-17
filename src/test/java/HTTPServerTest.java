@@ -23,7 +23,9 @@ public class HTTPServerTest extends TestCase {
                 "<!DOCTYPE html><html lang=\"en\"><body><h1>Hello World</h1></body></html>";
         MockSocket socket = new MockSocket(request);
         MockServerSocket serverSocket = new MockServerSocket(socket, -1);
-        Server server = new Server(serverSocket, new String[0]);
+        String[] args = new String[1];
+        args[0] = "-ai";
+        Server server = new Server(serverSocket, args);
 
         server.run();
 
