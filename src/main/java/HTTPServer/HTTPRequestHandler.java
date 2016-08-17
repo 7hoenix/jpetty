@@ -31,16 +31,22 @@ public class HTTPRequestHandler {
         return route(currentFile, parsedRequest);
     }
 
-    private byte[] route(File currentFile, Map parsedRequest) throws IOException {
-        File index = new File(currentFile.getPath().concat("/index.html"));
-        if (parsedRequest.get("path").equals("/") && index.exists()) {
-            return writeFileContents(index);
-        } else if (currentFile.isDirectory()) {
-            return generateDirectoryResponse(currentFile, parsedRequest);
+    private byte[] route(File currentFile, Map request) throws IOException {
+        if (currentFile.isDirectory()) {
+            return handleDirectory(currentFile, request);
         } else if (currentFile.isFile()) {
             return writeFileContents(currentFile);
         } else {
             return "HTTP/1.1 404 NOT FOUND\r\n\r\n".getBytes();
+        }
+    }
+
+    private byte[] handleDirectory(File currentFile, Map request) throws IOException {
+        File index = new File(currentFile.getPath().concat("/index.html"));
+        if (request.get("path").equals("/") && index.exists()) {
+            return writeFileContents(index);
+        } else {
+            return generateDirectoryResponse(currentFile, request);
         }
     }
 
@@ -70,7 +76,7 @@ public class HTTPRequestHandler {
     }
 
     private String createLink(String path, String resource) {
-        return "<a href=\"http://localhost:" + settings.port + path + "\">" + resource + "</a>\r\n";
+        return "<a href=\"" + path + "\">" + resource + "</a>\r\n";
     }
 
     private byte[] writeFileContents(File currentFile) throws IOException {
