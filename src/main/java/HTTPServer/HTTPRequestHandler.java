@@ -64,7 +64,7 @@ public class HTTPRequestHandler {
 
     private byte[] handleDirectory(File currentFile, Map request) throws IOException {
         File index = new File(currentFile.getPath().concat("/index.html"));
-        if (request.get("path").equals("/") && index.exists()) {
+        if (request.get("path").equals("/") && index.exists() && settings.autoIndex) {
             return writeFileContents(index);
         } else {
             return generateDirectoryResponse(currentFile, request);
