@@ -64,7 +64,7 @@ public class HTTPRequestHandler {
 
     private byte[] handleDirectory(File currentFile, Map request) throws IOException {
         File index = new File(currentFile.getPath().concat("/index.html"));
-        if (request.get("path").equals("/") && index.exists() && settings.autoIndex) {
+        if (index.exists() && settings.autoIndex) {
             return writeFileContents(index);
         } else {
             return generateDirectoryResponse(currentFile, request);
@@ -72,7 +72,12 @@ public class HTTPRequestHandler {
     }
 
     private String findRoute(File currentFile) {
-        return currentFile.getPath().replaceFirst(settings.root.getPath(), "");
+        String route = currentFile.getPath().replaceFirst(settings.root.getPath(), "");
+        if (route.isEmpty()) {
+            return "/";
+        } else {
+            return route;
+        }
     }
 
     private byte[] generateDirectoryResponse(File currentFile, Map parsedRequest) throws IOException {
