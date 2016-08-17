@@ -1,6 +1,5 @@
 import HTTPServer.Setup;
 import junit.framework.TestCase;
-import org.junit.rules.ExpectedException;
 
 /**
  * Created by jphoenix on 8/8/16.
@@ -13,7 +12,7 @@ public class SetupTest extends TestCase {
 
         Setup setup = new Setup(args);
 
-        assertEquals("public", setup.rootDirectory);
+        assertEquals("public", setup.root.getName());
         assertEquals(7500, setup.port);
     }
 
@@ -24,7 +23,7 @@ public class SetupTest extends TestCase {
 
         Setup setup = new Setup(args);
 
-        assertEquals("src", setup.rootDirectory);
+        assertEquals("src", setup.root.getName());
         assertEquals(5000, setup.port);
     }
 
@@ -37,7 +36,7 @@ public class SetupTest extends TestCase {
 
         Setup setup = new Setup(args);
 
-        assertEquals("src", setup.rootDirectory);
+        assertEquals("src", setup.root.getName());
         assertEquals(7500, setup.port);
     }
 }
