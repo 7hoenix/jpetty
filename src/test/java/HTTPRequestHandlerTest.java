@@ -1,6 +1,6 @@
 import HTTPServer.HTTPRequestHandler;
+import HTTPServer.Setup;
 import junit.framework.TestCase;
-import org.junit.Ignore;
 
 import java.io.*;
 
@@ -10,7 +10,12 @@ import java.io.*;
 public class HTTPRequestHandlerTest extends TestCase {
     public void testItHandlesASimpleRequest() throws Exception {
         InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        String[] args = new String[3];
+        args[0] = "-d";
+        args[1] = "public";
+        args[2] = "-ai";
+        Setup settings = new Setup(args);
+        HTTPRequestHandler handler = new HTTPRequestHandler(settings);
 
         byte[] response = handler.handle(request);
 
@@ -20,13 +25,16 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItReadsADirectoryStructureIfNoIndexPresent() throws Exception {
         InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("otherPublic");
+        HTTPRequestHandler handler = new HTTPRequestHandler("public");
 
         byte[] response = handler.handle(request);
 
         String innerHtml = "" +
-                createLink("/fakeDirectory", "fakeDirectory") +
-                createLink("/thing.txt", "thing.txt");
+                createLink("/brians", "brians") +
+                createLink("/games", "games") +
+                createLink("/geoffs-sweet-site", "geoffs-sweet-site") +
+                createLink("/images", "images") +
+                createLink("/index.html", "index.html");
         String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
         assertEquals(basicResponse, new String(response, "UTF-8"));
     }
@@ -177,6 +185,12 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         assertEquals("HTTP/1.1 404 NOT FOUND\r\n\r\n", new String(response, "UTF-8"));
     }
+
+//    public void testItServesUpAnIndexOnDirectoryWhenPassedFlag() throws Exception {
+//        InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
+//        HTTPRequestHandler handler = new HTTPRequestHandler("public", true);
+//
+//    }
 
     private String basicResponse(String headers, String html) {
         return "HTTP/1.1 200 OK\r\n" + headers + html;
