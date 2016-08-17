@@ -1,10 +1,12 @@
 package HTTPServer;
 
+import java.io.File;
+
 /**
  * Created by jphoenix on 8/8/16.
  */
 public class Setup {
-    public String rootDirectory;
+    public File root;
     public int port;
 
     public Setup(String[] args) {
@@ -14,7 +16,6 @@ public class Setup {
 
     private void assignPort(String[] args) {
         if (flagFound(args, "-p")) {
-            System.out.println("Port assigned");
             this.port = Integer.parseInt(argAfterFlag(args, "-p"));
         } else {
             this.port = 5000;
@@ -23,10 +24,9 @@ public class Setup {
 
     private void assignRoot(String[] args) {
         if (flagFound(args, "-d")) {
-            System.out.println("Root assigned");
-            this.rootDirectory = stripEntry(argAfterFlag(args, "-d"));
+            this.root = new File(stripEntry(argAfterFlag(args, "-d")));
         } else {
-            this.rootDirectory = "public";
+            this.root = new File("public");
         }
     }
 
