@@ -13,10 +13,8 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         byte[] response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
-                "<!DOCTYPE html><html lang=\"en\"><body>" +
-                "<h1>Hello World</h1>" +
-                "</body></html>", new String(response, "UTF-8"));
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml("<h1>Hello World</h1>"));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
     }
 
     public void testItHandlesABasicRequest() throws Exception {
@@ -25,10 +23,8 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         byte[] response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
-                "<!DOCTYPE html><html lang=\"en\"><body>" +
-                "<h1>Brian's cool website</h1>" +
-                "</body></html>", new String(response, "UTF-8"));
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml("<h1>Brian's cool website</h1>"));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
     }
 
     public void testItHandlesNotValid() throws Exception {
@@ -46,11 +42,12 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         byte[] response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
-                "<!DOCTYPE html><html lang=\"en\"><body>" +
-                "<a href=\"http://localhost:5000/brians/index.html\">index.html</a>\r\n" +
-                "<a href=\"http://localhost:5000/brians/ping-pong-equipment\">ping-pong-equipment</a>\r\n" +
-                "</body></html>", new String(response, "UTF-8"));
+        String innerHtml = "" +
+                createLink("", "..") +
+                createLink("/brians/index.html", "index.html") +
+                createLink("/brians/ping-pong-equipment", "ping-pong-equipment");
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
     }
 
     public void testItIncludesALinkToNavigateUpTheChain() throws Exception {
@@ -59,11 +56,11 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         byte[] response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
-                "<!DOCTYPE html><html lang=\"en\"><body>" +
-                "<a href=\"http://localhost:5000/brians/ping-pong-equipment\">..</a>\r\n" +
-                "<a href=\"http://localhost:5000/brians/ping-pong-equipment/lighting/index.html\">index.html</a>\r\n" +
-                "</body></html>", new String(response, "UTF-8"));
+        String innerHtml = "" +
+                createLink("/brians/ping-pong-equipment", "..") +
+                createLink("/brians/ping-pong-equipment/lighting/index.html", "index.html");
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
     }
 
     public void testItReturnsAListingOfFilesAndDirectoriesIfGivenADirectory() throws Exception {
@@ -72,11 +69,12 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         byte[] response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
-                "<!DOCTYPE html><html lang=\"en\"><body>" +
-                "<a href=\"http://localhost:5000/games/1\">1</a>\r\n" +
-                "<a href=\"http://localhost:5000/games/2\">2</a>\r\n" +
-                "</body></html>", new String(response, "UTF-8"));
+        String innerHtml = "" +
+                createLink("", "..") +
+                createLink("/games/1", "1") +
+                createLink("/games/2", "2");
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
     }
 
     public void testItDoesNotIncludeAOneUpLinkIfAtRootDirectory() throws Exception {
@@ -85,13 +83,13 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         byte[] response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
-                "<!DOCTYPE html><html lang=\"en\"><body>" +
-                "<a href=\"http://localhost:5000/brians\">..</a>\r\n" +
-                "<a href=\"http://localhost:5000/brians/ping-pong-equipment/lighting\">lighting</a>\r\n" +
-                "<a href=\"http://localhost:5000/brians/ping-pong-equipment/nets\">nets</a>\r\n" +
-                "<a href=\"http://localhost:5000/brians/ping-pong-equipment/paddles\">paddles</a>\r\n" +
-                "</body></html>", new String(response, "UTF-8"));
+        String innerHtml = "" +
+                createLink("/brians", "..") +
+                createLink("/brians/ping-pong-equipment/lighting", "lighting") +
+                createLink("/brians/ping-pong-equipment/nets", "nets") +
+                createLink("/brians/ping-pong-equipment/paddles", "paddles");
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
     }
 
     public void testItReturnsAContentTypeOfImageJpegForAJpeg() throws Exception {
@@ -130,10 +128,22 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         byte[] response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n" +
-                "<!DOCTYPE html><html lang=\"en\"><body>" +
-                "<a href=\"http://localhost:5000/main\">main</a>\r\n" +
-                "<a href=\"http://localhost:5000/test\">test</a>\r\n" +
-                "</body></html>", new String(response, "UTF-8"));
+        String innerHtml = "" +
+                createLink("/main", "main") +
+                createLink("/test", "test");
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
+    }
+
+    private String basicResponse(String headers, String html) {
+        return "HTTP/1.1 200 OK\r\n" + headers + html;
+    }
+
+    private String wrapHtml(String innerText) {
+        return "<!DOCTYPE html><html lang=\"en\"><body>" + innerText + "</body></html>";
+    }
+
+    private String createLink(String path, String resource) {
+        return "<a href=\"http://localhost:5000" + path + "\">" + resource + "</a>\r\n";
     }
 }
