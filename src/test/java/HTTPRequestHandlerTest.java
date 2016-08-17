@@ -1,5 +1,6 @@
 import HTTPServer.HTTPRequestHandler;
 import junit.framework.TestCase;
+import org.junit.Ignore;
 
 import java.io.*;
 
@@ -146,6 +147,35 @@ public class HTTPRequestHandlerTest extends TestCase {
                 createLink("/test", "test");
         String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
         assertEquals(basicResponse, new String(response, "UTF-8"));
+    }
+
+    public void testItCanHandleAHeadRequest() throws Exception {
+        InputStream request = new ByteArrayInputStream("HEAD /geoffs-sweet-site/samurai-champloo/board.gif HTTP/1.1".getBytes());
+        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+
+        byte[] response = handler.handle(request);
+
+        String responseHeader = new String(response, "UTF-8");
+        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: image/gif\r\nConnection: close\r\nContent-Length: 898055\r\n\r\n", responseHeader);
+    }
+
+    public void testItCanHandleAHeadRequestToAdirectory() throws Exception {
+        InputStream request = new ByteArrayInputStream("HEAD / HTTP/1.1".getBytes());
+        HTTPRequestHandler handler = new HTTPRequestHandler("otherPublic");
+
+        byte[] response = handler.handle(request);
+
+        String responseHeader = new String(response, "UTF-8");
+        assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n", responseHeader);
+    }
+
+    public void testItCanHandleAHeadRequestToARouteThatIsNotPresent() throws Exception {
+        InputStream request = new ByteArrayInputStream("HEAD /foo HTTP/1.1".getBytes());
+        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+
+        byte[] response = handler.handle(request);
+
+        assertEquals("HTTP/1.1 404 NOT FOUND\r\n\r\n", new String(response, "UTF-8"));
     }
 
     private String basicResponse(String headers, String html) {
