@@ -27,11 +27,32 @@ public class HTTPRequestHandler {
         RequestParser parser = new RequestParser(request);
         parser.parse();
         Map parsedRequest = parser.getParams();
-        File currentFile = new File(settings.root.getPath().concat((String) parsedRequest.get("path")));
-        return route(currentFile, parsedRequest);
+        return routeOnAction(parsedRequest);
     }
 
-    private byte[] route(File currentFile, Map request) throws IOException {
+    private byte[] routeOnAction(Map request) throws IOException {
+        String action = (String) request.get("action");
+        if (action.equals("HEAD")) {
+            return handleHeadRequest(request);
+        } else {
+            return handleGetRequest(request);
+        }
+    }
+
+    private byte[] handleHeadRequest(Map request) throws IOException {
+        File currentFile = new File(settings.root.getPath().concat((String) request.get("path")));
+        if (currentFile.isDirectory()) {
+            return "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n".getBytes();
+        } else if (currentFile.isFile()) {
+            byte[] fileInBytes = Files.readAllBytes(Paths.get(currentFile.getPath()));
+            return wrapHeaders(currentFile, fileInBytes);
+        } else {
+            return "HTTP/1.1 404 NOT FOUND\r\n\r\n".getBytes();
+        }
+    }
+
+    private byte[] handleGetRequest(Map request) throws IOException {
+        File currentFile = new File(settings.root.getPath().concat((String) request.get("path")));
         if (currentFile.isDirectory()) {
             return handleDirectory(currentFile, request);
         } else if (currentFile.isFile()) {
@@ -103,6 +124,7 @@ public class HTTPRequestHandler {
     private String wrapContentType(String header, File currentFile, byte[] fileInBytes) {
         HashMap supportedTypes = new HashMap();
         supportedTypes.put("jpg", "image/jpeg");
+        supportedTypes.put("jpeg", "image/jpeg");
         supportedTypes.put("gif", "image/gif");
         supportedTypes.put("png", "image/png");
         supportedTypes.put("txt", "text/plain");
