@@ -17,6 +17,19 @@ public class HTTPRequestHandlerTest extends TestCase {
         assertEquals(basicResponse, new String(response, "UTF-8"));
     }
 
+    public void testItReadsADirectoryStructureIfNoIndexPresent() throws Exception {
+        InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
+        HTTPRequestHandler handler = new HTTPRequestHandler("otherPublic");
+
+        byte[] response = handler.handle(request);
+
+        String innerHtml = "" +
+                createLink("/fakeDirectory", "fakeDirectory") +
+                createLink("/thing.txt", "thing.txt");
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
+    }
+
     public void testItHandlesABasicRequest() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /brians/index.html HTTP/1.1".getBytes());
         HTTPRequestHandler handler = new HTTPRequestHandler("public");
@@ -144,6 +157,6 @@ public class HTTPRequestHandlerTest extends TestCase {
     }
 
     private String createLink(String path, String resource) {
-        return "<a href=\"http://localhost:5000" + path + "\">" + resource + "</a>\r\n";
+        return "<a href=\"" + path + "\">" + resource + "</a>\r\n";
     }
 }
