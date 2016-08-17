@@ -23,6 +23,21 @@ public class HTTPRequestHandlerTest extends TestCase {
         assertEquals(basicResponse, new String(response, "UTF-8"));
     }
 
+    public void testItReturnsAnIndexIfNotAtRoot() throws Exception {
+        InputStream request = new ByteArrayInputStream("GET /brians HTTP/1.1".getBytes());
+        String[] args = new String[3];
+        args[0] = "-d";
+        args[1] = "public";
+        args[2] = "-ai";
+        Setup settings = new Setup(args);
+        HTTPRequestHandler handler = new HTTPRequestHandler(settings);
+
+        byte[] response = handler.handle(request);
+
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml("<h1>Brian's cool website</h1>"));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
+    }
+
     public void testItReadsADirectoryStructureIfNoIndexPresent() throws Exception {
         InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
         HTTPRequestHandler handler = new HTTPRequestHandler("public");
@@ -65,7 +80,7 @@ public class HTTPRequestHandlerTest extends TestCase {
         byte[] response = handler.handle(request);
 
         String innerHtml = "" +
-                createLink("", "..") +
+                createLink("/", "..") +
                 createLink("/brians/index.html", "index.html") +
                 createLink("/brians/ping-pong-equipment", "ping-pong-equipment");
         String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
@@ -92,7 +107,7 @@ public class HTTPRequestHandlerTest extends TestCase {
         byte[] response = handler.handle(request);
 
         String innerHtml = "" +
-                createLink("", "..") +
+                createLink("/", "..") +
                 createLink("/games/1", "1") +
                 createLink("/games/2", "2");
         String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
@@ -110,6 +125,20 @@ public class HTTPRequestHandlerTest extends TestCase {
                 createLink("/brians/ping-pong-equipment/lighting", "lighting") +
                 createLink("/brians/ping-pong-equipment/nets", "nets") +
                 createLink("/brians/ping-pong-equipment/paddles", "paddles");
+        String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
+        assertEquals(basicResponse, new String(response, "UTF-8"));
+    }
+
+    public void testUpLinksWorkOneLevelDown() throws Exception {
+        InputStream request = new ByteArrayInputStream("GET /brians HTTP/1.1".getBytes());
+        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+
+        byte[] response = handler.handle(request);
+
+        String innerHtml = "" +
+                createLink("/", "..") +
+                createLink("/brians/index.html", "index.html") +
+                createLink("/brians/ping-pong-equipment", "ping-pong-equipment");
         String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml(innerHtml));
         assertEquals(basicResponse, new String(response, "UTF-8"));
     }
@@ -185,12 +214,6 @@ public class HTTPRequestHandlerTest extends TestCase {
 
         assertEquals("HTTP/1.1 404 NOT FOUND\r\n\r\n", new String(response, "UTF-8"));
     }
-
-//    public void testItServesUpAnIndexOnDirectoryWhenPassedFlag() throws Exception {
-//        InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
-//        HTTPRequestHandler handler = new HTTPRequestHandler("public", true);
-//
-//    }
 
     private String basicResponse(String headers, String html) {
         return "HTTP/1.1 200 OK\r\n" + headers + html;
