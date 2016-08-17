@@ -5,38 +5,38 @@ import junit.framework.TestCase;
  * Created by jphoenix on 8/8/16.
  */
 public class SetupTest extends TestCase {
-    public void testItCanConfigureThePublicRoot() throws Exception {
-        String[] args = new String[1];
-        args[0] = "src";
+    public void testItHandlesThePFlagForPort() throws Exception {
+        String[] args = new String[2];
+        args[0] = "-p";
+        args[1] = "7500";
 
         Setup setup = new Setup(args);
 
-        assertEquals("src", setup.rootDirectory);
+        assertEquals("public", setup.root.getName());
+        assertEquals(7500, setup.port);
     }
 
-    public void testItCanHandleASlashOrNoSlash() throws Exception {
-        String[] args = new String[1];
-        args[0] = "src/";
+    public void testItTakesTheDFlagForDirectory() throws Exception {
+        String[] args = new String[2];
+        args[0] = "-d";
+        args[1] = "src";
 
         Setup setup = new Setup(args);
 
-        assertEquals("src", setup.rootDirectory);
+        assertEquals("src", setup.root.getName());
+        assertEquals(5000, setup.port);
     }
 
-    public void testItDefaultsToPublic() throws Exception {
-        String[] args = new String[0];
+    public void testItTakesBothFlags() throws Exception {
+        String[] args = new String[4];
+        args[0] = "-d";
+        args[1] = "src";
+        args[2] = "-p";
+        args[3] = "7500";
 
         Setup setup = new Setup(args);
 
-        assertEquals("public", setup.rootDirectory);
-    }
-
-    public void testItDefaultsToPublicIfInvalid() throws Exception {
-        String[] args = new String[1];
-        args[0] = "cake";
-
-        Setup setup = new Setup(args);
-
-        assertEquals("public", setup.rootDirectory);
+        assertEquals("src", setup.root.getName());
+        assertEquals(7500, setup.port);
     }
 }

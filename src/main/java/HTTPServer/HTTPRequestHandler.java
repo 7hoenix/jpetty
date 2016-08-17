@@ -10,32 +10,30 @@ import java.util.Map;
  * Created by jphoenix on 8/4/16.
  */
 public class HTTPRequestHandler {
-    private String rootDirectory;
+    private Setup settings;
 
     public HTTPRequestHandler(Setup settings) {
-        this.rootDirectory = settings.rootDirectory;
+        this.settings = settings;
     }
 
     public HTTPRequestHandler(String root) {
-        this.rootDirectory = root;
+        String[] args = new String[2];
+        args[0] = "-d";
+        args[1] = root;
+        this.settings = new Setup(args);
     }
 
     public byte[] handle(InputStream request) throws IOException {
         RequestParser parser = new RequestParser(request);
         parser.parse();
         Map parsedRequest = parser.getParams();
-        String uri = "./".concat(rootDirectory).concat((String) parsedRequest.get("path"));
-        File currentFile = new File(uri);
+        File currentFile = new File(settings.root.getPath().concat((String) parsedRequest.get("path")));
         return route(currentFile, parsedRequest);
     }
 
-    private byte[] route(File currentFile, Map parsedRequest) throws IOException {
-        File index = new File(currentFile.getPath().concat("/index.html"));
-        if (parsedRequest.get("path").equals("/") && index.exists()) {
-            String route = "./".concat(rootDirectory).concat("/index.html");
-            return writeFileContents(new File(route));
-        } else if (currentFile.isDirectory()) {
-            return generateDirectoryResponse(parsedRequest, currentFile);
+    private byte[] route(File currentFile, Map request) throws IOException {
+        if (currentFile.isDirectory()) {
+            return handleDirectory(currentFile, request);
         } else if (currentFile.isFile()) {
             return writeFileContents(currentFile);
         } else {
@@ -43,25 +41,42 @@ public class HTTPRequestHandler {
         }
     }
 
-    private byte[] generateDirectoryResponse(Map parsedRequest, File currentFile) {
+    private byte[] handleDirectory(File currentFile, Map request) throws IOException {
+        File index = new File(currentFile.getPath().concat("/index.html"));
+        if (request.get("path").equals("/") && index.exists()) {
+            return writeFileContents(index);
+        } else {
+            return generateDirectoryResponse(currentFile, request);
+        }
+    }
+
+    private String findRoute(File currentFile) {
+        return currentFile.getPath().replaceFirst(settings.root.getPath(), "");
+    }
+
+    private byte[] generateDirectoryResponse(File currentFile, Map parsedRequest) throws IOException {
         String response = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<!DOCTYPE html><html lang=\"en\"><body>";
         File[] filesInDir = currentFile.listFiles(pathname -> !pathname.isHidden());
-        String parentDir = currentFile.getParentFile().getName();
         String links = "";
-        if (!parentDir.equals(rootDirectory) && parentDir.length() > 1) {
-            String fullPath = currentFile.getParentFile().getPath();
-            Integer rootLength = rootDirectory.length();
-            String upOne = fullPath.substring(rootLength + 3);
-            links = links.concat("<a href=\"http://localhost:5000/" + upOne + "\">..</a>\r\n");
+        if (!(currentFile.getParent() == null)) {
+            File parent = new File(currentFile.getParent());
+            String parentRoute = findRoute(parent);
+            links = links.concat(createLink(parentRoute, ".."));
         }
-        String path = (String) parsedRequest.get("path");
-        if (path.equals("/"))
-            path = "";
         for (File file : filesInDir) {
-            links = links.concat("<a href=\"http://localhost:5000" + path + "/" + file.getName() + "\">" + file.getName() + "</a>\r\n");
+            String path = (String) parsedRequest.get("path");
+            if (path.equals("/"))
+                path = "";
+            path = path + "/" + file.getName();
+            String resource = file.getName();
+            links = links.concat(createLink(path, resource));
         }
         response += links + "</body></html>";
         return response.getBytes();
+    }
+
+    private String createLink(String path, String resource) {
+        return "<a href=\"" + path + "\">" + resource + "</a>\r\n";
     }
 
     private byte[] writeFileContents(File currentFile) throws IOException {
