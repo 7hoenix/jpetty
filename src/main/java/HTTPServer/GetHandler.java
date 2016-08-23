@@ -1,55 +1,29 @@
 package HTTPServer;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by jphoenix on 8/4/16.
+ * Created by jphoenix on 8/23/16.
  */
-public class HTTPRequestHandler {
+public class GetHandler implements Handler {
     private Setup settings;
 
-    public HTTPRequestHandler(Setup settings) {
+    public GetHandler(Setup settings) {
         this.settings = settings;
     }
 
-    public HTTPRequestHandler(String root) {
-        String[] args = new String[2];
-        args[0] = "-d";
-        args[1] = root;
-        this.settings = new Setup(args);
-    }
-
-    public byte[] handle(InputStream request) throws IOException {
-        RequestParser parser = new RequestParser(request);
-        parser.parse();
-        Map parsedRequest = parser.getParams();
-        if (parsedRequest.isEmpty()) {
-            return "HTTP/1.1 400 BAD REQUEST\r\n\r\n".getBytes();
-        } else {
-            return routeOnAction(parsedRequest);
-        }
-    }
-
-    private byte[] routeOnAction(Map request) throws IOException {
-        String action = (String) request.get("action");
-        if (action.equals("HEAD")) {
-            return handleHeadRequest(request);
-        } else {
-            return handleGetRequest(request);
-        }
-    }
-
-    private byte[] handleHeadRequest(Map request) throws IOException {
-        File currentFile = new File(settings.root.getPath().concat((String) request.get("path")));
+    public byte[] handle(Map params) throws IOException {
+        File currentFile = new File(settings.root.getPath().concat((String) params.get("path")));
         if (currentFile.isDirectory()) {
-            return "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n".getBytes();
+            return handleDirectory(currentFile, params);
         } else if (currentFile.isFile()) {
-            byte[] fileInBytes = Files.readAllBytes(Paths.get(currentFile.getPath()));
-            return wrapHeaders(currentFile, fileInBytes);
+            return writeFileContents(currentFile);
         } else {
             return "HTTP/1.1 404 NOT FOUND\r\n\r\n".getBytes();
         }
