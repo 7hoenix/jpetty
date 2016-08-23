@@ -38,7 +38,8 @@ public class RequestParser {
             if (line.isEmpty()) break;
             input.append("\r\n");
         }
-        populateParams(input.toString());
+        if (input.length() > 0)
+            populateParams(input.toString());
     }
 
     private void populateParams(String header) throws IOException {
