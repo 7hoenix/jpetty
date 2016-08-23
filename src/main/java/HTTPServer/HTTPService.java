@@ -1,9 +1,6 @@
 package HTTPServer;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,9 +21,8 @@ public class HTTPService {
     }
 
     public byte[] processInput(InputStream inputStream) throws IOException {
-        RequestParser parser = new RequestParser(inputStream);
-        parser.parse();
-        Map parsedRequest = parser.getParams();
+        InputParser parser = new InputParser();
+        Map parsedRequest = parser.parse(inputStream);
         if (parsedRequest.isEmpty()) {
             return "HTTP/1.1 400 BAD REQUEST\r\n\r\n".getBytes();
         } else {
