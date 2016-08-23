@@ -8,28 +8,16 @@ import java.util.Map;
  * Created by jphoenix on 8/4/16.
  */
 public class InputParser {
-    private HashMap params;
-
-    public InputParser() {
-        this.params = new HashMap();
-    }
-
     public Map parse(InputStream inputStream) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-        StringBuilder input = new StringBuilder();
-        String line;
-        while ((line = br.readLine()) != null) {
-            input.append(line);
-            if (line.isEmpty()) break;
-            input.append("\r\n");
-        }
-        return populateParams(input.toString());
+        String line = br.readLine();
+        return populateParams(line);
     }
 
-    private Map populateParams(String header) throws IOException {
-        if (!header.isEmpty()) {
-            String[] lines = header.split("\r\n");
-            String[] line = lines[0].split(" ");
+    private Map populateParams(String completeLine) throws IOException {
+        HashMap params = new HashMap();
+        if (completeLine != null) {
+            String[] line = completeLine.split(" ");
             params.put("action", line[0]);
             params.put("path", line[1]);
             params.put("scheme", line[2]);
