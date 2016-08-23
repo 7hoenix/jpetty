@@ -1,10 +1,5 @@
 package HTTPServer;
 
-import HTTPServer.GetHandler;
-import HTTPServer.Handler;
-import HTTPServer.HeadHandler;
-import HTTPServer.Setup;
-
 import java.io.IOException;
 import java.util.Map;
 
