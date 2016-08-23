@@ -10,14 +10,6 @@ import java.util.Map;
 public class InputParser {
     private HashMap params;
 
-    private static final String ACTION = "action";
-    private static final String PATH = "path";
-    private static final String SCHEME = "scheme";
-
-    public HashMap getParams() {
-        return this.params;
-    }
-
     public InputParser() {
         this.params = new HashMap();
     }
@@ -38,9 +30,9 @@ public class InputParser {
         if (!header.isEmpty()) {
             String[] lines = header.split("\r\n");
             String[] line = lines[0].split(" ");
-            params.put(ACTION, line[0]);
-            params.put(PATH, line[1]);
-            params.put(SCHEME, line[2]);
+            params.put("action", line[0]);
+            params.put("path", line[1]);
+            params.put("scheme", line[2]);
         }
         return params;
     }

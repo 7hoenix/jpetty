@@ -18,6 +18,6 @@ public class InputParserTest extends TestCase {
 
         assertEquals(parsedInput.get("action"), "GET");
         assertEquals(parsedInput.get("path"), "/");
-        assertEquals(parser.getParams().get("scheme"), "HTTP/1.1");
+        assertEquals(parsedInput.get("scheme"), "HTTP/1.1");
     }
 }
