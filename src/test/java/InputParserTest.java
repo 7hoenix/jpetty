@@ -20,4 +20,13 @@ public class InputParserTest extends TestCase {
         assertEquals(parsedInput.get("path"), "/");
         assertEquals(parsedInput.get("scheme"), "HTTP/1.1");
     }
+
+    public void test_it_can_handle_a_blank_input_stream() throws Exception {
+        InputStream inputStream = new ByteArrayInputStream("".getBytes());
+        InputParser parser = new InputParser();
+
+        Map parsedInput = parser.parse(inputStream);
+
+        assert(parsedInput.isEmpty());
+    }
 }
