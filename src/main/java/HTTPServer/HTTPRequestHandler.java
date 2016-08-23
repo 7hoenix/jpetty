@@ -27,7 +27,11 @@ public class HTTPRequestHandler {
         RequestParser parser = new RequestParser(request);
         parser.parse();
         Map parsedRequest = parser.getParams();
-        return routeOnAction(parsedRequest);
+        if (parsedRequest.isEmpty()) {
+            return "HTTP/1.1 400 BAD REQUEST\r\n\r\n".getBytes();
+        } else {
+            return routeOnAction(parsedRequest);
+        }
     }
 
     private byte[] routeOnAction(Map request) throws IOException {
