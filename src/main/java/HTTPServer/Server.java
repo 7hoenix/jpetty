@@ -32,10 +32,10 @@ public class Server {
     public void run() throws IOException {
         while (wrappedServerSocket.listening().equals(true)) {
             Connectible wrappedSocket = wrappedServerSocket.accept();
-            InputStream request = wrappedSocket.getInputStream();
-            HTTPRequestHandler handler = new HTTPRequestHandler(settings);
-            byte[] response = handler.handle(request);
-            wrappedSocket.write(response);
+            InputStream inputStream = wrappedSocket.getInputStream();
+            HTTPService service = new HTTPService(settings);
+            byte[] output = service.processInput(inputStream);
+            wrappedSocket.write(output);
             wrappedSocket.close();
         }
         wrappedServerSocket.close();

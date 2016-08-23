@@ -9,22 +9,22 @@ import java.util.Map;
 /**
  * Created by jphoenix on 8/4/16.
  */
-public class HTTPRequestHandler {
+public class HTTPService {
     private Setup settings;
 
-    public HTTPRequestHandler(Setup settings) {
+    public HTTPService(Setup settings) {
         this.settings = settings;
     }
 
-    public HTTPRequestHandler(String root) {
+    public HTTPService(String root) {
         String[] args = new String[2];
         args[0] = "-d";
         args[1] = root;
         this.settings = new Setup(args);
     }
 
-    public byte[] handle(InputStream request) throws IOException {
-        RequestParser parser = new RequestParser(request);
+    public byte[] processInput(InputStream inputStream) throws IOException {
+        RequestParser parser = new RequestParser(inputStream);
         parser.parse();
         Map parsedRequest = parser.getParams();
         if (parsedRequest.isEmpty()) {

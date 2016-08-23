@@ -1,4 +1,4 @@
-import HTTPServer.HTTPRequestHandler;
+import HTTPServer.HTTPService;
 import HTTPServer.Setup;
 import junit.framework.TestCase;
 
@@ -7,7 +7,7 @@ import java.io.*;
 /**
  * Created by jphoenix on 8/4/16.
  */
-public class HTTPRequestHandlerTest extends TestCase {
+public class HTTPServiceTest extends TestCase {
     public void testItHandlesASimpleRequest() throws Exception {
         InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
         String[] args = new String[3];
@@ -15,9 +15,9 @@ public class HTTPRequestHandlerTest extends TestCase {
         args[1] = "public";
         args[2] = "-ai";
         Setup settings = new Setup(args);
-        HTTPRequestHandler handler = new HTTPRequestHandler(settings);
+        HTTPService service = new HTTPService(settings);
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml("<h1>Hello World</h1>"));
         assertEquals(basicResponse, new String(response, "UTF-8"));
@@ -30,9 +30,9 @@ public class HTTPRequestHandlerTest extends TestCase {
         args[1] = "public";
         args[2] = "-ai";
         Setup settings = new Setup(args);
-        HTTPRequestHandler handler = new HTTPRequestHandler(settings);
+        HTTPService service = new HTTPService(settings);
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml("<h1>Brian's cool website</h1>"));
         assertEquals(basicResponse, new String(response, "UTF-8"));
@@ -40,9 +40,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItReadsADirectoryStructureIfNoIndexPresent() throws Exception {
         InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String innerHtml = "" +
                 createLink("/brians", "brians") +
@@ -56,9 +56,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItHandlesABasicRequest() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /brians/index.html HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String basicResponse = basicResponse("Content-Type: text/html\r\n\r\n", wrapHtml("<h1>Brian's cool website</h1>"));
         assertEquals(basicResponse, new String(response, "UTF-8"));
@@ -66,18 +66,18 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItHandlesNotValid() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /cake HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         assertEquals("HTTP/1.1 404 NOT FOUND\r\n\r\n", new String(response, "UTF-8"));
     }
 
     public void testItHandlesIndexesAsSlashes() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /brians HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String innerHtml = "" +
                 createLink("/", "..") +
@@ -89,9 +89,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItIncludesALinkToNavigateUpTheChain() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /brians/ping-pong-equipment/lighting HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String innerHtml = "" +
                 createLink("/brians/ping-pong-equipment", "..") +
@@ -102,9 +102,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItReturnsAListingOfFilesAndDirectoriesIfGivenADirectory() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /games HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String innerHtml = "" +
                 createLink("/", "..") +
@@ -116,9 +116,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItDoesNotIncludeAOneUpLinkIfAtRootDirectory() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /brians/ping-pong-equipment HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String innerHtml = "" +
                 createLink("/brians", "..") +
@@ -131,9 +131,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testUpLinksWorkOneLevelDown() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /brians HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String innerHtml = "" +
                 createLink("/", "..") +
@@ -145,9 +145,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItReturnsAContentTypeOfImageJpegForAJpeg() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /images/hong-kong.jpg HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String responseHeader = new String(response, "UTF-8").split("\r\n\r\n")[0];
         assertEquals("HTTP/1.1 200 OK\r\nContent-Type: image/jpeg\r\nConnection: close\r\nContent-Length: 2044854", responseHeader);
@@ -155,18 +155,18 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItIncludesTheImageInTheBody() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /images/hong-kong.jpg HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         assertEquals(2044943, response.length);
     }
 
     public void testItCanReturnAGiphy() throws Exception {
         InputStream request = new ByteArrayInputStream("GET /geoffs-sweet-site/samurai-champloo/board.gif HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         assertEquals(898142, response.length);
         String responseHeader = new String(response, "UTF-8").split("\r\n\r\n")[0];
@@ -175,9 +175,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItCanHandleDifferentRoutes() throws Exception {
         InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("src");
+        HTTPService service = new HTTPService("src");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String innerHtml = "" +
                 createLink("/main", "main") +
@@ -188,9 +188,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItCanHandleAHeadRequest() throws Exception {
         InputStream request = new ByteArrayInputStream("HEAD /geoffs-sweet-site/samurai-champloo/board.gif HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String responseHeader = new String(response, "UTF-8");
         assertEquals("HTTP/1.1 200 OK\r\nContent-Type: image/gif\r\nConnection: close\r\nContent-Length: 898055\r\n\r\n", responseHeader);
@@ -198,9 +198,9 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItCanHandleAHeadRequestToAdirectory() throws Exception {
         InputStream request = new ByteArrayInputStream("HEAD / HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("otherPublic");
+        HTTPService service = new HTTPService("otherPublic");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         String responseHeader = new String(response, "UTF-8");
         assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n", responseHeader);
@@ -208,18 +208,18 @@ public class HTTPRequestHandlerTest extends TestCase {
 
     public void testItCanHandleAHeadRequestToARouteThatIsNotPresent() throws Exception {
         InputStream request = new ByteArrayInputStream("HEAD /foo HTTP/1.1".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         assertEquals("HTTP/1.1 404 NOT FOUND\r\n\r\n", new String(response, "UTF-8"));
     }
 
     public void testItCanHandleABlankRequest() throws Exception {
         InputStream request = new ByteArrayInputStream("".getBytes());
-        HTTPRequestHandler handler = new HTTPRequestHandler("public");
+        HTTPService service = new HTTPService("public");
 
-        byte[] response = handler.handle(request);
+        byte[] response = service.processInput(request);
 
         assertEquals("HTTP/1.1 400 BAD REQUEST\r\n\r\n", new String(response, "UTF-8"));
 
