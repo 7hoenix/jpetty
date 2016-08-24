@@ -1,72 +1,44 @@
 package HTTPServer;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 
+/**
+ * Created by jphoenix on 8/24/16.
+ */
 public class Response {
-    public byte[] wrapContentType(byte[] response, File currentFile) throws IOException {
-        String contentType = findContentType(currentFile);
-        if (contentType != null) {
-            String command = "Content-Type: " + contentType + "\r\n";
-            return combine(response, command.getBytes());
+    private byte[] header;
+    private byte[] body;
+
+    public byte[] getFull() throws IOException {
+        byte[] fullHeader = combine(getHeader(), "\r\n".getBytes());
+        if (getBody() != null) {
+            return combine(fullHeader, getBody());
         } else {
-            return response;
+            return fullHeader;
         }
     }
 
-    public byte[] wrapContentLength(byte[] response, File currentFile) throws IOException {
-        int sizeOfFile = findSizeOfFile(currentFile);
-        if (sizeOfFile > 0) {
-            String command = "Content-Length: " + new String().valueOf(sizeOfFile) + "\r\n";
-            return combine(response, command.getBytes());
-        } else {
-            return response;
-        }
+    public void setHeader(byte[] header) {
+        this.header = header;
     }
 
-    private int findSizeOfFile(File currentFile) throws IOException {
-        if (currentFile.isFile()) {
-            byte[] fileInBytes = Files.readAllBytes(Paths.get(currentFile.getPath()));
-            return fileInBytes.length;
-        } else {
-            return 0;
-        }
+    public void setBody(byte[] body) {
+        this.body = body;
     }
 
-    private byte[] combine(byte[] response, byte[] addend) throws IOException {
+    public byte[] getHeader() {
+        return header;
+    }
+
+    public byte[] getBody() {
+        return body;
+    }
+
+    private byte[] combine(byte[] original, byte[] addend) throws IOException {
         ByteArrayOutputStream combined = new ByteArrayOutputStream();
-        combined.write(response);
+        combined.write(original);
         combined.write(addend);
         return combined.toByteArray();
-    }
-
-    private String findContentType(File currentFile) {
-        String path = currentFile.getPath();
-        String contentType = null;
-        if (path.indexOf(".") >= 0) {
-            int finalPeriod = path.lastIndexOf(".");
-            String extensionType = path.substring(finalPeriod + 1);
-            if (supportedTypes().get(extensionType) != null) {
-                contentType = (String) supportedTypes().get(extensionType);
-            } else {
-                contentType = "text/html";
-            }
-        }
-        return contentType;
-    }
-
-    private Map supportedTypes() {
-        HashMap supportedTypes = new HashMap();
-        supportedTypes.put("jpg", "image/jpeg");
-        supportedTypes.put("jpeg", "image/jpeg");
-        supportedTypes.put("gif", "image/gif");
-        supportedTypes.put("png", "image/png");
-        supportedTypes.put("txt", "text/plain");
-        return supportedTypes;
     }
 }
