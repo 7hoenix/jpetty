@@ -20,11 +20,13 @@ public class HTTPService {
         this.settings = new Setup(args);
     }
 
-    public byte[] processInput(InputStream inputStream) throws IOException {
+    public Response processInput(InputStream inputStream) throws IOException {
         InputParser parser = new InputParser();
         Map parsedRequest = parser.parse(inputStream);
         if (parsedRequest.isEmpty()) {
-            return "HTTP/1.1 400 BAD REQUEST\r\n\r\n".getBytes();
+            Response response = new Response();
+            response.setHeader("HTTP/1.1 400 BAD REQUEST\r\n".getBytes());
+            return response;
         } else {
             Router router = new Router(settings);
             return router.route(parsedRequest);

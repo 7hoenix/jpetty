@@ -34,8 +34,8 @@ public class Server {
             Connectible wrappedSocket = wrappedServerSocket.accept();
             InputStream inputStream = wrappedSocket.getInputStream();
             HTTPService service = new HTTPService(settings);
-            byte[] output = service.processInput(inputStream);
-            wrappedSocket.write(output);
+            Response response = service.processInput(inputStream);
+            wrappedSocket.write(response.getFull());
             wrappedSocket.close();
         }
         wrappedServerSocket.close();
