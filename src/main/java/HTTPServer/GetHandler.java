@@ -29,17 +29,6 @@ public class GetHandler implements Handler {
         }
     }
 
-    private byte[] handleGetRequest(Map request) throws IOException {
-        File currentFile = new File(settings.root.getPath().concat((String) request.get("path")));
-        if (currentFile.isDirectory()) {
-            return handleDirectory(currentFile, request);
-        } else if (currentFile.isFile()) {
-            return writeFileContents(currentFile);
-        } else {
-            return "HTTP/1.1 404 NOT FOUND\r\n\r\n".getBytes();
-        }
-    }
-
     private byte[] handleDirectory(File currentFile, Map request) throws IOException {
         File index = new File(currentFile.getPath().concat("/index.html"));
         if (index.exists() && settings.autoIndex) {
