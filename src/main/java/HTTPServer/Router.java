@@ -1,6 +1,7 @@
 package HTTPServer;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,14 +15,18 @@ public class Router {
     }
 
     public Response route(Map params) throws IOException {
-        if (params.get("action").equals("GET")) {
-            return new GetHandler(settings).handle(params);
-        } else if (params.get("action").equals("HEAD")) {
-            return new HeadHandler(settings).handle(params);
+        Handler handler = findRoute((String) params.get("action"));
+        return handler.handle(params);
+    }
+
+    private Handler findRoute(String action) {
+        HashMap<String, Handler> handlers = new HashMap();
+        handlers.put("GET", new GetHandler(settings));
+        handlers.put("HEAD", new HeadHandler(settings));
+        if (handlers.containsKey(action)) {
+            return handlers.get(action);
         } else {
-            Response response = new Response();
-            response.setHeader("HTTP/1.1 400 BAD REQUEST\r\n\r\n".getBytes());
-            return response;
+            return new ErrorHandler(settings);
         }
     }
 }
