@@ -13,13 +13,15 @@ public class Router {
         this.settings = settings;
     }
 
-    public byte[] route(Map params) throws IOException {
+    public Response route(Map params) throws IOException {
         if (params.get("action").equals("GET")) {
             return new GetHandler(settings).handle(params);
         } else if (params.get("action").equals("HEAD")) {
             return new HeadHandler(settings).handle(params);
         } else {
-            return "HTTP/1.1 400 BAD REQUEST\r\n\r\n".getBytes();
+            Response response = new Response();
+            response.setHeader("HTTP/1.1 400 BAD REQUEST\r\n\r\n".getBytes());
+            return response;
         }
     }
 }
