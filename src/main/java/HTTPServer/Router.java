@@ -23,6 +23,7 @@ public class Router {
         HashMap<String, Handler> handlers = new HashMap();
         handlers.put("GET", new GetHandler(settings));
         handlers.put("HEAD", new HeadHandler(settings));
+        handlers.put("OPTIONS", new OptionsHandler(settings));
         if (handlers.containsKey(action)) {
             return handlers.get(action);
         } else {
