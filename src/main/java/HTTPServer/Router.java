@@ -1,33 +1,22 @@
 package HTTPServer;
+import CobSpecApp.ErrorHandler;
+import CobSpecApp.Handler;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by jphoenix on 8/23/16.
- */
 public class Router {
-    Setup settings;
+    private final Map routes;
 
-    public Router(Setup settings) {
-        this.settings = settings;
+    public Router(Map routes) {
+        this.routes = routes;
     }
 
-    public Response route(Map params) throws IOException {
-        Handler handler = findRoute((String) params.get("action"));
-        return handler.handle(params);
-    }
-
-    private Handler findRoute(String action) {
-        HashMap<String, Handler> handlers = new HashMap();
-        handlers.put("GET", new GetHandler(settings));
-        handlers.put("HEAD", new HeadHandler(settings));
-        handlers.put("OPTIONS", new OptionsHandler(settings));
-        if (handlers.containsKey(action)) {
-            return handlers.get(action);
+    public Handler route(Map params) throws IOException {
+        if (routes.containsKey(params.get("action"))) {
+            return (Handler) routes.get(params.get("action"));
         } else {
-            return new ErrorHandler(settings);
+            return new ErrorHandler("HTTP/1.1 404 NOT FOUND\r\n");
         }
     }
 }

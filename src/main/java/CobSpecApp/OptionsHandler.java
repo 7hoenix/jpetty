@@ -1,13 +1,12 @@
-package HTTPServer;
+package CobSpecApp;
 
-import java.io.File;
+import HTTPServer.Response;
+import HTTPServer.Setup;
+
 import java.util.Map;
 
-/**
- * Created by jphoenix on 8/24/16.
- */
 public class OptionsHandler implements Handler {
-    Setup settings;
+    private Setup settings;
 
     public OptionsHandler(Setup settings) {
         this.settings = settings;

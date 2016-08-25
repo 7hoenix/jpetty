@@ -1,3 +1,5 @@
+package Server;
+
 import HTTPServer.HTTPService;
 import HTTPServer.Response;
 import HTTPServer.Setup;

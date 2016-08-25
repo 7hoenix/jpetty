@@ -1,3 +1,5 @@
+package Server;
+
 import HTTPServer.ServerSocketWrapper;
 import junit.framework.TestCase;
 
