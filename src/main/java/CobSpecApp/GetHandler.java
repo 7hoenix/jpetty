@@ -16,6 +16,16 @@ public class GetHandler implements Handler {
     }
 
     public Response handle(Map params) throws IOException {
+        if (params.containsValue("/redirect")) {
+            Response response = new Response();
+            response.setHeader("HTTP/1.1 302 FOUND\r\nLocation: http://localhost:5000/\r\n".getBytes());
+            return response;
+        } else {
+            return basicGetResponse(params);
+        }
+    }
+
+    private Response basicGetResponse(Map params) throws IOException {
         File currentFile = new File(settings.root.getPath().concat((String) params.get("path")));
         if (currentFile.isDirectory()) {
             return handleDirectory(currentFile, params);
