@@ -1,4 +1,5 @@
-import HTTPServer.ErrorHandler;
+package CobSpecApp;
+
 import HTTPServer.Response;
 import junit.framework.TestCase;
 

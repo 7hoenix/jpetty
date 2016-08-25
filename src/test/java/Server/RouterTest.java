@@ -1,4 +1,7 @@
-import HTTPServer.Handler;
+package Server;
+
+import CobSpecApp.MockHandler;
+import CobSpecApp.Handler;
 import HTTPServer.Router;
 import HTTPServer.Setup;
 import junit.framework.TestCase;

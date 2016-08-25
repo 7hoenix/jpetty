@@ -1,4 +1,7 @@
-package HTTPServer;
+package CobSpecApp;
+
+import HTTPServer.Response;
+import HTTPServer.Setup;
 
 import java.util.Map;
 

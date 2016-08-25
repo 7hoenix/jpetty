@@ -1,11 +1,13 @@
-package HTTPServer;
+package CobSpecApp;
+
+import HTTPServer.Response;
 
 import java.util.Map;
 
 /**
  * Created by jphoenix on 8/24/16.
  */
-public class ErrorHandler implements Handler{
+public class ErrorHandler implements Handler {
     private String message;
 
     public ErrorHandler(String message) {
