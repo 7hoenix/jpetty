@@ -29,7 +29,8 @@ public class HTTPService {
             return response;
         } else {
             Router router = new Router(settings);
-            return router.route(parsedRequest);
+            Handler handler = router.route(parsedRequest);
+            return handler.handle(parsedRequest);
         }
     }
 }
