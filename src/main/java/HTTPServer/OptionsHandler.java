@@ -3,7 +3,7 @@ package HTTPServer;
 import java.util.Map;
 
 public class OptionsHandler implements Handler {
-    Setup settings;
+    private Setup settings;
 
     public OptionsHandler(Setup settings) {
         this.settings = settings;
