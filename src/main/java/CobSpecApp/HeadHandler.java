@@ -18,7 +18,7 @@ public class HeadHandler implements Handler {
 
     public Response handle(Map params) throws IOException {
         Response response = new Response();
-        File currentFile = new File(settings.root.getPath().concat((String) params.get("path")));
+        File currentFile = new File(settings.getRoot().getPath().concat((String) params.get("path")));
         if (currentFile.isDirectory()) {
             response.setHeader("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n".getBytes());
         } else if (currentFile.isFile()) {

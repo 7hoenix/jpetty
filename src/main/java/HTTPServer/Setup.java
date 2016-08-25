@@ -3,16 +3,28 @@ package HTTPServer;
 import java.io.File;
 
 public class Setup {
-    public String[] args;
-    public File root;
-    public int port;
-    public boolean autoIndex;
+    private String[] args;
+    private File root;
+    private int port;
+    private boolean autoIndex;
 
     public Setup(String[] args) {
         this.args = args;
         this.port = assignPort(args);
         this.root = assignRoot(args);
         this.autoIndex = assignAutoIndex(args);
+    }
+
+    public File getRoot() {
+       return root;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public boolean getAutoIndex() {
+        return autoIndex;
     }
 
     private boolean assignAutoIndex(String[] args) {
