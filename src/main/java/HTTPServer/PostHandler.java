@@ -3,7 +3,7 @@ package HTTPServer;
 import java.util.Map;
 
 public class PostHandler implements Handler {
-    Setup settings;
+    private Setup settings;
 
     public PostHandler(Setup settings) {
         this.settings = settings;
