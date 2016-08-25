@@ -6,9 +6,6 @@ import CobSpecApp.CobSpecRoutes;
 import java.io.*;
 import java.util.Map;
 
-/**
- * Created by jphoenix on 8/4/16.
- */
 public class HTTPService {
     private Setup settings;
 

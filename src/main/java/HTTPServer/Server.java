@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
 
-/**
- * Created by jphoenix on 8/1/16.
- */
 public class Server {
     private ServerConnectible wrappedServerSocket;
     private Setup settings;

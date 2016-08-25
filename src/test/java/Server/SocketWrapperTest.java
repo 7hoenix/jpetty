@@ -8,9 +8,6 @@ import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Created by jphoenix on 8/2/16.
- */
 public class SocketWrapperTest extends TestCase {
     public void testItTakesAnInputStreamAndReturnsAString() throws Exception {
         String someStr = "hey there cake 1234";

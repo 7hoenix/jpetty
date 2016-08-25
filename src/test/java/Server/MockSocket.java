@@ -5,9 +5,6 @@ import HTTPServer.Connectible;
 import java.io.*;
 import java.net.Socket;
 
-/**
- * Created by jphoenix on 8/1/16.
- */
 public class MockSocket implements Connectible, Runnable {
     private InputStream input;
     private byte[] output;

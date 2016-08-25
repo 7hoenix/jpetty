@@ -3,9 +3,6 @@ package HTTPServer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/**
- * Created by jphoenix on 8/24/16.
- */
 public class Response {
     private byte[] header;
     private byte[] body;

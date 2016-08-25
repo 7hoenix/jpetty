@@ -5,12 +5,8 @@ import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by jphoenix on 8/4/16.
- */
 public class InputParserTest extends TestCase {
     public void testItSeparatesLineIntoActionPathAndScheme() throws Exception {
         InputStream inputStream = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());

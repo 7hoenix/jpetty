@@ -3,9 +3,6 @@ package HTTPServer;
 import java.io.*;
 import java.net.Socket;
 
-/**
- * Created by jphoenix on 8/1/16.
- */
 public class SocketWrapper implements Connectible {
     private Socket socket;
     private InputStream inputStream;

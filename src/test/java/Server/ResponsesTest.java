@@ -5,9 +5,6 @@ import junit.framework.TestCase;
 
 import java.io.File;
 
-/**
- * Created by jphoenix on 8/24/16.
- */
 public class ResponsesTest extends TestCase {
     public void test_it_can_wrap_content_type() throws Exception {
         File currentFile = new File("otherPublic/thing.txt");
