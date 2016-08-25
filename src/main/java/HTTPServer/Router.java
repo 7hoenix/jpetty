@@ -4,30 +4,37 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by jphoenix on 8/23/16.
- */
 public class Router {
-    Setup settings;
+    private Setup settings;
+    private final Map routes;
 
     public Router(Setup settings) {
         this.settings = settings;
+        this.routes = defaultRoutes();
     }
 
-    public Response route(Map params) throws IOException {
-        Handler handler = findRoute((String) params.get("action"));
-        return handler.handle(params);
+    public Router(Map routes) {
+        this.settings = new Setup(new String[0]);
+        this.routes = routes;
+    }
+
+    public Handler route(Map params) throws IOException {
+        return findRoute((String) params.get("action"));
     }
 
     private Handler findRoute(String action) {
-        HashMap<String, Handler> handlers = new HashMap();
-        handlers.put("GET", new GetHandler(settings));
-        handlers.put("HEAD", new HeadHandler(settings));
-        handlers.put("OPTIONS", new OptionsHandler(settings));
-        if (handlers.containsKey(action)) {
-            return handlers.get(action);
+        if (routes.containsKey(action)) {
+            return (Handler) routes.get(action);
         } else {
             return new ErrorHandler(settings);
         }
+    }
+
+    public Map defaultRoutes() {
+        HashMap<String, Handler> routes = new HashMap();
+        routes.put("GET", new GetHandler(settings));
+        routes.put("HEAD", new HeadHandler(settings));
+        routes.put("OPTIONS", new OptionsHandler(settings));
+        return routes;
     }
 }
