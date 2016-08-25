@@ -11,8 +11,8 @@ public class SetupTest extends TestCase {
 
         Setup setup = new Setup(args);
 
-        assertEquals("public", setup.root.getName());
-        assertEquals(7500, setup.port);
+        assertEquals("public", setup.getRoot().getName());
+        assertEquals(7500, setup.getPort());
     }
 
     public void testItTakesTheDFlagForDirectory() throws Exception {
@@ -22,8 +22,8 @@ public class SetupTest extends TestCase {
 
         Setup setup = new Setup(args);
 
-        assertEquals("src", setup.root.getName());
-        assertEquals(5000, setup.port);
+        assertEquals("src", setup.getRoot().getName());
+        assertEquals(5000, setup.getPort());
     }
 
     public void testItTakesBothFlags() throws Exception {
@@ -35,8 +35,8 @@ public class SetupTest extends TestCase {
 
         Setup setup = new Setup(args);
 
-        assertEquals("src", setup.root.getName());
-        assertEquals(7500, setup.port);
+        assertEquals("src", setup.getRoot().getName());
+        assertEquals(7500, setup.getPort());
     }
 
     public void testItTakesAnAutoIndexFlag() throws Exception {
@@ -45,7 +45,7 @@ public class SetupTest extends TestCase {
 
         Setup setup = new Setup(args);
 
-        assertEquals(true, setup.autoIndex);
+        assertEquals(true, setup.getAutoIndex());
     }
 
     public void testItSetsFalseByDefault() throws Exception {
@@ -53,6 +53,6 @@ public class SetupTest extends TestCase {
 
         Setup setup = new Setup(args);
 
-        assertEquals(false, setup.autoIndex);
+        assertEquals(false, setup.getAutoIndex());
     }
 }

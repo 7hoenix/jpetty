@@ -16,7 +16,18 @@ public class GetHandler implements Handler {
     }
 
     public Response handle(Map params) throws IOException {
-        File currentFile = new File(settings.root.getPath().concat((String) params.get("path")));
+        if (params.containsValue("/redirect")) {
+            Response response = new Response();
+            response.setHeader(("HTTP/1.1 302 FOUND\r\nLocation: http://localhost:" +
+                    String.valueOf(settings.getPort()) + "/\r\n").getBytes());
+            return response;
+        } else {
+            return basicGetResponse(params);
+        }
+    }
+
+    private Response basicGetResponse(Map params) throws IOException {
+        File currentFile = new File(settings.getRoot().getPath().concat((String) params.get("path")));
         if (currentFile.isDirectory()) {
             return handleDirectory(currentFile, params);
         } else if (currentFile.isFile()) {
@@ -40,7 +51,7 @@ public class GetHandler implements Handler {
 
     private Response handleDirectory(File currentFile, Map request) throws IOException {
         File index = new File(currentFile.getPath().concat("/index.html"));
-        if (index.exists() && settings.autoIndex) {
+        if (index.exists() && settings.getAutoIndex()) {
             return handleFile(index);
         } else {
             return generateDirectoryResponse(currentFile, request);
@@ -48,7 +59,7 @@ public class GetHandler implements Handler {
     }
 
     private String findRoute(File currentFile) {
-        String route = currentFile.getPath().replaceFirst(settings.root.getPath(), "");
+        String route = currentFile.getPath().replaceFirst(settings.getRoot().getPath(), "");
         if (route.isEmpty()) {
             return "/";
         } else {

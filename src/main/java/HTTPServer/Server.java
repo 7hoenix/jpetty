@@ -10,7 +10,7 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         Setup settings = new Setup(args);
-        ServerSocket serverSocket = new ServerSocket(settings.port);
+        ServerSocket serverSocket = new ServerSocket(settings.getPort());
         ServerConnectible wrappedServerSocket = new ServerSocketWrapper(serverSocket);
         Server server = new Server(wrappedServerSocket, settings);
         server.run();
