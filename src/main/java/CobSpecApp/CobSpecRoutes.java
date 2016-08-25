@@ -12,6 +12,7 @@ public class CobSpecRoutes {
         routes.put("HEAD", new HeadHandler(settings));
         routes.put("OPTIONS", new OptionsHandler(settings));
         routes.put("POST", new PostHandler(settings));
+        routes.put("PUT", new PutHandler(settings));
         return routes;
     }
 }
