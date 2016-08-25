@@ -1,11 +1,7 @@
 package HTTPServer;
 
-import java.io.File;
 import java.util.Map;
 
-/**
- * Created by jphoenix on 8/24/16.
- */
 public class OptionsHandler implements Handler {
     Setup settings;
 
