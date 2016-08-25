@@ -15,7 +15,7 @@ public class Router {
         if (routes.containsKey(params.get("action"))) {
             return (Handler) routes.get(params.get("action"));
         } else {
-            return (Handler) routes.get("ERROR");
+            return new ErrorHandler("HTTP/1.1 404 NOT FOUND\r\n");
         }
     }
 }
