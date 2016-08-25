@@ -3,9 +3,6 @@ package Server;
 import HTTPServer.Response;
 import junit.framework.TestCase;
 
-/**
- * Created by jphoenix on 8/24/16.
- */
 public class ResponseTest extends TestCase {
     public void test_it_knows_its_header() throws Exception {
         Response response = new Response();

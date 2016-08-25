@@ -4,9 +4,6 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by jphoenix on 8/4/16.
- */
 public class InputParser {
     public Map parse(InputStream inputStream) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));

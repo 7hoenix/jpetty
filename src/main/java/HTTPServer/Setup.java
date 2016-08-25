@@ -2,9 +2,6 @@ package HTTPServer;
 
 import java.io.File;
 
-/**
- * Created by jphoenix on 8/8/16.
- */
 public class Setup {
     public String[] args;
     public File root;

@@ -7,9 +7,6 @@ import junit.framework.TestCase;
 
 import java.io.*;
 
-/**
- * Created by jphoenix on 8/4/16.
- */
 public class HTTPServiceTest extends TestCase {
     public void testItHandlesASimpleRequest() throws Exception {
         InputStream request = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());

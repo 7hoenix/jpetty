@@ -8,9 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-/**
- * Created by jphoenix on 8/23/16.
- */
 public class HeadHandler implements Handler {
 
     private Setup settings;

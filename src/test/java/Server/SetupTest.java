@@ -3,12 +3,6 @@ package Server;
 import HTTPServer.Setup;
 import junit.framework.TestCase;
 
-import java.util.HashMap;
-import java.util.Map;
-
-/**
- * Created by jphoenix on 8/8/16.
- */
 public class SetupTest extends TestCase {
     public void testItHandlesThePFlagForPort() throws Exception {
         String[] args = new String[2];
