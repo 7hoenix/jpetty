@@ -30,6 +30,6 @@ public class RouterTest extends TestCase {
 
         Handler handler = router.route(params);
 
-        assertEquals("HTTP/1.1 404 NOT FOUND\r\n", new String(handler.handle(params).getHeader(), "UTF-8"));
+        assertEquals("HTTP/1.1 405 NOT FOUND\r\n", new String(handler.handle(params).getHeader(), "UTF-8"));
     }
 }
