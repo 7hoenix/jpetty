@@ -20,7 +20,7 @@ public class MockServerSocket implements ServerConnectible {
 
     public MockServerSocket(Integer connectionCount)
     {
-        InputStream input = new ByteArrayInputStream("GET / HTTP/1.1".getBytes());
+        InputStream input = new ByteArrayInputStream("GET / HTTP/1.1\r\n\r\n".getBytes());
         this.wrappedSocket = new MockSocket(input);
         this.connectionCount = connectionCount;
     }

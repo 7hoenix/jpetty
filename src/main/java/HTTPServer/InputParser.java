@@ -7,9 +7,37 @@ import java.util.Map;
 
 public class InputParser {
     public Request create(InputStream inputStream) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-        String line = br.readLine();
-        return new Request(populateParams(line));
+//        byte[] result = parseResult(inputStream);
+//        String fullLine = Requests.findLine(result);
+//        String header = Requests.findHeader(result);
+//        String body = Requests.findBody(result);
+//        return new Request(populateParams(fullLine), header, body);
+//        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+//        String[] result = new String[5000];
+//        String line;
+//        int counter = 0;
+//        while ((line = br.readLine()) != null) {
+//            result[counter] = line;
+//            counter++;
+//            if (line.isEmpty()) {
+//                break;
+//            }
+//        }
+        return new Request(new HashMap());
+    }
+
+    private byte[] parseResult(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream result = new ByteArrayOutputStream();
+        int numberRead;
+        byte[] data = new byte[16384];
+
+        while ((numberRead = inputStream.read(data, 0, data.length)) != -1) {
+            result.write(data, 0, numberRead);
+        }
+
+        result.flush();
+
+        return result.toByteArray();
     }
 
     private Map populateParams(String completeLine) throws IOException {
