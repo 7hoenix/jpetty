@@ -6,9 +6,6 @@ import junit.framework.TestCase;
 
 import java.util.HashMap;
 
-/**
- * Created by jphoenix on 8/24/16.
- */
 public class OptionsHandlerTest extends TestCase {
     public void test_it_returns_a_listing_of_the_methods_that_will_work_on_a_resource() throws Exception {
         HashMap params = new HashMap();

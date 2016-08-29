@@ -22,16 +22,16 @@ public class HTTPService {
 
     public Response processInput(InputStream inputStream) throws IOException {
         InputParser parser = new InputParser();
-        Map parsedRequest = parser.parse(inputStream);
-        if (parsedRequest.isEmpty()) {
+        Request request = parser.create(inputStream);
+        if (request.getParams().isEmpty()) {
             Response response = new Response();
             response.setHeader("HTTP/1.1 400 BAD REQUEST\r\n".getBytes());
             return response;
         } else {
             Map routes = CobSpecRoutes.generate(settings);
             Router router = new Router(routes);
-            Handler handler = router.route(parsedRequest);
-            return handler.handle(parsedRequest);
+            Handler handler = router.route(request.getParams());
+            return handler.handle(request.getParams());
         }
     }
 }
