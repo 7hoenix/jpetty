@@ -217,14 +217,14 @@ public class HTTPServiceTest extends TestCase {
         assertEquals("HTTP/1.1 404 NOT FOUND\r\n\r\n", new String(response.getFull(), "UTF-8"));
     }
 
-//    public void testItCanHandleABlankRequest() throws Exception {
-//        InputStream request = new ByteArrayInputStream("\r\n\r\n".getBytes());
-//        HTTPService service = new HTTPService("public");
-//
-//        Response response = service.processInput(request);
-//
-//        assertEquals("HTTP/1.1 400 BAD REQUEST\r\n\r\n", new String(response.getFull(), "UTF-8"));
-//    }
+    public void testItCanHandleABlankRequest() throws Exception {
+        InputStream request = new ByteArrayInputStream("\r\n\r\n".getBytes());
+        HTTPService service = new HTTPService("public");
+
+        Response response = service.processInput(request);
+
+        assertEquals("HTTP/1.1 400 BAD REQUEST\r\n\r\n", new String(response.getFull(), "UTF-8"));
+    }
 
     private String basicResponse(String headers, String html) {
         return "HTTP/1.1 200 OK\r\n" + headers + html;

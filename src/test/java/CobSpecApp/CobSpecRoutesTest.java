@@ -1,5 +1,6 @@
 package CobSpecApp;
 
+import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Setup;
 import junit.framework.TestCase;
@@ -15,7 +16,7 @@ public class CobSpecRoutesTest extends TestCase {
         params.put("path", "/");
         Handler handler = (Handler) routes.get("GET");
 
-        Response response = handler.handle(params);
+        Response response = handler.handle(new Request(params));
 
         assertEquals("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n", new String(response.getHeader(), "UTF-8"));
     }

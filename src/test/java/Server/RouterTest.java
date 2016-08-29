@@ -2,6 +2,7 @@ package Server;
 
 import CobSpecApp.MockHandler;
 import CobSpecApp.Handler;
+import HTTPServer.Request;
 import HTTPServer.Router;
 import HTTPServer.Setup;
 import junit.framework.TestCase;
@@ -17,7 +18,7 @@ public class RouterTest extends TestCase {
         params.put("action", "GET");
         Router router = new Router(supportedRoutes);
 
-        Handler handler = router.route(params);
+        Handler handler = router.route(new Request(params));
 
         assertEquals(handler, mockHandler);
     }
@@ -28,8 +29,8 @@ public class RouterTest extends TestCase {
         params.put("action", "TRACE");
         Router router = new Router(supportedRoutes);
 
-        Handler handler = router.route(params);
+        Handler handler = router.route(new Request(params));
 
-        assertEquals("HTTP/1.1 405 NOT FOUND\r\n", new String(handler.handle(params).getHeader(), "UTF-8"));
+        assertEquals("HTTP/1.1 405 NOT FOUND\r\n", new String(handler.handle(new Request(params)).getHeader(), "UTF-8"));
     }
 }

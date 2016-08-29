@@ -1,5 +1,6 @@
 package CobSpecApp;
 
+import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Responses;
 import HTTPServer.Setup;
@@ -15,28 +16,28 @@ public class GetHandler implements Handler {
         this.settings = settings;
     }
 
-    public Response handle(Map params) throws IOException {
-        if (params.containsValue("/redirect")) {
+    public Response handle(Request request) throws IOException {
+        if (request.getParams().containsValue("/redirect")) {
             Response response = new Response();
             response.setHeader(("HTTP/1.1 302 FOUND\r\nLocation: http://localhost:" +
                     String.valueOf(settings.getPort()) + "/\r\n").getBytes());
             return response;
-        } else if (params.containsKey("variable_1")) {
+        } else if (request.getParams().containsKey("variable_1")) {
             Response response = new Response();
             response.setHeader("HTTP/1.1 200 OK\r\n".getBytes());
-            String body =  "variable_1 = " + params.get("variable_1") + "\r\n" +
-                    "variable_2 = " + params.get("variable_2");
+            String body =  "variable_1 = " + request.getParams().get("variable_1") + "\r\n" +
+                    "variable_2 = " + request.getParams().get("variable_2");
             response.setBody(body.getBytes());
             return response;
         } else {
-            return basicGetResponse(params);
+            return basicGetResponse(request);
         }
     }
 
-    private Response basicGetResponse(Map params) throws IOException {
-        File currentFile = new File(settings.getRoot().getPath().concat((String) params.get("path")));
+    private Response basicGetResponse(Request request) throws IOException {
+        File currentFile = new File(settings.getRoot().getPath().concat((String) request.getParams().get("path")));
         if (currentFile.isDirectory()) {
-            return handleDirectory(currentFile, params);
+            return handleDirectory(currentFile, request.getParams());
         } else if (currentFile.isFile()) {
             return handleFile(currentFile);
         } else {

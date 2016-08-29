@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CobSpecRoutes {
-    public static Map generate(Setup settings) {
+    public static Map<String, Handler> generate(Setup settings) {
         HashMap<String, Handler> routes = new HashMap();
         routes.put("GET", new GetHandler(settings));
         routes.put("HEAD", new HeadHandler(settings));

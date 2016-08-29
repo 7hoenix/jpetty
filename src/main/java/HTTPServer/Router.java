@@ -6,15 +6,15 @@ import java.io.IOException;
 import java.util.Map;
 
 public class Router {
-    private final Map routes;
+    private final Map<String, Handler> routes;
 
-    public Router(Map routes) {
+    public Router(Map<String, Handler> routes) {
         this.routes = routes;
     }
 
-    public Handler route(Map params) throws IOException {
-        if (routes.containsKey(params.get("action"))) {
-            return (Handler) routes.get(params.get("action"));
+    public Handler route(Request request) throws IOException {
+        if (routes.containsKey(request.getParams().get("action"))) {
+            return routes.get(request.getParams().get("action"));
         } else {
             return new ErrorHandler("HTTP/1.1 405 NOT FOUND\r\n");
         }

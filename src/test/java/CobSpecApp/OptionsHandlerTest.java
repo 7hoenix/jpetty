@@ -1,5 +1,6 @@
 package CobSpecApp;
 
+import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Setup;
 import junit.framework.TestCase;
@@ -12,7 +13,7 @@ public class OptionsHandlerTest extends TestCase {
         params.put("path", "/method_options");
         OptionsHandler handler = new OptionsHandler(new Setup(new String[0]));
 
-        Response response = handler.handle(params);
+        Response response = handler.handle(new Request(params));
 
         assertEquals("HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n", new String(response.getHeader(), "UTF-8"));
     }
@@ -22,7 +23,7 @@ public class OptionsHandlerTest extends TestCase {
         params.put("path", "/method_options2");
         OptionsHandler handler = new OptionsHandler(new Setup(new String[0]));
 
-        Response response = handler.handle(params);
+        Response response = handler.handle(new Request(params));
 
         assertEquals("HTTP/1.1 200 OK\r\nAllow: GET,OPTIONS\r\n", new String(response.getHeader(), "UTF-8"));
     }

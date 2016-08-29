@@ -1,8 +1,7 @@
 package CobSpecApp;
 
+import HTTPServer.Request;
 import HTTPServer.Response;
-
-import java.util.Map;
 
 public class ErrorHandler implements Handler {
     private String message;
@@ -11,7 +10,7 @@ public class ErrorHandler implements Handler {
         this.message = message;
     }
 
-    public Response handle(Map params) {
+    public Response handle(Request request) {
         Response response = new Response();
         response.setHeader(message.getBytes());
         return response;

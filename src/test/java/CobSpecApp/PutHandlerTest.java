@@ -1,5 +1,6 @@
 package CobSpecApp;
 
+import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Setup;
 import junit.framework.TestCase;
@@ -13,7 +14,7 @@ public class PutHandlerTest extends TestCase {
         params.put("path", "/games/1");
         PutHandler handler = new PutHandler(new Setup(new String[0]));
 
-        Response response = handler.handle(params);
+        Response response = handler.handle(new Request(params));
 
         assertEquals("HTTP/1.1 200 OK\r\n", new String(response.getHeader(), "UTF-8"));
     }

@@ -3,7 +3,7 @@ package HTTPServer;
 import java.util.Map;
 
 public class Request {
-    private Map params;
+    private Map<String, String> params;
     private String header;
     private String body;
 

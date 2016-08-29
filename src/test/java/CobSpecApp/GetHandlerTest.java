@@ -1,5 +1,6 @@
 package CobSpecApp;
 
+import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Setup;
 import junit.framework.TestCase;
@@ -13,7 +14,7 @@ public class GetHandlerTest extends TestCase {
         params.put("path", "/redirect");
         GetHandler handler = new GetHandler(new Setup(new String[0]));
 
-        Response response = handler.handle(params);
+        Response response = handler.handle(new Request(params));
 
         assertEquals("HTTP/1.1 302 FOUND\r\nLocation: http://localhost:5000/\r\n", new String(response.getHeader(), "UTF-8"));
     }
@@ -26,7 +27,7 @@ public class GetHandlerTest extends TestCase {
         params.put("variable_2", "nom nom");
         GetHandler handler = new GetHandler(new Setup(new String[0]));
 
-        Response response = handler.handle(params);
+        Response response = handler.handle(new Request(params));
 
         assertEquals("variable_1 = cake\r\nvariable_2 = nom nom", new String(response.getBody(), "UTF-8"));
     }

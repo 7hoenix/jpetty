@@ -21,14 +21,14 @@ public class InputParserTest extends TestCase {
         assertEquals(request.getParams().get("scheme"), "HTTP/1.1");
     }
 
-//    public void test_it_can_handle_a_blank_input_stream() throws Exception {
-//        InputStream inputStream = new ByteArrayInputStream("".getBytes());
-//        InputParser parser = new InputParser();
-//
-//        Request request = parser.create(inputStream);
-//
-//        assert(request.getParams().isEmpty());
-//    }
+    public void test_it_can_handle_a_blank_input_stream() throws Exception {
+        InputStream inputStream = new ByteArrayInputStream("".getBytes());
+        InputParser parser = new InputParser();
+
+        Request request = parser.create(inputStream);
+
+        assert(request.getParams().isEmpty());
+    }
 
     public void test_it_can_store_the_body_of_the_request() throws Exception {
         InputStream inputStream = new ByteArrayInputStream("GET /parameters?a=1&b=2 HTTP/1.1\r\n\r\n".getBytes());
@@ -60,7 +60,7 @@ public class InputParserTest extends TestCase {
 
         Request request = parser.create(inputStream);
 
-        assertEquals("GET /parameters?a=1&b=2 HTTP/1.1\r\n", request.getHeader());
+        assertEquals("GET /parameters?a=1&b=2 HTTP/1.1", request.getHeader());
         assertEquals("hi mom", request.getBody());
     }
 }

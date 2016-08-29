@@ -1,5 +1,6 @@
 package CobSpecApp;
 
+import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Setup;
 
@@ -12,7 +13,7 @@ public class PutHandler implements Handler {
         this.settings = settings;
     }
 
-    public Response handle(Map request) {
+    public Response handle(Request request) {
         Response response = new Response();
         response.setHeader("HTTP/1.1 200 OK\r\n".getBytes());
         return response;

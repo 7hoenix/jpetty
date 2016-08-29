@@ -30,8 +30,9 @@ public class HTTPService {
         } else {
             Map routes = CobSpecRoutes.generate(settings);
             Router router = new Router(routes);
-            Handler handler = router.route(request.getParams());
-            return handler.handle(request.getParams());
+            Handler handler = router.route(request);
+            return handler.handle(request);
         }
     }
 }
+

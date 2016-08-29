@@ -1,5 +1,6 @@
 package CobSpecApp;
 
+import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Responses;
 import HTTPServer.Setup;
@@ -16,9 +17,9 @@ public class HeadHandler implements Handler {
         this.settings = settings;
     }
 
-    public Response handle(Map params) throws IOException {
+    public Response handle(Request request) throws IOException {
         Response response = new Response();
-        File currentFile = new File(settings.getRoot().getPath().concat((String) params.get("path")));
+        File currentFile = new File(settings.getRoot().getPath().concat((String) request.getParams().get("path")));
         if (currentFile.isDirectory()) {
             response.setHeader("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n".getBytes());
         } else if (currentFile.isFile()) {
