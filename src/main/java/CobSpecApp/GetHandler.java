@@ -21,6 +21,13 @@ public class GetHandler implements Handler {
             response.setHeader(("HTTP/1.1 302 FOUND\r\nLocation: http://localhost:" +
                     String.valueOf(settings.getPort()) + "/\r\n").getBytes());
             return response;
+        } else if (params.containsKey("variable_1")) {
+            Response response = new Response();
+            response.setHeader("HTTP/1.1 200 OK\r\n".getBytes());
+            String body =  "variable_1 = " + params.get("variable_1") + "\r\n" +
+                    "variable_2 = " + params.get("variable_2");
+            response.setBody(body.getBytes());
+            return response;
         } else {
             return basicGetResponse(params);
         }
