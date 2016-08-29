@@ -7,42 +7,29 @@ import java.util.Map;
 
 public class InputParser {
     public Request create(InputStream inputStream) throws IOException {
-//        byte[] result = parseResult(inputStream);
-//        String fullLine = Requests.findLine(result);
-//        String header = Requests.findHeader(result);
-//        String body = Requests.findBody(result);
-//        return new Request(populateParams(fullLine), header, body);
-//        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-//        String[] result = new String[5000];
-//        String line;
-//        int counter = 0;
-//        while ((line = br.readLine()) != null) {
-//            result[counter] = line;
-//            counter++;
-//            if (line.isEmpty()) {
-//                break;
-//            }
-//        }
-        return new Request(new HashMap());
+        byte[] result = parseResult(inputStream);
+        String fullLine = Requests.findLine(result);
+        String header = Requests.findHeader(result);
+        String body = Requests.findBody(result);
+        return new Request(populateParams(fullLine), header, body);
     }
 
     private byte[] parseResult(InputStream inputStream) throws IOException {
         ByteArrayOutputStream result = new ByteArrayOutputStream();
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
         int numberRead;
-        byte[] data = new byte[16384];
-
-        while ((numberRead = inputStream.read(data, 0, data.length)) != -1) {
-            result.write(data, 0, numberRead);
+        while ((numberRead = in.read()) != -1) {
+            result.write(numberRead);
+            if (!in.ready())
+                break;
         }
-
         result.flush();
-
         return result.toByteArray();
     }
 
     private Map populateParams(String completeLine) throws IOException {
         HashMap params = new HashMap();
-        if (completeLine != null) {
+        if (completeLine != null && !completeLine.isEmpty()) {
             String[] line = completeLine.split(" ");
             params.putAll(findAction(line[0]));
             params.putAll(findPathAndQueryParams(line[1]));
@@ -53,7 +40,11 @@ public class InputParser {
 
     private HashMap findScheme(String httpScheme) {
         HashMap scheme = new HashMap();
-        scheme.put("scheme", httpScheme);
+        if (httpScheme.endsWith("\r\n")) {
+            scheme.put("scheme", httpScheme.substring(0, httpScheme.length() - 2));
+        } else {
+            scheme.put("scheme", httpScheme);
+        }
         return scheme;
     }
 
