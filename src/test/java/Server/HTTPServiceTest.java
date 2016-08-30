@@ -9,7 +9,7 @@ import java.io.*;
 
 public class HTTPServiceTest extends TestCase {
     public void testItHandlesASimpleRequest() throws Exception {
-        InputStream request = new ByteArrayInputStream("GET / HTTP/1.1\r\n\r\n".getBytes());
+        InputStream inputStream = new ByteArrayInputStream("GET / HTTP/1.1\r\nContent-Type: text/html\r\n\r\n".getBytes());
         String[] args = new String[3];
         args[0] = "-d";
         args[1] = "public";
@@ -17,7 +17,8 @@ public class HTTPServiceTest extends TestCase {
         Setup settings = new Setup(args);
         HTTPService service = new HTTPService(settings);
 
-        Response response = service.processInput(request);
+        Response response = service.processInput(inputStream);
+
         String basicResponse = basicResponse("Content-Type: text/html\r\nConnection: close\r\n" +
                 "Content-Length: 71\r\n\r\n", wrapHtml("<h1>Hello World</h1>"));
         assertEquals(basicResponse, new String(response.getFull(), "UTF-8"));
