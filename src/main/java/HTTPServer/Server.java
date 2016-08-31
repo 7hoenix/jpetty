@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 public class Server {
     private ServerConnectible wrappedServerSocket;
     private Setup settings;
+    private DataStorage dataStore;
 
     public static void main(String[] args) throws IOException {
         Setup settings = new Setup(args);
@@ -19,18 +20,20 @@ public class Server {
     public Server(ServerConnectible serverSocket, Setup settings) {
         this.wrappedServerSocket = serverSocket;
         this.settings = settings;
+        this.dataStore = new DataStore();
     }
 
     public Server(ServerConnectible serverSocket, String[] args) {
         this.wrappedServerSocket = serverSocket;
         this.settings = new Setup(args);
+        this.dataStore = new DataStore();
     }
 
     public void run() throws IOException {
         while (wrappedServerSocket.listening().equals(true)) {
             Connectible wrappedSocket = wrappedServerSocket.accept();
             InputStream inputStream = wrappedSocket.getInputStream();
-            HTTPService service = new HTTPService(settings);
+            HTTPService service = new HTTPService(settings, dataStore);
             Response response = service.processInput(inputStream);
             wrappedSocket.write(response.getFull());
             wrappedSocket.close();
