@@ -1,16 +1,18 @@
 package CobSpecApp;
 
-import HTTPServer.Request;
-import HTTPServer.Response;
-import HTTPServer.Setup;
-
-import java.util.Map;
+import HTTPServer.*;
 
 public class OptionsHandler implements Handler {
     private Setup settings;
+    private DataStorage dataStore;
 
     public OptionsHandler(Setup settings) {
         this.settings = settings;
+    }
+
+    public OptionsHandler(Setup settings, DataStorage dataStore) {
+        this.settings = settings;
+        this.dataStore = dataStore;
     }
 
     public Response handle(Request request) {

@@ -7,7 +7,6 @@ import HTTPServer.Setup;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
 
 public class PostHandlerTest extends TestCase {
     public void test_it_passes_the_simple_post_spec() throws Exception {

@@ -1,6 +1,5 @@
 package HTTPServer;
 
-import CobSpecApp.Handler;
 import CobSpecApp.CobSpecRoutes;
 
 import java.io.*;
@@ -8,9 +7,15 @@ import java.util.Map;
 
 public class HTTPService {
     private Setup settings;
+    private DataStorage dataStore;
 
     public HTTPService(Setup settings) {
         this.settings = settings;
+    }
+
+    public HTTPService(Setup settings, DataStorage dataStore) {
+        this.settings = settings;
+        this.dataStore = dataStore;
     }
 
     public HTTPService(String root) {
@@ -27,7 +32,7 @@ public class HTTPService {
             response.setHeader("HTTP/1.1 400 BAD REQUEST\r\n".getBytes());
             return response;
         } else {
-            Map routes = CobSpecRoutes.generate(settings);
+            Map routes = CobSpecRoutes.generate(settings, dataStore);
             Router router = new Router(routes);
             Handler handler = router.route(request);
             return handler.handle(request);

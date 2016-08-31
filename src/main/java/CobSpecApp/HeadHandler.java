@@ -1,20 +1,17 @@
 package CobSpecApp;
 
-import HTTPServer.Request;
-import HTTPServer.Response;
-import HTTPServer.Responses;
-import HTTPServer.Setup;
+import HTTPServer.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 public class HeadHandler implements Handler {
-
     private Setup settings;
+    private DataStorage dataStore;
 
-    public HeadHandler(Setup settings) {
+    public HeadHandler(Setup settings, DataStorage dataStore) {
         this.settings = settings;
+        this.dataStore = dataStore;
     }
 
     public Response handle(Request request) throws IOException {

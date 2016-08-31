@@ -1,5 +1,6 @@
 package CobSpecApp;
 
+import HTTPServer.Handler;
 import HTTPServer.Request;
 import HTTPServer.Response;
 

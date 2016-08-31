@@ -1,16 +1,18 @@
 package CobSpecApp;
 
-import HTTPServer.Request;
-import HTTPServer.Response;
-import HTTPServer.Setup;
-
-import java.util.Map;
+import HTTPServer.*;
 
 public class PutHandler implements Handler {
     private Setup settings;
+    private DataStorage dataStore;
 
     public PutHandler(Setup settings) {
         this.settings = settings;
+    }
+
+    public PutHandler(Setup settings, DataStorage dataStore) {
+        this.settings = settings;
+        this.dataStore = dataStore;
     }
 
     public Response handle(Request request) {
