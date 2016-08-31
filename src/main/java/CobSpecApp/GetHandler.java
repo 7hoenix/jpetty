@@ -1,42 +1,45 @@
 package CobSpecApp;
 
-import HTTPServer.Response;
-import HTTPServer.Responses;
-import HTTPServer.Setup;
+import HTTPServer.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 public class GetHandler implements Handler {
     private Setup settings;
+    private DataStorage dataStore;
 
     public GetHandler(Setup settings) {
         this.settings = settings;
     }
 
-    public Response handle(Map params) throws IOException {
-        if (params.containsValue("/redirect")) {
+    public GetHandler(Setup settings, DataStorage dataStore) {
+        this.settings = settings;
+        this.dataStore = dataStore;
+    }
+
+    public Response handle(Request request) throws IOException {
+        if (request.findQuery().contains("/redirect")) {
             Response response = new Response();
             response.setHeader(("HTTP/1.1 302 FOUND\r\nLocation: http://localhost:" +
                     String.valueOf(settings.getPort()) + "/\r\n").getBytes());
             return response;
-        } else if (params.containsKey("variable_1")) {
+        } else if (request.findQueryParams().containsKey("variable_1")) {
             Response response = new Response();
             response.setHeader("HTTP/1.1 200 OK\r\n".getBytes());
-            String body =  "variable_1 = " + params.get("variable_1") + "\r\n" +
-                    "variable_2 = " + params.get("variable_2");
+            String body =  "variable_1 = " + request.findQueryParams().get("variable_1") + "\r\n" +
+                    "variable_2 = " + request.findQueryParams().get("variable_2");
             response.setBody(body.getBytes());
             return response;
         } else {
-            return basicGetResponse(params);
+            return basicGetResponse(request);
         }
     }
 
-    private Response basicGetResponse(Map params) throws IOException {
-        File currentFile = new File(settings.getRoot().getPath().concat((String) params.get("path")));
+    private Response basicGetResponse(Request request) throws IOException {
+        File currentFile = new File(settings.getRoot().getPath().concat(request.findQuery()));
         if (currentFile.isDirectory()) {
-            return handleDirectory(currentFile, params);
+            return handleDirectory(currentFile, request);
         } else if (currentFile.isFile()) {
             return handleFile(currentFile);
         } else {
@@ -56,7 +59,7 @@ public class GetHandler implements Handler {
         return response;
     }
 
-    private Response handleDirectory(File currentFile, Map request) throws IOException {
+    private Response handleDirectory(File currentFile, Request request) throws IOException {
         File index = new File(currentFile.getPath().concat("/index.html"));
         if (index.exists() && settings.getAutoIndex()) {
             return handleFile(index);
@@ -74,7 +77,7 @@ public class GetHandler implements Handler {
         }
     }
 
-    private Response generateDirectoryResponse(File currentFile, Map parsedRequest) throws IOException {
+    private Response generateDirectoryResponse(File currentFile, Request request) throws IOException {
         Response response = new Response();
         response.setHeader("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n".getBytes());
         String body = "<!DOCTYPE html><html lang=\"en\"><body>";
@@ -86,7 +89,7 @@ public class GetHandler implements Handler {
             links = links.concat(createLink(parentRoute, ".."));
         }
         for (File file : filesInDir) {
-            String path = (String) parsedRequest.get("path");
+            String path = request.findQuery();
             if (path.equals("/"))
                 path = "";
             path = path + "/" + file.getName();

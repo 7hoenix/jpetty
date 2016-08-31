@@ -1,9 +1,9 @@
 package CobSpecApp;
 
+import HTTPServer.Handler;
+import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Setup;
-
-import java.util.Map;
 
 public class MockHandler implements Handler {
     private Setup settings;
@@ -14,7 +14,7 @@ public class MockHandler implements Handler {
         this.called = false;
     }
 
-    public Response handle(Map params) {
+    public Response handle(Request request) {
         this.called = true;
         return new Response();
     }
