@@ -4,8 +4,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 public class Response {
-    private byte[] header;
-    private byte[] body;
+    private final byte[] header;
+    private final byte[] body;
+
+    public Response(byte[] header, byte[] body) {
+        this.header = header;
+        this.body = body;
+    }
+
+    public Response(byte[] header) {
+        this.header = header;
+        this.body = new byte[0];
+    }
 
     public byte[] getFull() throws IOException {
         byte[] fullHeader = combine(getHeader(), "\r\n".getBytes());
@@ -14,14 +24,6 @@ public class Response {
         } else {
             return fullHeader;
         }
-    }
-
-    public void setHeader(byte[] header) {
-        this.header = header;
-    }
-
-    public void setBody(byte[] body) {
-        this.body = body;
     }
 
     public byte[] getHeader() {

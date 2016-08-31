@@ -28,9 +28,8 @@ public class HTTPService {
     public Response processInput(InputStream inputStream) throws IOException {
         Request request = new RequestFactory().create(inputStream);
         if (!request.isValid()) {
-            Response response = new Response();
-            response.setHeader("HTTP/1.1 400 BAD REQUEST\r\n".getBytes());
-            return response;
+            byte[] header = "HTTP/1.1 400 BAD REQUEST\r\n".getBytes();
+            return new ResponseFactory().create(header);
         } else {
             Map routes = CobSpecRoutes.generate(settings, dataStore);
             Router router = new Router(routes);
