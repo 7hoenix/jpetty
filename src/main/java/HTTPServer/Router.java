@@ -1,6 +1,5 @@
 package HTTPServer;
 import CobSpecApp.ErrorHandler;
-import CobSpecApp.Handler;
 
 import java.io.IOException;
 import java.util.Map;
