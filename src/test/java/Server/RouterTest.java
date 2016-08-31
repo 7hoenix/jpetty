@@ -1,7 +1,7 @@
 package Server;
 
 import CobSpecApp.MockHandler;
-import CobSpecApp.Handler;
+import HTTPServer.Handler;
 import HTTPServer.Request;
 import HTTPServer.RequestFactory;
 import HTTPServer.Router;
