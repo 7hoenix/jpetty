@@ -75,15 +75,27 @@ public class Request {
         return params;
     }
 
+    public Map findPostParams() throws UnsupportedEncodingException {
+        String queryString = getBody();
+        return parseParams(queryString);
+    }
+
     private Map parseParams(String queryParams) throws UnsupportedEncodingException {
         Map finalParams = new HashMap();
         if (queryParams.contains("&")) {
             String[] params = queryParams.split("&");
             for(String param : params) {
-                String[] argAndValue = param.split("=");
-                finalParams.put(decode(argAndValue[0]), decode(argAndValue[1]));
+                finalParams = putArgAndValue(finalParams, param);
             }
+        } else {
+            finalParams = putArgAndValue(finalParams, queryParams);
         }
+        return finalParams;
+    }
+
+    private Map putArgAndValue(Map finalParams, String param) throws UnsupportedEncodingException {
+        String[] argAndValue = param.split("=");
+        finalParams.put(decode(argAndValue[0]), decode(argAndValue[1]));
         return finalParams;
     }
 
