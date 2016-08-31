@@ -15,16 +15,16 @@ public class HeadHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        Response response = new Response();
+        byte[] header;
         File currentFile = new File(settings.getRoot().getPath().concat(request.findQuery()));
         if (currentFile.isDirectory()) {
-            response.setHeader("HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n".getBytes());
+            header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n".getBytes();
         } else if (currentFile.isFile()) {
-            response.setHeader(handleFile(currentFile));
+            header = handleFile(currentFile);
         } else {
-            response.setHeader("HTTP/1.1 404 NOT FOUND\r\n".getBytes());
+            header = "HTTP/1.1 404 NOT FOUND\r\n".getBytes();
         }
-        return response;
+        return new ResponseFactory().create(header);
     }
 
     private byte[] handleFile(File currentFile) throws IOException {

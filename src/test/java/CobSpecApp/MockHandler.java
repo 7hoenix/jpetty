@@ -16,6 +16,6 @@ public class MockHandler implements Handler {
 
     public Response handle(Request request) {
         this.called = true;
-        return new Response();
+        return new Response(new byte[0]);
     }
 }

@@ -3,6 +3,7 @@ package CobSpecApp;
 import HTTPServer.Handler;
 import HTTPServer.Request;
 import HTTPServer.Response;
+import HTTPServer.ResponseFactory;
 
 public class ErrorHandler implements Handler {
     private String message;
@@ -12,8 +13,6 @@ public class ErrorHandler implements Handler {
     }
 
     public Response handle(Request request) {
-        Response response = new Response();
-        response.setHeader(message.getBytes());
-        return response;
+        return new ResponseFactory().create(message.getBytes());
     }
 }

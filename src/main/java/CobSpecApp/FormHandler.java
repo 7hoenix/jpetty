@@ -15,10 +15,11 @@ public class FormHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        Response response = new Response();
-        response.setHeader("HTTP/1.1 200 OK\r\n".getBytes());
+        byte[] header;
+        byte[] body = new byte[0];
+        header = "HTTP/1.1 200 OK\r\n".getBytes();
         if (request.findAction().contains("GET")) {
-            response.setBody(formContent().getBytes());
+            body = formContent().getBytes();
         } else if (request.findAction().contains("POST")) {
             Map params = request.findPostParams();
             dataStore.store("data", (String) params.get("data"));
@@ -28,7 +29,7 @@ public class FormHandler implements Handler {
         } else if (request.findAction().contains("DELETE")) {
             dataStore.remove("data");
         }
-        return response;
+        return new ResponseFactory().create(header, body);
     }
 
     private String formContent() {
