@@ -17,7 +17,7 @@ public class Router {
         } else if (routes.containsKey(request.findAction())) {
             return routes.get(request.findAction());
         } else {
-            return new ErrorHandler("HTTP/1.1 405 NOT FOUND\r\n");
+            return new ErrorHandler(404);
         }
     }
 }

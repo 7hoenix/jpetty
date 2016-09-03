@@ -16,7 +16,6 @@ public class PutHandler implements Handler {
     }
 
     public Response handle(Request request) {
-        byte[] header = "HTTP/1.1 200 OK\r\n".getBytes();
-        return new ResponseFactory().create(header);
+        return new Response(200);
     }
 }

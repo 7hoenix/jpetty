@@ -15,6 +15,6 @@ public class PostHandlerTest extends TestCase {
 
         Response response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\n", new String(response.getHeader(), "UTF-8"));
+        assertEquals(200, response.getStatusCode());
     }
 }

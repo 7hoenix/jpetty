@@ -15,7 +15,8 @@ public class GetHandlerTest extends TestCase {
 
         Response response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 302 FOUND\r\nLocation: http://localhost:5000/\r\n", new String(response.getHeader(), "UTF-8"));
+        assertEquals(302, response.getStatusCode());
+        assertEquals("http://localhost:5000/", response.getHeader("Location"));
     }
 
     public void test_it_handles_decoding_parameters() throws Exception {

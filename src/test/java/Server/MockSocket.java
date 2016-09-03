@@ -15,9 +15,7 @@ public class MockSocket implements Connectible, Runnable {
         this.input = input;
     }
 
-    public InputStream getInputStream()
-    {
-
+    public InputStream getInputStream() {
         return input;
     }
 
@@ -26,9 +24,7 @@ public class MockSocket implements Connectible, Runnable {
         this.output = response;
     }
 
-    public void close()
-    {
-
+    public void close() {
     }
 
     public String displayValue() throws UnsupportedEncodingException {

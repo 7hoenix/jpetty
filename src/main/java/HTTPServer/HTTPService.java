@@ -5,7 +5,7 @@ import CobSpecApp.CobSpecRoutes;
 import java.io.*;
 import java.util.Map;
 
-public class HTTPService {
+public class HTTPService  {
     private Setup settings;
     private DataStorage dataStore;
 
@@ -25,17 +25,15 @@ public class HTTPService {
         this.settings = new Setup(args);
     }
 
-    public Response processInput(InputStream inputStream) throws IOException {
+    public byte[] processInput(InputStream inputStream) throws IOException {
         Request request = new RequestFactory().create(inputStream);
         if (!request.isValid()) {
-            byte[] header = "HTTP/1.1 400 BAD REQUEST\r\n".getBytes();
-            return new ResponseFactory().create(header);
+            return new ResponseFormatter().formatResponse(new Response(400));
         } else {
             Map routes = CobSpecRoutes.generate(settings, dataStore);
             Router router = new Router(routes);
             Handler handler = router.route(request);
-            return handler.handle(request);
+            return new ResponseFormatter().formatResponse(handler.handle(request));
         }
     }
 }
-

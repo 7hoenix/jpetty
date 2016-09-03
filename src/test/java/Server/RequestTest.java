@@ -68,19 +68,20 @@ public class RequestTest extends TestCase {
 
         assertEquals("Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?", params.get("variable_1"));
     }
-
-    public void test_it_parses_params_in_the_body_of_a_post_request() throws Exception {
-        byte[] fullRequest = ("POST /form HTTP/1.1\r\n\r\na=1&b=2").getBytes();
-        String header = "POST /form HTTP/1.1";
-        String body = "a=1&b=2";
-        Request request = new Request(fullRequest, header, body);
-
-        Map params = request.findPostParams();
-
-        assertEquals("1", params.get("a"));
-        assertEquals("2", params.get("b"));
-
-    }
+//
+//    public void test_it_parses_params_in_the_body_of_a_post_request() throws Exception {
+//        byte[] fullRequest = ("POST /form HTTP/1.1\r\n\r\na=1&b=2").getBytes();
+//        String header = "POST /form HTTP/1.1";
+//        String body = "a=1&b=2";
+//        Request request = new Request(fullRequest, header, body);
+//
+//        Map params = request.findPostParams();
+//
+//        assertEquals("1", params.get("a"));
+//        assertEquals("2", params.get("b"));
+//        Response response = new Response();
+//        response.setStatusCode(200).setHeader("Location", "");
+//    }
 
     private Request getRequest(String query) {
         byte[] fullRequest = ("POST " + query + " HTTP/1.1\r\nContent-Length: 13\r\nContent-Type: application/x-www-form-urlencoded\r\n\r\nhi=mom").getBytes();

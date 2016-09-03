@@ -15,11 +15,8 @@ public class FormHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        byte[] header;
-        byte[] body = new byte[0];
-        header = "HTTP/1.1 200 OK\r\n".getBytes();
         if (request.findAction().contains("GET")) {
-            body = formContent().getBytes();
+            return new Response(200).setBody(formContent());
         } else if (request.findAction().contains("POST")) {
             Map params = request.findPostParams();
             dataStore.store("data", (String) params.get("data"));
@@ -29,15 +26,15 @@ public class FormHandler implements Handler {
         } else if (request.findAction().contains("DELETE")) {
             dataStore.remove("data");
         }
-        return new ResponseFactory().create(header, body);
+        return new Response(200);
     }
 
-    private String formContent() {
+    private byte[] formContent() {
         if (!dataStore.retrieve("data").isEmpty()) {
             String data = "data=" + dataStore.retrieve("data");
-            return basicForm(data);
+            return basicForm(data).getBytes();
         } else {
-            return basicForm();
+            return basicForm().getBytes();
         }
     }
 

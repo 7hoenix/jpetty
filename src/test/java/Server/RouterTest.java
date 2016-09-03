@@ -25,12 +25,12 @@ public class RouterTest extends TestCase {
     }
 
     public void test_it_returns_the_error_handler_with_404_if_route_is_not_found() throws Exception {
-        Request request = new RequestFactory().create(new ByteArrayInputStream("TRACE / HTTP/1.1\r\n\r\n".getBytes()));
+        Request request = new RequestFactory().create(new ByteArrayInputStream("GET / HTTP/1.1\r\n\r\n".getBytes()));
         HashMap supportedRoutes = new HashMap();
         Router router = new Router(supportedRoutes);
 
         Handler handler = router.route(request);
 
-        assertEquals("HTTP/1.1 405 NOT FOUND\r\n", new String(handler.handle(request).getHeader(), "UTF-8"));
+        assertEquals(404, handler.handle(request).getStatusCode());
     }
 }

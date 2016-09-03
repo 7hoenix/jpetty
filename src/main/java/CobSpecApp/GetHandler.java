@@ -4,6 +4,9 @@ import HTTPServer.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class GetHandler implements Handler {
     private Setup settings;
@@ -20,17 +23,19 @@ public class GetHandler implements Handler {
 
     public Response handle(Request request) throws IOException {
         if (request.findQuery().contains("/redirect")) {
-            byte[] header = ("HTTP/1.1 302 FOUND\r\nLocation: http://localhost:" +
-                    String.valueOf(settings.getPort()) + "/\r\n").getBytes();
-            return new ResponseFactory().create(header);
+            Response response = new Response(302).setHeader("Location", fullPath("/"));
+            return response;
         } else if (request.findQueryParams().containsKey("variable_1")) {
-            byte[] header = "HTTP/1.1 200 OK\r\n".getBytes();
             byte[] body =  ("variable_1 = " + request.findQueryParams().get("variable_1") + "\r\n" +
                     "variable_2 = " + request.findQueryParams().get("variable_2")).getBytes();
-            return new ResponseFactory().create(header, body);
+            return new Response(200).setBody(body);
         } else {
             return basicGetResponse(request);
         }
+    }
+
+    private String fullPath(String path) {
+        return "http://localhost:" + String.valueOf(settings.getPort() + path);
     }
 
     private Response basicGetResponse(Request request) throws IOException {
@@ -40,18 +45,28 @@ public class GetHandler implements Handler {
         } else if (currentFile.isFile()) {
             return handleFile(currentFile);
         } else {
-            byte[] header = "HTTP/1.1 404 NOT FOUND\r\n".getBytes();
-            return new ResponseFactory().create(header);
+            return new Response(404);
         }
     }
 
     private Response handleFile(File currentFile) throws IOException {
-        Responses responder = new Responses();
-        byte[] basic = responder.basicResponse();
-        byte[] contentType = responder.wrapContentType(basic, currentFile);
-        byte[] header = responder.wrapContentLength(responder.wrapConnection(contentType), currentFile);
-        byte[] body = responder.wrapBody(new byte[0], currentFile);
-        return new ResponseFactory().create(header, body);
+        Response response = new Response(200)
+                .setHeader("Content-Type", findContentType(currentFile))
+                .setHeader("Content-Length", new String(String.valueOf(findContentLength(currentFile))))
+                .setBody(readFile(currentFile));
+        return response;
+    }
+
+    private byte[] readFile(File currentFile) throws IOException {
+        return Files.readAllBytes(Paths.get(currentFile.getPath()));
+    }
+
+    private int findContentLength(File currentFile) throws IOException {
+        return readFile(currentFile).length;
+    }
+
+    private String findContentType(File currentFile) {
+        return URLConnection.guessContentTypeFromName(currentFile.getName());
     }
 
     private Response handleDirectory(File currentFile, Request request) throws IOException {
@@ -73,7 +88,6 @@ public class GetHandler implements Handler {
     }
 
     private Response generateDirectoryResponse(File currentFile, Request request) throws IOException {
-        byte[] header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n".getBytes();
         String body = "<!DOCTYPE html><html lang=\"en\"><body>";
         File[] filesInDir = currentFile.listFiles(pathname -> !pathname.isHidden());
         String links = "";
@@ -91,7 +105,7 @@ public class GetHandler implements Handler {
             links = links.concat(createLink(path, resource));
         }
         byte[] fullBody = (body + links + "</body></html>").getBytes();
-        return new ResponseFactory().create(header, fullBody);
+        return new Response(200).setHeader("Content-Type", "text/html").setBody(fullBody);
     }
 
     private String createLink(String path, String resource) {

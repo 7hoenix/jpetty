@@ -6,10 +6,10 @@ import junit.framework.TestCase;
 
 public class ErrorHandlerTest extends TestCase {
     public void test_it_returns_an_error_response() throws Exception {
-        ErrorHandler handler = new ErrorHandler("HTTP/1.1 404 NOT FOUND\r\n");
+        ErrorHandler handler = new ErrorHandler(404);
 
         Response response = handler.handle(new Request(new byte[0], "", ""));
 
-        assertEquals("HTTP/1.1 404 NOT FOUND\r\n\r\n", new String(response.getFull(), "UTF-8"));
+        assertEquals(404, response.getStatusCode());
     }
 }
