@@ -18,7 +18,7 @@ public class HeadHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        File currentFile = new File(settings.getRoot().getPath().concat(request.findQuery()));
+        File currentFile = new File(settings.getRoot().getPath().concat(request.getRoute()));
         if (currentFile.isDirectory()) {
             return new Response(200).setHeader("Content-Type", "text/html");
         } else if (currentFile.isFile()) {

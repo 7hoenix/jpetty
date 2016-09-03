@@ -1,5 +1,6 @@
 package HTTPServer;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,8 +28,9 @@ public class Response {
     }
 
     public Response setHeader(String fieldName, String fieldValue) {
-        headers.put(fieldName, fieldValue);
-        return new Response(this.statusCode, headers, this.body);
+        Map<String, String> updatedHeaders = new HashMap(headers);
+        updatedHeaders.put(fieldName, fieldValue);
+        return new Response(this.statusCode, updatedHeaders, this.body);
     }
 
     public String getHeader(String fieldName) {
@@ -36,7 +38,8 @@ public class Response {
     }
 
     public Response setBody(byte[] body) {
-        return new Response(this.statusCode, this.headers, body);
+        byte[] updatedBody = Arrays.copyOf(body, body.length);
+        return new Response(this.statusCode, this.headers, updatedBody);
     }
 
     public byte[] getBody() {

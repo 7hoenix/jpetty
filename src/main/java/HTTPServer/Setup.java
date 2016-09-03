@@ -15,6 +15,10 @@ public class Setup {
         this.autoIndex = assignAutoIndex(args);
     }
 
+    public Setup() {
+        this(new String[0]);
+    }
+
     public File getRoot() {
        return root;
     }

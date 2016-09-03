@@ -9,10 +9,6 @@ public class HTTPService  {
     private Setup settings;
     private DataStorage dataStore;
 
-    public HTTPService(Setup settings) {
-        this.settings = settings;
-    }
-
     public HTTPService(Setup settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
@@ -26,14 +22,14 @@ public class HTTPService  {
     }
 
     public byte[] processInput(InputStream inputStream) throws IOException {
-        Request request = new RequestFactory().create(inputStream);
-        if (!request.isValid()) {
-            return new ResponseFormatter().formatResponse(new Response(400));
-        } else {
+        Request request = new RequestParser().create(inputStream);
+        if (request != null) {
             Map routes = CobSpecRoutes.generate(settings, dataStore);
             Router router = new Router(routes);
             Handler handler = router.route(request);
             return new ResponseFormatter().formatResponse(handler.handle(request));
+        } else {
+            return new ResponseFormatter().formatResponse(new Response(400));
         }
     }
 }

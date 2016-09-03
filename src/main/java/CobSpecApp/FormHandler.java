@@ -15,15 +15,13 @@ public class FormHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        if (request.findAction().contains("GET")) {
+        if (request.getAction().contains("GET")) {
             return new Response(200).setBody(formContent());
-        } else if (request.findAction().contains("POST")) {
-            Map params = request.findPostParams();
-            dataStore.store("data", (String) params.get("data"));
-        } else if (request.findAction().contains("PUT")) {
-            Map params = request.findPostParams();
-            dataStore.store("data", (String) params.get("data"));
-        } else if (request.findAction().contains("DELETE")) {
+        } else if (request.getAction().contains("POST")) {
+            dataStore.store("data", request.getParam("data"));
+        } else if (request.getAction().contains("PUT")) {
+            dataStore.store("data", request.getParam("data"));
+        } else if (request.getAction().contains("DELETE")) {
             dataStore.remove("data");
         }
         return new Response(200);

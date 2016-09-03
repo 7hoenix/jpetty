@@ -41,6 +41,8 @@ public class ResponseFormatter {
     private Map<Integer, String> defaultMessages() {
         Map<Integer, String> messagesByCodes = new HashMap();
         messagesByCodes.put(200, "OK");
+        messagesByCodes.put(404, "NOT FOUND");
+        messagesByCodes.put(405, "METHOD NOT ALLOWED");
         return messagesByCodes;
     }
 }
