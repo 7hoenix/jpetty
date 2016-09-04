@@ -23,10 +23,9 @@ public class RequestParser {
         if (line[0].contains("GET")) {
             String query = line[1];
             params = findQueryParams(query);
-        } else if (line[0].contains("POST")) {
+        } else if (line[0].contains("POST") || line[0].contains("PUT")) {
             params = parseParams(findBody(input));
         }
-        System.out.println(params);
         return params;
     }
 
@@ -123,8 +122,10 @@ public class RequestParser {
     }
 
     private Map putArgAndValue(Map finalParams, String param) throws UnsupportedEncodingException {
-        String[] argAndValue = param.split("=");
-        finalParams.put(decode(argAndValue[0]), decode(argAndValue[1]));
+        if (param.contains("=")) {
+            String[] argAndValue = param.split("=");
+            finalParams.put(decode(argAndValue[0]), decode(argAndValue[1]));
+        }
         return finalParams;
     }
 
