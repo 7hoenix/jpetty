@@ -8,6 +8,7 @@ import java.io.*;
 public class HTTPServiceTest extends TestCase {
     public void test_it_handles_not_valid() throws Exception {
         InputStream input = new ByteArrayInputStream("GET /cake HTTP/1.1\r\n\r\n".getBytes());
+        
         HTTPService service = new HTTPService("public");
 
         byte[] output = service.processInput(input);
