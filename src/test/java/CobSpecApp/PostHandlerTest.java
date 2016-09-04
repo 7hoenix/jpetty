@@ -1,7 +1,7 @@
 package CobSpecApp;
 
 import HTTPServer.Request;
-import HTTPServer.RequestFactory;
+import HTTPServer.RequestParser;
 import HTTPServer.Response;
 import HTTPServer.Setup;
 import junit.framework.TestCase;
@@ -10,11 +10,11 @@ import java.io.ByteArrayInputStream;
 
 public class PostHandlerTest extends TestCase {
     public void test_it_passes_the_simple_post_spec() throws Exception {
-        Request request = new RequestFactory().create(new ByteArrayInputStream("POST /games HTTP/1.1\r\n\r\n".getBytes()));
+        Request request = new Request("POST", "/games");
         PostHandler handler = new PostHandler(new Setup(new String[0]));
 
         Response response = handler.handle(request);
 
-        assertEquals("HTTP/1.1 200 OK\r\n", new String(response.getHeader(), "UTF-8"));
+        assertEquals(200, response.getStatusCode());
     }
 }

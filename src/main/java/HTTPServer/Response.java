@@ -1,43 +1,52 @@
 package HTTPServer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Response {
-    private final byte[] header;
-    private final byte[] body;
+    private int statusCode;
+    private Map<String, String> headers;
+    private byte[] body;
 
-    public Response(byte[] header, byte[] body) {
-        this.header = header;
+    public Response(int statusCode) {
+        this(statusCode, new HashMap<>(), new byte[0]);
+    }
+
+    private Response(int statusCode, Map<String, String> headers, byte[] body) {
+        this.statusCode = statusCode;
+        this.headers = headers;
         this.body = body;
     }
 
-    public Response(byte[] header) {
-        this.header = header;
-        this.body = new byte[0];
+    public Response setStatusCode(int statusCode) {
+        return new Response(statusCode, this.headers, this.body);
     }
 
-    public byte[] getFull() throws IOException {
-        byte[] fullHeader = combine(getHeader(), "\r\n".getBytes());
-        if (getBody() != null) {
-            return combine(fullHeader, getBody());
-        } else {
-            return fullHeader;
-        }
+    public int getStatusCode() {
+        return statusCode;
     }
 
-    public byte[] getHeader() {
-        return header;
+    public Response setHeader(String fieldName, String fieldValue) {
+        Map<String, String> updatedHeaders = new HashMap(headers);
+        updatedHeaders.put(fieldName, fieldValue);
+        return new Response(this.statusCode, updatedHeaders, this.body);
+    }
+
+    public String getHeader(String fieldName) {
+        return headers.get(fieldName);
+    }
+
+    public Response setBody(byte[] body) {
+        byte[] updatedBody = Arrays.copyOf(body, body.length);
+        return new Response(this.statusCode, this.headers, updatedBody);
     }
 
     public byte[] getBody() {
         return body;
     }
 
-    private byte[] combine(byte[] original, byte[] addend) throws IOException {
-        ByteArrayOutputStream combined = new ByteArrayOutputStream();
-        combined.write(original);
-        combined.write(addend);
-        return combined.toByteArray();
+    public Map<String, String> getHeaders() {
+        return headers;
     }
 }

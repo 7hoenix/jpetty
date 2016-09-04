@@ -16,12 +16,10 @@ public class OptionsHandler implements Handler {
     }
 
     public Response handle(Request request) {
-        byte[] header;
-        if (request.findQuery().equals("/method_options")) {
-            header = "HTTP/1.1 200 OK\r\nAllow: GET,HEAD,POST,OPTIONS,PUT\r\n".getBytes();
+        if (request.getRoute().equals("/method_options")) {
+            return new Response(200).setHeader("Allow", "GET,HEAD,POST,OPTIONS,PUT");
         } else {
-            header = "HTTP/1.1 200 OK\r\nAllow: GET,OPTIONS\r\n".getBytes();
+            return new Response(200).setHeader("Allow", "GET,OPTIONS,PUT");
         }
-        return new ResponseFactory().create(header);
     }
 }

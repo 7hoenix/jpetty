@@ -4,6 +4,9 @@ import HTTPServer.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class HeadHandler implements Handler {
     private Setup settings;
@@ -15,23 +18,31 @@ public class HeadHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        byte[] header;
-        File currentFile = new File(settings.getRoot().getPath().concat(request.findQuery()));
+        File currentFile = new File(settings.getRoot().getPath().concat(request.getRoute()));
         if (currentFile.isDirectory()) {
-            header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n".getBytes();
+            return new Response(200).setHeader("Content-Type", "text/html");
         } else if (currentFile.isFile()) {
-            header = handleFile(currentFile);
+            return handleFile(currentFile);
         } else {
-            header = "HTTP/1.1 404 NOT FOUND\r\n".getBytes();
+            return new Response(404);
         }
-        return new ResponseFactory().create(header);
     }
 
-    private byte[] handleFile(File currentFile) throws IOException {
-        Responses responder = new Responses();
-        byte[] basic = responder.basicResponse();
-        byte[] contentType = responder.wrapContentType(basic, currentFile);
-        byte[] connection = responder.wrapConnection(contentType);
-        return responder.wrapContentLength(connection, currentFile);
+    private Response handleFile(File currentFile) throws IOException {
+        return new Response(200)
+                .setHeader("Content-Type", findContentType(currentFile))
+                .setHeader("Content-Length", new String(String.valueOf(findContentLength(currentFile))));
+    }
+
+    private byte[] readFile(File currentFile) throws IOException {
+        return Files.readAllBytes(Paths.get(currentFile.getPath()));
+    }
+
+    private int findContentLength(File currentFile) throws IOException {
+        return readFile(currentFile).length;
+    }
+
+    private String findContentType(File currentFile) {
+        return URLConnection.guessContentTypeFromName(currentFile.getName());
     }
 }

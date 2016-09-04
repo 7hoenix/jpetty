@@ -18,7 +18,7 @@ public class HTTPServerTest extends TestCase {
 
     public void testItSendsBackTheProperResponse() throws Exception {
         InputStream request = new ByteArrayInputStream("GET / HTTP/1.1\r\nUser-Agent: Cake\r\nAccept-Language: en-us\r\n\r\n".getBytes());
-        String properResponse = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\nConnection: close\r\nContent-Length: 71\r\n\r\n" +
+        String properResponse = "HTTP/1.1 200 OK\r\nContent-Length: 71\r\nContent-Type: text/html\r\n\r\n" +
                 "<!DOCTYPE html><html lang=\"en\"><body><h1>Hello World</h1></body></html>";
         MockSocket socket = new MockSocket(request);
         MockServerSocket serverSocket = new MockServerSocket(socket, -1);
