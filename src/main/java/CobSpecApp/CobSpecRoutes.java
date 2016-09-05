@@ -11,6 +11,7 @@ public class CobSpecRoutes {
     public static Map<String, Handler> generate(Setup settings, DataStorage dataStore) {
         HashMap<String, Handler> routes = new HashMap();
         routes.put("/form", new FormHandler(settings, dataStore));
+        routes.put("/partial_content.txt", new PartialContentHandler(settings, dataStore));
         routes.put("GET", new GetHandler(settings, dataStore));
         routes.put("HEAD", new HeadHandler(settings, dataStore));
         routes.put("OPTIONS", new OptionsHandler(settings, dataStore));
