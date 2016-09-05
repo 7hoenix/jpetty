@@ -42,11 +42,10 @@ public class FileHandler implements Handler {
     }
 
     private Response handleFile(File currentFile) throws IOException {
-        Response response = new Response(200)
+        return new Response(200)
                 .setHeader("Content-Type", findContentType(currentFile))
                 .setHeader("Content-Length", new String(String.valueOf(findContentLength(currentFile))))
                 .setBody(readFile(currentFile));
-        return response;
     }
 
     private String fullPath(String path) {
