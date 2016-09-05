@@ -53,7 +53,8 @@ public class FileHandlerTest extends TestCase {
                 createLink("/games", "games") +
                 createLink("/geoffs-sweet-site", "geoffs-sweet-site") +
                 createLink("/images", "images") +
-                createLink("/index.html", "index.html");
+                createLink("/index.html", "index.html") +
+                createLink("/text-file.txt", "text-file.txt");
         assertEquals(wrapHtml(innerHtml), new String(response.getBody(), "UTF-8"));
         assertEquals("text/html", response.getHeader("Content-Type"));
     }
@@ -169,6 +170,7 @@ public class FileHandlerTest extends TestCase {
                 createLink("/test", "test");
         assertEquals(wrapHtml(innerHtml), new String(response.getBody(), "UTF-8"));
     }
+
 
     private String wrapHtml(String innerText) {
         return "<!DOCTYPE html><html lang=\"en\"><body>" + innerText + "</body></html>";
