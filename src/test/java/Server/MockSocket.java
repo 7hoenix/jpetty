@@ -1,46 +1,45 @@
 package Server;
 
-import HTTPServer.Connectible;
+import HTTPServer.Connectable;
 
-import java.io.*;
-import java.net.Socket;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-public class MockSocket implements Connectible, Runnable {
+public class MockSocket implements Connectable {
+    private boolean open = true;
+    private boolean read = false;
+    private boolean written = false;
     private InputStream input;
-    private byte[] output;
-    private Integer delay = 50;
+    private OutputStream output;
 
-    public MockSocket(InputStream input)
-    {
+    public MockSocket(InputStream input, OutputStream output) {
         this.input = input;
+        this.output = output;
     }
 
     public InputStream getInputStream() {
+        this.read = true;
         return input;
     }
 
-    public void write(byte[] response)
-    {
-        this.output = response;
+    public OutputStream getOutputStream() {
+        this.written = true;
+        return output;
+    }
+
+    public boolean isOpen() {
+        return this.open;
+    }
+
+    public boolean isRead() {
+        return this.read;
+    }
+
+    public boolean isWritten() {
+        return this.written;
     }
 
     public void close() {
-    }
-
-    public String displayValue() throws UnsupportedEncodingException {
-        return new String(output, "UTF-8");
-    }
-
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(delay);
-            Socket socket = new Socket("localhost", 5000);
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        this.open = false;
     }
 }
