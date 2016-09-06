@@ -17,6 +17,7 @@ public class CobSpecRoutes {
         routes.put("/coffee", new TeapotHandler(settings, dataStore));
         routes.put("/tea", new TeapotHandler(settings, dataStore));
         routes.put("/logs", new AuthorizationHandler(settings, dataStore));
+        routes.put("/patch-content.txt", new PatchHandler(settings, dataStore));
         routes.put("GET", new GetHandler(settings, dataStore));
         routes.put("HEAD", new HeadHandler(settings, dataStore));
         routes.put("OPTIONS", new OptionsHandler(settings, dataStore));

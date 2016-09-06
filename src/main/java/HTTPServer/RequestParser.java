@@ -12,6 +12,8 @@ public class RequestParser {
         byte[] fullRequest = parseResult(inputStream);
         Map<String, String> headers = findHeaders(fullRequest);
         Map<String, String> params = findParams(fullRequest);
+        if (findAction(fullRequest).equals("PATCH"))
+            System.out.println(new String(fullRequest, "UTF-8"));
         return new Request(findAction(fullRequest), findRoute(fullRequest))
                 .setHeaders(headers)
                 .setParams(params);
