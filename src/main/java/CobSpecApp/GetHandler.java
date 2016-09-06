@@ -10,6 +10,7 @@ public class GetHandler implements Handler {
 
     public GetHandler(Setup settings) {
         this.settings = settings;
+        this.dataStore = new DataStore();
     }
 
     public GetHandler(Setup settings, DataStorage dataStore) {
@@ -18,6 +19,7 @@ public class GetHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
+        dataStore.store("GET", request.getRoute());
         if (request.getRoute().contains("/redirect")) {
             Response response = new Response(302).setHeader("Location", fullPath("/"));
             return response;

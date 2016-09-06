@@ -12,7 +12,7 @@ public class RequestParser {
         byte[] fullRequest = parseResult(inputStream);
         Map<String, String> headers = findHeaders(fullRequest);
         Map<String, String> params = findParams(fullRequest);
-        return new Request(findAction(fullRequest), findQuery(fullRequest))
+        return new Request(findAction(fullRequest), findRoute(fullRequest))
                 .setHeaders(headers)
                 .setParams(params);
     }
@@ -97,6 +97,15 @@ public class RequestParser {
 
     public String findQuery(byte[] fullRequest) {
         return findHeader(fullRequest).split(" ")[1];
+    }
+
+    private String findRoute(byte[] fullRequest) {
+        String query = findQuery(fullRequest);
+        if (query.contains("?")) {
+            return query.split("\\?")[0];
+        } else {
+            return query;
+        }
     }
 
     public Map findQueryParams(String query) throws UnsupportedEncodingException {

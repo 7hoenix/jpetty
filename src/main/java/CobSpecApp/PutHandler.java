@@ -8,6 +8,7 @@ public class PutHandler implements Handler {
 
     public PutHandler(Setup settings) {
         this.settings = settings;
+        this.dataStore = new DataStore();
     }
 
     public PutHandler(Setup settings, DataStorage dataStore) {
@@ -16,6 +17,7 @@ public class PutHandler implements Handler {
     }
 
     public Response handle(Request request) {
+        dataStore.store("PUT", request.getRoute());
         return new Response(200);
     }
 }
