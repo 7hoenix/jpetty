@@ -54,6 +54,7 @@ public class FileHandlerTest extends TestCase {
                 createLink("/geoffs-sweet-site", "geoffs-sweet-site") +
                 createLink("/images", "images") +
                 createLink("/index.html", "index.html") +
+                createLink("/patch-content.txt", "patch-content.txt") +
                 createLink("/text-file.txt", "text-file.txt");
         assertEquals(wrapHtml(innerHtml), new String(response.getBody(), "UTF-8"));
         assertEquals("text/html", response.getHeader("Content-Type"));
