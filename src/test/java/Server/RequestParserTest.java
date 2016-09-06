@@ -12,7 +12,7 @@ public class RequestParserTest extends TestCase {
         InputStream inputStream = new ByteArrayInputStream("GET / HTTP/1.1\r\n\r\n".getBytes());
         RequestParser parser = new RequestParser();
 
-        Request request = parser.create(inputStream);
+        Request request = parser.parse(inputStream);
 
         assertEquals("GET", request.getAction());
         assertEquals("/", request.getRoute());
@@ -23,7 +23,7 @@ public class RequestParserTest extends TestCase {
                 "Content-Length: 2\r\nKeep: alive\r\n\r\n").getBytes());
         RequestParser parser = new RequestParser();
 
-        Request request = parser.create(inputStream);
+        Request request = parser.parse(inputStream);
 
         assertEquals("2", request.getHeader("Content-Length"));
         assertEquals("text/html", request.getHeader("Content-Type"));
@@ -33,7 +33,7 @@ public class RequestParserTest extends TestCase {
         InputStream inputStream = new ByteArrayInputStream(("GET /?a=1&b=2 HTTP/1.1\r\n\r\n").getBytes());
         RequestParser parser = new RequestParser();
 
-        Request request = parser.create(inputStream);
+        Request request = parser.parse(inputStream);
 
         assertEquals("1", request.getParam("a"));
         assertEquals("2", request.getParam("b"));
@@ -43,7 +43,7 @@ public class RequestParserTest extends TestCase {
         InputStream inputStream = new ByteArrayInputStream(("POST / HTTP/1.1\r\n\r\na=fat%20cat").getBytes());
         RequestParser parser = new RequestParser();
 
-        Request request = parser.create(inputStream);
+        Request request = parser.parse(inputStream);
 
         assertEquals("fat cat", request.getParam("a"));
     }

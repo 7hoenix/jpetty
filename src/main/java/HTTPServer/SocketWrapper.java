@@ -1,44 +1,26 @@
 package HTTPServer;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
-public class SocketWrapper implements Connectible {
+public class SocketWrapper implements Connectable {
     private Socket socket;
-    private InputStream inputStream;
-    private OutputStream outputStream;
 
-    public SocketWrapper(Socket socket, InputStream inputStream, OutputStream outputStream)
-    {
+    public SocketWrapper(Socket socket) {
         this.socket = socket;
-        this.inputStream = inputStream;
-        this.outputStream = outputStream;
     }
 
-    public SocketWrapper(Socket socket) throws IOException {
-        this.socket = socket;
-        this.inputStream = socket.getInputStream();
-        this.outputStream = socket.getOutputStream();
+    public InputStream getInputStream() throws IOException {
+        return socket.getInputStream();
     }
 
-    @Override
-    public InputStream getInputStream() throws IOException
-    {
-        return inputStream;
+    public OutputStream getOutputStream() throws IOException {
+        return socket.getOutputStream();
     }
 
-    @Override
-    public void write(byte[] response) throws IOException {
-        outputStream.write(response);
-    }
-
-    @Override
-    public void close()
-    {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void close() throws IOException {
+        socket.close();
     }
 }

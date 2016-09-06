@@ -3,9 +3,9 @@ package HTTPServer;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
-public interface Connectible extends Closeable {
+public interface Connectable extends Closeable {
     InputStream getInputStream() throws IOException;
-    void write(byte[] response) throws IOException;
-    void close();
+    OutputStream getOutputStream() throws IOException;
 }

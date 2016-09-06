@@ -3,30 +3,19 @@ package HTTPServer;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-public class ServerSocketWrapper implements ServerConnectible {
+public class ServerSocketWrapper implements ServerConnectable {
     private ServerSocket serverSocket;
-    private Integer connectionCount = 0;
-
-    public ServerSocketWrapper(Integer connectionCount) throws IOException {
-        this.serverSocket = new ServerSocket(5000);
-        this.connectionCount = connectionCount;
-    }
 
     public ServerSocketWrapper(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
     }
 
-    public Connectible accept() throws IOException {
-        connectionCount++;
-        return new SocketWrapper(serverSocket.accept());
+    public Connection accept() throws IOException {
+        return new Connection(new SocketWrapper(serverSocket.accept()));
     }
 
-    public Boolean listening() {
+    public boolean isListening() {
         return true;
-    }
-
-    public Integer connectionCount() {
-        return connectionCount;
     }
 
     public void close() {

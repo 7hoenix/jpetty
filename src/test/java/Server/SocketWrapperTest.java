@@ -1,47 +1,57 @@
 package Server;
 
-import HTTPServer.Connectible;
 import HTTPServer.SocketWrapper;
 import junit.framework.TestCase;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 
 public class SocketWrapperTest extends TestCase {
-    public void testItTakesAnInputStreamAndReturnsAString() throws Exception {
-        String someStr = "hey there cake 1234";
-        Socket socket = new Socket();
-        InputStream streamIn = new ByteArrayInputStream(someStr.getBytes(StandardCharsets.UTF_8));
-        OutputStream streamOut = new ByteArrayOutputStream();
-        Connectible wrappedSocket = new SocketWrapper(socket, streamIn, streamOut);
+    public void test_it_knows_its_input_and_output_streams() throws Exception {
+        OutputStream output = new ByteArrayOutputStream();
+        InputStream input = new ByteArrayInputStream("".getBytes());
+        Socket socket = new OtherSocket(input, output);
 
-        InputStream request = wrappedSocket.getInputStream();
+        SocketWrapper wrapper = new SocketWrapper(socket);
 
-        assertEquals("hey there cake 1234\r\n", convertStreamToString(request));
+        assertEquals(input, wrapper.getInputStream());
+        assertEquals(output, wrapper.getOutputStream());
     }
 
-    public void testWriteTakesAStringAndWritesToAnOutputStream() throws Exception {
-        byte[] someStr = "hey there cake 1234".getBytes();
-        Socket socket = new Socket();
-        InputStream streamIn = new ByteArrayInputStream(someStr);
-        OutputStream outputStream = new ByteArrayOutputStream();
-        Connectible wrappedSocket = new SocketWrapper(socket, streamIn, outputStream);
+    public void test_it_can_be_closed() throws Exception {
+        OutputStream output = new ByteArrayOutputStream();
+        InputStream input = new ByteArrayInputStream("".getBytes());
+        Socket socket = new OtherSocket(input, output);
+        SocketWrapper wrapper = new SocketWrapper(socket);
 
-        wrappedSocket.write(someStr);
+        wrapper.close();
 
-        assertEquals("hey there cake 1234", outputStream.toString());
+        assertNotSame(input, wrapper.getInputStream());
     }
 
-    private String convertStreamToString(InputStream input) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-        StringBuilder out = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            if (line.isEmpty()) break;
-            out.append("\r\n");
+    private class OtherSocket extends Socket {
+        private InputStream input;
+        private OutputStream output;
+        public boolean open = true;
+
+        public OtherSocket(InputStream input, OutputStream output) {
+            this.input = input;
+            this.output = output;
         }
-        return out.toString();
+
+        public InputStream getInputStream() {
+            return (open) ? input : new ByteArrayInputStream("NOT LEGIT".getBytes());
+        }
+
+        public OutputStream getOutputStream() {
+            return output;
+        }
+
+        public void close() {
+            this.open = false;
+        }
     }
 }

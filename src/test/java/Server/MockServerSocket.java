@@ -1,41 +1,30 @@
 package Server;
 
-import HTTPServer.ServerConnectible;
-import HTTPServer.Connectible;
+import HTTPServer.Connection;
+import HTTPServer.ServerConnectable;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
-public class MockServerSocket implements ServerConnectible {
-
+public class MockServerSocket implements ServerConnectable {
     public boolean listening = false;
-    private Connectible wrappedSocket;
+    private Connection connection;
     private Integer connectionCount;
 
-    public MockServerSocket(Connectible wrappedSocket, Integer connectionCount)
+    public MockServerSocket(Connection connection, Integer connectionCount)
     {
-        this.wrappedSocket = wrappedSocket;
-        this.connectionCount = connectionCount;
-    }
-
-    public MockServerSocket(Integer connectionCount)
-    {
-        InputStream input = new ByteArrayInputStream("GET / HTTP/1.1\r\n\r\n".getBytes());
-        this.wrappedSocket = new MockSocket(input);
+        this.connection = connection;
         this.connectionCount = connectionCount;
     }
 
     @Override
-    public Connectible accept()
+    public Connection accept()
     {
-        connectionCount++;
+        connectionCount--;
         listening = true;
-        return wrappedSocket;
+        return connection;
     }
 
     @Override
-    public Boolean listening() {
-        if (connectionCount < 0) {
+    public boolean isListening() {
+        if (connectionCount > 0) {
             return true;
         } else {
             return false;
@@ -43,6 +32,6 @@ public class MockServerSocket implements ServerConnectible {
     }
 
     public void close() {
-        listening = false;
+        this.connectionCount = 0;
     }
 }

@@ -1,42 +1,41 @@
 package HTTPServer;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 
 public class Server {
-    private ServerConnectible wrappedServerSocket;
+    private ServerConnectable serverConnection;
     private Setup settings;
     private DataStorage dataStore;
 
     public static void main(String[] args) throws IOException {
         Setup settings = new Setup(args);
         ServerSocket serverSocket = new ServerSocket(settings.getPort());
-        ServerConnectible wrappedServerSocket = new ServerSocketWrapper(serverSocket);
-        Server server = new Server(wrappedServerSocket, settings);
+        ServerConnectable serverConnection = new ServerSocketWrapper(serverSocket);
+        Server server = new Server(serverConnection, settings);
         server.run();
     }
 
-    public Server(ServerConnectible serverSocket, Setup settings) {
-        this.wrappedServerSocket = serverSocket;
+    public Server(ServerConnectable serverConnection, Setup settings) {
+        this.serverConnection = serverConnection;
         this.settings = settings;
         this.dataStore = new DataStore();
     }
 
-    public Server(ServerConnectible serverSocket, String[] args) {
-        this.wrappedServerSocket = serverSocket;
+    public Server(ServerConnectable serverConnection, String[] args) {
+        this.serverConnection = serverConnection;
         this.settings = new Setup(args);
         this.dataStore = new DataStore();
     }
 
     public void run() throws IOException {
-        while (wrappedServerSocket.listening().equals(true)) {
-            Connectible wrappedSocket = wrappedServerSocket.accept();
-            InputStream inputStream = wrappedSocket.getInputStream();
-            byte[] output = new HTTPService(settings, dataStore).processInput(inputStream);
-            wrappedSocket.write(output);
-            wrappedSocket.close();
+        while (serverConnection.isListening() == true) {
+            Connection connection = serverConnection.accept();
+            Request request = connection.read();
+            Response response = new BasicHandler(settings, dataStore).handle(request);
+            connection.write(response);
+            connection.close();
         }
-        wrappedServerSocket.close();
+        serverConnection.close();
     }
 }
