@@ -19,6 +19,7 @@ public class HTTPService  {
         args[0] = "-d";
         args[1] = root;
         this.settings = new Setup(args);
+        this.dataStore = new DataStore();
     }
 
     public byte[] processInput(InputStream inputStream) throws IOException {
