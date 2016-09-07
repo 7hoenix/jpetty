@@ -75,6 +75,7 @@ public class FileHandler implements Handler {
 
     private Response generateDirectoryResponse(File currentFile, Request request) throws IOException {
         String body = "<!DOCTYPE html><html lang=\"en\"><body>";
+        System.out.println(currentFile.listFiles());
         File[] filesInDir = currentFile.listFiles(pathname -> !pathname.isHidden());
         String links = "";
         if (!(currentFile.getParent() == null)) {
