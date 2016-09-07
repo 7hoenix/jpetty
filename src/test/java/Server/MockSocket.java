@@ -2,6 +2,7 @@ package Server;
 
 import HTTPServer.Connectable;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -19,11 +20,13 @@ public class MockSocket implements Connectable {
 
     public InputStream getInputStream() {
         this.read = true;
+        System.out.println("read");
         return input;
     }
 
-    public OutputStream getOutputStream() {
+    public OutputStream getOutputStream() throws IOException {
         this.written = true;
+        System.out.println("written");
         return output;
     }
 
