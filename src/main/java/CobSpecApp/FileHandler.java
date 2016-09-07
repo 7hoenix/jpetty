@@ -48,10 +48,6 @@ public class FileHandler implements Handler {
                 .setBody(readFile(currentFile));
     }
 
-    private String fullPath(String path) {
-        return "http://localhost:" + String.valueOf(settings.getPort() + path);
-    }
-
     private byte[] readFile(File currentFile) throws IOException {
         return Files.readAllBytes(Paths.get(currentFile.getPath()));
     }
@@ -75,7 +71,6 @@ public class FileHandler implements Handler {
 
     private Response generateDirectoryResponse(File currentFile, Request request) throws IOException {
         String body = "<!DOCTYPE html><html lang=\"en\"><body>";
-        System.out.println(currentFile.listFiles());
         File[] filesInDir = currentFile.listFiles(pathname -> !pathname.isHidden());
         String links = "";
         if (!(currentFile.getParent() == null)) {

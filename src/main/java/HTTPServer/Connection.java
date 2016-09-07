@@ -28,9 +28,7 @@ public class Connection implements Runnable, Closeable {
         Response response = null;
         try {
             Handler handler = new BasicHandler(settings, dataStore);
-            System.out.println(7);
             response = handler.handle(request);
-            System.out.println(8);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -48,18 +46,15 @@ public class Connection implements Runnable, Closeable {
     }
 
     public Request read() throws IOException {
-        System.out.println(0);
         Request request = new RequestParser().parse(socket.getInputStream());
         return request;
     }
 
     public void write(Response response) throws IOException {
-        System.out.println(1);
         socket.getOutputStream().write(new ResponseFormatter().formatResponse(response));
     }
 
     public void close() throws IOException {
-        System.out.println(2);
         socket.close();
     }
 }
