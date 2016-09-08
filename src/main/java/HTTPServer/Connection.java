@@ -19,41 +19,41 @@ public class Connection implements Runnable, Closeable {
     }
 
     public void run() {
-        Request request = null;
-        try {
-            request = read();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Request request = read();
+        Handler handler = new BasicHandler(settings, dataStore);
         Response response = null;
         try {
-            Handler handler = new BasicHandler(settings, dataStore);
             response = handler.handle(request);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            write(response);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        write(response);
+        close();
     }
 
-    public Request read() throws IOException {
-        Request request = new RequestParser().parse(socket.getInputStream());
+    public Request read() {
+        Request request = null;
+        try {
+            request = new RequestParser().parse(socket.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return request;
     }
 
-    public void write(Response response) throws IOException {
-        socket.getOutputStream().write(new ResponseFormatter().formatResponse(response));
+    public void write(Response response) {
+        try {
+            socket.getOutputStream().write(new ResponseFormatter().formatResponse(response));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void close() throws IOException {
-        socket.close();
+    public void close() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
