@@ -89,7 +89,7 @@ public class PartialContentHandler implements Handler {
     }
 
     private File currentFile(Request request) {
-        return new File(settings.getRoot().getPath().concat(request.getRoute()));
+        return new File(settings.getRoot().getPath().concat(request.getPath()));
     }
 
     private byte[] readFile(File currentFile) throws IOException {

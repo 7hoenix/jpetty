@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 
-public class RouterTest extends TestCase {
+public class RoutesTest extends TestCase {
     public void test_it_routes_to_the_expected_handler() throws Exception {
         Request request = new RequestParser().parse(new ByteArrayInputStream("GET / HTTP/1.1\r\n\r\n".getBytes()));
         HashMap supportedRoutes = new HashMap();

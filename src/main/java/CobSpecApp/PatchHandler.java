@@ -14,7 +14,7 @@ public class PatchHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        dataStore.store("PATCH", request.getRoute());
+        dataStore.store("PATCH", request.getPath());
         if (request.getHeader("If-Match") != null && request.getHeader("If-Match").equals("dc50a0d27dda2eee9f65644cd7e4c9cf11de8bec")) {
             dataStore.store("file-contents", "patched content");
             return new Response(204);

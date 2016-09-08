@@ -16,7 +16,7 @@ public class OptionsHandler implements Handler {
     }
 
     public Response handle(Request request) {
-        if (request.getRoute().equals("/method_options")) {
+        if (request.getPath().equals("/method_options")) {
             return new Response(200).setHeader("Allow", "GET,HEAD,POST,OPTIONS,PUT");
         } else {
             return new Response(200).setHeader("Allow", "GET,OPTIONS,PUT");

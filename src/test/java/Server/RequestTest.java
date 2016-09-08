@@ -8,14 +8,14 @@ import java.util.Map;
 
 public class RequestTest extends TestCase {
     public void test_it_knows_its_path_and_method() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
         assertEquals("GET", request.getAction());
-        assertEquals("/", request.getRoute());
+        assertEquals("/", request.getPath());
     }
 
     public void test_it_can_set_action() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
         Request updatedRequest = request.setAction("POST");
 
@@ -23,7 +23,7 @@ public class RequestTest extends TestCase {
     }
 
     public void test_action_is_immutable() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
         request.setAction("POST");
 
@@ -31,15 +31,15 @@ public class RequestTest extends TestCase {
     }
 
     public void test_it_can_set_route() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
-        Request updatedRequest = request.setRoute("/games");
+        Request updatedRequest = request.setPath("/games");
 
-        assertEquals("/games", updatedRequest.getRoute());
+        assertEquals("/games", updatedRequest.getPath());
     }
 
     public void test_route_is_immutable() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
         request.setAction("POST");
 
@@ -47,7 +47,7 @@ public class RequestTest extends TestCase {
     }
 
     public void test_it_can_add_headers() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
         Request updatedRequest = request.setHeader("Content-Length", "30").setHeader("Keep", "alive");
 
@@ -56,7 +56,7 @@ public class RequestTest extends TestCase {
     }
 
     public void test_headers_are_immutable() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
         request.setHeader("Content-Length", "30");
 
@@ -64,7 +64,7 @@ public class RequestTest extends TestCase {
     }
 
     public void test_it_can_add_params() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
         Request updatedRequest = request.setParam("a", "1");
 
@@ -72,7 +72,7 @@ public class RequestTest extends TestCase {
     }
 
     public void test_params_are_immutable() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
 
         request.setParam("a", "1");
 
@@ -80,7 +80,7 @@ public class RequestTest extends TestCase {
     }
 
     public void test_it_can_add_multiple_headers_at_once() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
         Map headers = new HashMap<String, String>();
         headers.put("Content-Length", "30");
         headers.put("Keep", "alive");
@@ -92,7 +92,7 @@ public class RequestTest extends TestCase {
     }
 
     public void test_it_can_add_multiple_params_at_once() throws Exception {
-        Request request = new Request("GET", "/");
+        Request request = new Request("/", "GET");
         Map params = new HashMap<String, String>();
         params.put("a", "1");
         params.put("b", "2");

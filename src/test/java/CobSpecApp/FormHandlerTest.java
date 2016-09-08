@@ -42,7 +42,7 @@ public class FormHandlerTest extends TestCase {
     public void test_it_changes_the_form_data_if_passed_a_put_request() throws Exception {
         DataStorage dataStore = new DataStore();
         dataStore.store("data", "cake yo");
-        Request request = new Request("PUT", "/form").setParam("data", "pie yo");
+        Request request = new Request("/form", "PUT").setParam("data", "pie yo");
         FormHandler handler = new FormHandler(new Setup(new String[0]), dataStore);
 
         handler.handle(request);
@@ -53,7 +53,7 @@ public class FormHandlerTest extends TestCase {
     public void test_it_removes_the_data_store_data_if_remove_is_called() throws Exception {
         DataStorage dataStore = new DataStore();
         dataStore.store("data", "cake yo");
-        Request request = new Request("DELETE", "/form");
+        Request request = new Request("/form", "DELETE");
         FormHandler handler = new FormHandler(new Setup(new String[0]), dataStore);
 
         handler.handle(request);

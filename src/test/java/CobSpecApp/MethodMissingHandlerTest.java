@@ -23,7 +23,7 @@ public class MethodMissingHandlerTest extends TestCase {
     }
 
     public void test_it_works_for_get_requests() throws Exception {
-        Request request = new Request("GET", "/text-file.txt");
+        Request request = new Request("/text-file.txt", "GET");
         Handler methodMissingHandler = new MethodMissingHandler(new Setup(), new DataStore());
 
         Response response = methodMissingHandler.handle(request);

@@ -14,6 +14,10 @@ import java.nio.file.Paths;
 public class FileHandler implements Handler {
     private Setup settings;
 
+    public FileHandler() {
+        this(new Setup());
+    }
+
     public FileHandler(Setup settings) {
         this.settings = settings;
     }
@@ -29,7 +33,7 @@ public class FileHandler implements Handler {
     }
 
     private File getCurrentFile(Request request) {
-        return new File(settings.getRoot().getPath().concat(request.getRoute()));
+        return new File(settings.getRoot().getPath().concat(request.getPath()));
     }
 
     private Response handleDirectory(Request request) throws IOException {
@@ -79,7 +83,7 @@ public class FileHandler implements Handler {
             links = links.concat(createLink(parentRoute, ".."));
         }
         for (File file : filesInDir) {
-            String path = request.getRoute();
+            String path = request.getPath();
             if (path.equals("/"))
                 path = "";
             path = path + "/" + file.getName();

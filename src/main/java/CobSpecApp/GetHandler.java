@@ -19,8 +19,8 @@ public class GetHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        dataStore.store("GET", request.getRoute());
-        if (request.getRoute().contains("/redirect")) {
+        dataStore.store("GET", request.getPath());
+        if (request.getPath().contains("/redirect")) {
             Response response = new Response(302).setHeader("Location", fullPath("/"));
             return response;
         } else if (request.getParam("variable_1") != null) {

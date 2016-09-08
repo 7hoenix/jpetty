@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 
 public class TeapotHandlerTest extends TestCase {
     public void test_routes_to_a_418() throws Exception {
-        Request request = new Request("GET", "/coffee");
+        Request request = new Request("/coffee", "GET");
         Handler handler = new TeapotHandler(new Setup(), new DataStore());
 
         Response response = handler.handle(request);
@@ -15,7 +15,7 @@ public class TeapotHandlerTest extends TestCase {
     }
 
     public void test_it_responds_with_200_for_tea() throws Exception {
-        Request request = new Request("GET", "/tea");
+        Request request = new Request("/tea", "GET");
         Handler handler = new TeapotHandler(new Setup(), new DataStore());
 
         Response response = handler.handle(request);

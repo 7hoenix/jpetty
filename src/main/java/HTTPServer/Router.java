@@ -12,8 +12,8 @@ public class Router {
     }
 
     public Handler route(Request request) throws IOException {
-        if (routes.containsKey(request.getRoute())) {
-            return routes.get(request.getRoute());
+        if (routes.containsKey(request.getPath())) {
+            return routes.get(request.getPath());
         } else if (routes.containsKey(request.getAction())) {
             return routes.get(request.getAction());
         } else {

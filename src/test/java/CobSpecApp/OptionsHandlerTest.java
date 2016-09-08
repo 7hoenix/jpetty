@@ -10,7 +10,7 @@ import java.io.ByteArrayInputStream;
 
 public class OptionsHandlerTest extends TestCase {
     public void test_it_returns_a_listing_of_the_methods_that_will_work_on_a_resource() throws Exception {
-        Request request = new Request("OPTIONS", "/method_options");
+        Request request = new Request("/method_options", "OPTIONS");
         OptionsHandler handler = new OptionsHandler(new Setup(new String[0]));
 
         Response response = handler.handle(request);
@@ -20,7 +20,7 @@ public class OptionsHandlerTest extends TestCase {
     }
 
     public void test_it_returns_different_results_if_a_file_is_not_there() throws Exception {
-        Request request = new Request("OPTIONS", "/method_options2");
+        Request request = new Request("/method_options2", "OPTIONS");
         OptionsHandler handler = new OptionsHandler(new Setup(new String[0]));
 
         Response response = handler.handle(request);

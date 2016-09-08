@@ -18,8 +18,8 @@ public class HeadHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        dataStore.store("HEAD", request.getRoute());
-        File currentFile = new File(settings.getRoot().getPath().concat(request.getRoute()));
+        dataStore.store("HEAD", request.getPath());
+        File currentFile = new File(settings.getRoot().getPath().concat(request.getPath()));
         if (currentFile.isDirectory()) {
             return new Response(200).setHeader("Content-Type", "text/html");
         } else if (currentFile.isFile()) {

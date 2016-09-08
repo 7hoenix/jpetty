@@ -17,7 +17,7 @@ public class PutHandler implements Handler {
     }
 
     public Response handle(Request request) {
-        dataStore.store("PUT", request.getRoute());
+        dataStore.store("PUT", request.getPath());
         return new Response(200);
     }
 }
