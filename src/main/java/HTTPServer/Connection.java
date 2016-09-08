@@ -29,7 +29,6 @@ public class Connection implements Runnable, Closeable {
         try {
             Handler handler = new BasicHandler(settings, dataStore);
             response = handler.handle(request);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
