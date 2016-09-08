@@ -5,13 +5,17 @@ import java.net.ServerSocket;
 
 public class ServerSocketWrapper implements ServerConnectable {
     private ServerSocket serverSocket;
+    private Setup settings;
+    private DataStorage dataStore;
 
-    public ServerSocketWrapper(ServerSocket serverSocket) {
+    public ServerSocketWrapper(ServerSocket serverSocket, Setup settings) {
         this.serverSocket = serverSocket;
+        this.settings = settings;
+        this.dataStore = new DataStore();
     }
 
     public Connection accept() throws IOException {
-        return new Connection(new SocketWrapper(serverSocket.accept()));
+        return new Connection(new SocketWrapper(serverSocket.accept()), settings, dataStore);
     }
 
     public boolean isListening() {

@@ -4,8 +4,8 @@ import HTTPServer.Connection;
 import HTTPServer.ServerConnectable;
 
 public class MockServerSocket implements ServerConnectable {
-    public boolean listening = false;
     private Connection connection;
+    private boolean accepted = false;
     private Integer connectionCount;
 
     public MockServerSocket(Connection connection, Integer connectionCount)
@@ -17,8 +17,8 @@ public class MockServerSocket implements ServerConnectable {
     @Override
     public Connection accept()
     {
+        this.accepted = true;
         connectionCount--;
-        listening = true;
         return connection;
     }
 
@@ -29,6 +29,10 @@ public class MockServerSocket implements ServerConnectable {
         } else {
             return false;
         }
+    }
+
+    public boolean hasAccepted() {
+        return accepted;
     }
 
     public void close() {

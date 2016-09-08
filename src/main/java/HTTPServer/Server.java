@@ -2,16 +2,17 @@ package HTTPServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Server {
     private ServerConnectable serverConnection;
     private Setup settings;
-    private DataStorage dataStore;
 
     public static void main(String[] args) throws IOException {
         Setup settings = new Setup(args);
         ServerSocket serverSocket = new ServerSocket(settings.getPort());
-        ServerConnectable serverConnection = new ServerSocketWrapper(serverSocket);
+        ServerConnectable serverConnection = new ServerSocketWrapper(serverSocket, settings);
         Server server = new Server(serverConnection, settings);
         server.run();
     }
@@ -19,22 +20,13 @@ public class Server {
     public Server(ServerConnectable serverConnection, Setup settings) {
         this.serverConnection = serverConnection;
         this.settings = settings;
-        this.dataStore = new DataStore();
-    }
-
-    public Server(ServerConnectable serverConnection, String[] args) {
-        this.serverConnection = serverConnection;
-        this.settings = new Setup(args);
-        this.dataStore = new DataStore();
     }
 
     public void run() throws IOException {
+        ExecutorService fixedPool = Executors.newFixedThreadPool(20);
         while (serverConnection.isListening() == true) {
             Connection connection = serverConnection.accept();
-            Request request = connection.read();
-            Response response = new BasicHandler(settings, dataStore).handle(request);
-            connection.write(response);
-            connection.close();
+            fixedPool.submit(connection);
         }
         serverConnection.close();
     }

@@ -1,25 +1,36 @@
 package Server;
 
-import HTTPServer.Connection;
-import HTTPServer.Server;
+import HTTPServer.*;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class HTTPServerTest extends TestCase {
     public void test_it_writes_to_the_output_stream() throws Exception {
-        InputStream input = new ByteArrayInputStream("GET / HTTP/1.1\r\n\r\n".getBytes());
-        OutputStream output = new ByteArrayOutputStream();
-        MockSocket socket = new MockSocket(input, output);
-        Connection connection = new Connection(socket);
+        Connection connection = new OtherConnection(new MockSocket(new ByteArrayInputStream("".getBytes()), new ByteArrayOutputStream()));
         MockServerSocket serverSocket = new MockServerSocket(connection, 1);
-        Server server = new Server(serverSocket, new String[0]);
+        Server server = new Server(serverSocket, new Setup());
 
         server.run();
 
-        assertEquals(true, socket.isWritten());
+        assertEquals(true, serverSocket.hasAccepted());
+    }
+
+    private class OtherConnection extends Connection {
+
+        public OtherConnection(Connectable socket) {
+            super(socket);
+        }
+
+        public void run() {
+        }
     }
 }

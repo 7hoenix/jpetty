@@ -48,10 +48,6 @@ public class FileHandler implements Handler {
                 .setBody(readFile(currentFile));
     }
 
-    private String fullPath(String path) {
-        return "http://localhost:" + String.valueOf(settings.getPort() + path);
-    }
-
     private byte[] readFile(File currentFile) throws IOException {
         return Files.readAllBytes(Paths.get(currentFile.getPath()));
     }
