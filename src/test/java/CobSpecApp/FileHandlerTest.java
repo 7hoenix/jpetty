@@ -3,10 +3,8 @@ package CobSpecApp;
 import HTTPServer.Handler;
 import HTTPServer.Request;
 import HTTPServer.Response;
-import HTTPServer.Setup;
+import HTTPServer.Settings;
 import junit.framework.TestCase;
-
-import java.util.HashMap;
 
 public class FileHandlerTest extends TestCase {
 
@@ -16,7 +14,7 @@ public class FileHandlerTest extends TestCase {
         args[0] = "-d";
         args[1] = "public";
         args[2] = "-ai";
-        Setup settings = new Setup(args);
+        Settings settings = new Settings(args);
         Handler handler = new FileHandler(settings);
 
         Response response = handler.handle(request);
@@ -32,7 +30,7 @@ public class FileHandlerTest extends TestCase {
         args[0] = "-d";
         args[1] = "public";
         args[2] = "-ai";
-        Setup settings = new Setup(args);
+        Settings settings = new Settings(args);
         Handler handler = new FileHandler(settings);
 
         Response response = handler.handle(request);
@@ -44,7 +42,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_reads_a_directory_structure_if_no_index_is_present() throws Exception {
         Request request = new Request("/", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -63,7 +61,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_handles_a_basic_request() throws Exception {
         Request request = new Request("/brians/index.html", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -72,7 +70,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_handles_indexes_as_slashes() throws Exception {
         Request request = new Request("/brians", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -85,7 +83,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_includes_a_link_to_navigate_up_the_chain() throws Exception {
         Request request = new Request("/brians/ping-pong-equipment/lighting", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -97,7 +95,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_returns_a_listing_of_files_if_given_a_directory() throws Exception {
         Request request = new Request("/games", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -110,7 +108,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_does_not_include_a_link_if_at_root_directory() throws Exception {
         Request request = new Request("/brians/ping-pong-equipment", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -124,7 +122,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_up_links_work_one_level_down() throws Exception {
         Request request = new Request("/brians", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -137,7 +135,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_returns_an_image_with_a_content_length_and_content_type_for_jpg() throws Exception {
         Request request = new Request("/images/hong-kong.jpg", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -148,7 +146,7 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_returns_a_giffy_with_a_content_length_and_content_type() throws Exception {
         Request request = new Request("/geoffs-sweet-site/samurai-champloo/board.gif", "GET");
-        Handler handler = new FileHandler(new Setup());
+        Handler handler = new FileHandler(new Settings());
 
         Response response = handler.handle(request);
 
@@ -162,7 +160,7 @@ public class FileHandlerTest extends TestCase {
         String[] args = new String[2];
         args[0] = "-d";
         args[1] = "src";
-        Handler handler = new FileHandler(new Setup(args));
+        Handler handler = new FileHandler(new Settings(args));
 
         Response response = handler.handle(request);
 

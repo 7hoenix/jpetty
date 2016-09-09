@@ -3,15 +3,15 @@ package CobSpecApp;
 import HTTPServer.*;
 
 public class PutHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public PutHandler(Setup settings) {
+    public PutHandler(Settings settings) {
         this.settings = settings;
         this.dataStore = new DataStore();
     }
 
-    public PutHandler(Setup settings, DataStorage dataStore) {
+    public PutHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

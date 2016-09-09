@@ -3,10 +3,10 @@ package CobSpecApp;
 import HTTPServer.*;
 
 public class TeapotHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public TeapotHandler(Setup settings, DataStorage dataStore) {
+    public TeapotHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

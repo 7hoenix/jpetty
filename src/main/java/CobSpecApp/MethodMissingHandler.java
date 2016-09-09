@@ -5,10 +5,10 @@ import HTTPServer.*;
 import java.io.IOException;
 
 public class MethodMissingHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public MethodMissingHandler(Setup settings, DataStorage dataStore) {
+    public MethodMissingHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

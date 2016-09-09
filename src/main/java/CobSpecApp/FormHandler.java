@@ -3,13 +3,12 @@ package CobSpecApp;
 import HTTPServer.*;
 
 import java.io.*;
-import java.util.Map;
 
 public class FormHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public FormHandler(Setup settings, DataStorage dataStore) {
+    public FormHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

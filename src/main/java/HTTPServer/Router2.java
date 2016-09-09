@@ -1,14 +1,22 @@
 package HTTPServer;
 
+import CobSpecApp.FileHandler;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Router2 {
     private Map<String, Map<String, Handler>> routes;
+    private Settings settings;
 
     public Router2() {
         this(new HashMap<String, Map<String, Handler>>());
+    }
+
+    public Router2(Settings settings) {
+        this.settings = settings;
     }
 
     private Router2(Map routes) {
@@ -16,19 +24,26 @@ public class Router2 {
     }
 
     public Response route(Request request) throws IOException {
-        if (routeIsPresent(request)) {
-            Handler handler = routes.get(request.getPath()).get(request.getAction());
+        Handler handler = getHandler(request);
+        if (handler != null) {
             return handler.handle(request);
         } else {
-            return new Response(404);
+            return new BasicHandler(settings).handle(request);
         }
     }
 
-    public Handler get(String path, String action) {
+    public Handler getHandler(Request request) {
         Handler handler = null;
-        if (routes.get(path) != null && routes.get(path).get(action) != null)
-            handler = routes.get(path).get(action);
+        if (routeIsPresent(request)) {
+            handler = routes.get(request.getPath()).get(request.getAction());
+        } else if (routeMatchesFile(request)) {
+            handler = new FileHandler(settings);
+        }
         return handler;
+    }
+
+    private boolean routeMatchesFile(Request request) {
+        return (new File(settings.getRoot().getPath().concat(request.getPath())) != null);
     }
 
     public Router2 add(String path, String action, Handler handler) {

@@ -5,10 +5,10 @@ import HTTPServer.*;
 import java.io.IOException;
 
 public class PatchHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public PatchHandler(Setup settings, DataStorage dataStore) {
+    public PatchHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

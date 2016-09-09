@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class Connection implements Runnable, Closeable {
     private Connectable socket;
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
     private Router2 router;
 
@@ -15,10 +15,10 @@ public class Connection implements Runnable, Closeable {
     }
 
     public Connection(Connectable socket) {
-        this(socket, new Setup(), new DataStore());
+        this(socket, new Settings(), new DataStore());
     }
 
-    public Connection(Connectable socket, Setup settings, DataStorage dataStore) {
+    public Connection(Connectable socket, Settings settings, DataStorage dataStore) {
         this.socket = socket;
         this.settings = settings;
         this.dataStore = dataStore;

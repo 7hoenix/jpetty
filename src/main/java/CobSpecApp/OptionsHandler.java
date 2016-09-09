@@ -3,14 +3,14 @@ package CobSpecApp;
 import HTTPServer.*;
 
 public class OptionsHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public OptionsHandler(Setup settings) {
+    public OptionsHandler(Settings settings) {
         this.settings = settings;
     }
 
-    public OptionsHandler(Setup settings, DataStorage dataStore) {
+    public OptionsHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

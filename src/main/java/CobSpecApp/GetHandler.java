@@ -5,15 +5,15 @@ import HTTPServer.*;
 import java.io.IOException;
 
 public class GetHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public GetHandler(Setup settings) {
+    public GetHandler(Settings settings) {
         this.settings = settings;
         this.dataStore = new DataStore();
     }
 
-    public GetHandler(Setup settings, DataStorage dataStore) {
+    public GetHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

@@ -3,7 +3,7 @@ package CobSpecApp;
 import HTTPServer.Handler;
 import HTTPServer.Request;
 import HTTPServer.Response;
-import HTTPServer.Setup;
+import HTTPServer.Settings;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,13 +12,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class FileHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
 
     public FileHandler() {
-        this(new Setup());
+        this(new Settings());
     }
 
-    public FileHandler(Setup settings) {
+    public FileHandler(Settings settings) {
         this.settings = settings;
     }
 

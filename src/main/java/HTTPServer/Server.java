@@ -11,11 +11,10 @@ public class Server {
     private ServerConnectable serverConnection;
 
     public static void main(String[] args) throws IOException {
-//        return updatedRouter.route(request);
-        Setup settings = new Setup(args);
+        Settings settings = new Settings(args);
         DataStorage dataStore = new DataStore();
-        Router2 router = new Router2();
-        Router2 updatedRouter = CobSpecRoutes.generate(router, settings, dataStore);
+        Router2 router = CobSpecRoutes.generate(new Router2(settings), settings, dataStore);
+        Router2 updatedRouter = StaticRoutes.generate(router, settings, dataStore);
 
         ServerSocket serverSocket = new ServerSocket(settings.getPort());
         ServerConnectable serverConnection = new ServerSocketWrapper(serverSocket, updatedRouter);

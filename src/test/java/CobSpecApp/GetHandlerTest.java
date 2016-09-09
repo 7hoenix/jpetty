@@ -3,7 +3,7 @@ package CobSpecApp;
 import HTTPServer.Request;
 import HTTPServer.RequestParser;
 import HTTPServer.Response;
-import HTTPServer.Setup;
+import HTTPServer.Settings;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;
@@ -11,7 +11,7 @@ import java.io.ByteArrayInputStream;
 public class GetHandlerTest extends TestCase {
     public void test_it_handles_redirect() throws Exception {
         Request request = new RequestParser().parse(new ByteArrayInputStream("GET /redirect HTTP/1.1\r\n\r\n".getBytes()));
-        GetHandler handler = new GetHandler(new Setup(new String[0]));
+        GetHandler handler = new GetHandler(new Settings(new String[0]));
 
         Response response = handler.handle(request);
 
@@ -21,7 +21,7 @@ public class GetHandlerTest extends TestCase {
 
     public void test_it_handles_decoding_parameters() throws Exception {
         Request request = new RequestParser().parse(new ByteArrayInputStream("GET /parameters?variable_1=cake&variable_2=nom%20nom HTTP/1.1\r\n\r\n".getBytes()));
-        GetHandler handler = new GetHandler(new Setup(new String[0]));
+        GetHandler handler = new GetHandler(new Settings(new String[0]));
 
         Response response = handler.handle(request);
 

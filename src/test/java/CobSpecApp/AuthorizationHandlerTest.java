@@ -8,7 +8,7 @@ import java.util.Base64;
 public class AuthorizationHandlerTest extends TestCase {
     public void test_it_returns_a_401_if_unauthorized() throws Exception {
         Request request = new Request("GET", "/logs");
-        Handler handler = new AuthorizationHandler(new Setup(), new DataStore());
+        Handler handler = new AuthorizationHandler(new Settings(), new DataStore());
 
         Response response = handler.handle(request);
 
@@ -24,7 +24,7 @@ public class AuthorizationHandlerTest extends TestCase {
         repository.store("GET", "/log");
         repository.store("PUT", "/these");
         repository.store("HEAD", "/requests");
-        Handler handler = new AuthorizationHandler(new Setup(), repository);
+        Handler handler = new AuthorizationHandler(new Settings(), repository);
 
         Response response = handler.handle(request);
 

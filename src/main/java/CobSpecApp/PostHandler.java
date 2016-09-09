@@ -3,14 +3,14 @@ package CobSpecApp;
 import HTTPServer.*;
 
 public class PostHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public PostHandler(Setup settings) {
+    public PostHandler(Settings settings) {
         this.settings = settings;
     }
 
-    public PostHandler(Setup settings, DataStorage dataStore) {
+    public PostHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

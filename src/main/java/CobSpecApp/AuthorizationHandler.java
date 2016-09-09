@@ -6,10 +6,10 @@ import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 public class AuthorizationHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public AuthorizationHandler(Setup settings, DataStorage dataStore) {
+    public AuthorizationHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

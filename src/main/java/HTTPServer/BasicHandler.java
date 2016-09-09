@@ -1,16 +1,13 @@
 package HTTPServer;
 
-import CobSpecApp.CobSpecRoutes;
-
 import java.io.*;
-import java.util.Map;
 
 public class BasicHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
     private Router2 router;
 
-    public BasicHandler(Setup settings, DataStorage dataStore) {
+    public BasicHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }
@@ -20,10 +17,7 @@ public class BasicHandler implements Handler {
     }
 
     public BasicHandler(String root) {
-        String[] args = new String[2];
-        args[0] = "-d";
-        args[1] = root;
-        this.settings = new Setup(args);
+        this.settings = new Settings(new String[] {"-d", root});
         this.dataStore = new DataStore();
     }
 

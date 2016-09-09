@@ -9,10 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class HeadHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public HeadHandler(Setup settings, DataStorage dataStore) {
+    public HeadHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }
