@@ -1,8 +1,5 @@
 package HTTPServer;
 
-import CobSpecApp.FileHandler;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,38 +9,28 @@ public class Router2 {
     private Settings settings;
 
     public Router2() {
-        this(new HashMap<String, Map<String, Handler>>());
+        this(new HashMap<String, Map<String, Handler>>(), new Settings());
     }
 
     public Router2(Settings settings) {
+        this(new HashMap<String, Map<String, Handler>>(), settings);
+    }
+
+    private Router2(Map routes, Settings settings) {
+        this.routes = routes;
         this.settings = settings;
     }
 
-    private Router2(Map routes) {
-        this.routes = routes;
-    }
-
     public Response route(Request request) throws IOException {
-        Handler handler = getHandler(request);
-        if (handler != null) {
-            return handler.handle(request);
+        if (request != null && getHandler(request) != null) {
+            return getHandler(request).handle(request);
         } else {
             return new BasicHandler(settings).handle(request);
         }
     }
 
     public Handler getHandler(Request request) {
-        Handler handler = null;
-        if (routeIsPresent(request)) {
-            handler = routes.get(request.getPath()).get(request.getAction());
-        } else if (routeMatchesFile(request)) {
-            handler = new FileHandler(settings);
-        }
-        return handler;
-    }
-
-    private boolean routeMatchesFile(Request request) {
-        return (new File(settings.getRoot().getPath().concat(request.getPath())) != null);
+        return (routeIsPresent(request)) ? routes.get(request.getPath()).get(request.getAction()) : null;
     }
 
     public Router2 add(String path, String action, Handler handler) {
@@ -51,7 +38,7 @@ public class Router2 {
         Map updatedRoutes = new HashMap(this.routes);
         routes.put(action, handler);
         updatedRoutes.put(path, routes);
-        return new Router2(updatedRoutes);
+        return new Router2(updatedRoutes, this.settings);
     }
 
     public Router2 add(String path, String[] actions, Handler handler) {
@@ -61,7 +48,7 @@ public class Router2 {
             routes.put(action, handler);
         }
         updatedRoutes.put(path, routes);
-        return new Router2(updatedRoutes);
+        return new Router2(updatedRoutes, this.settings);
     }
 
     private boolean routeIsPresent(Request request) {

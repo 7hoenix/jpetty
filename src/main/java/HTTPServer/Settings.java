@@ -1,15 +1,11 @@
 package HTTPServer;
 
-import java.io.File;
-
 public class Settings {
-    private String[] args;
-    private File root;
+    private String root;
     private int port;
     private boolean autoIndex;
 
     public Settings(String[] args) {
-        this.args = args;
         this.port = assignPort(args);
         this.root = assignRoot(args);
         this.autoIndex = assignAutoIndex(args);
@@ -19,7 +15,7 @@ public class Settings {
         this(new String[0]);
     }
 
-    public File getRoot() {
+    public String getRoot() {
        return root;
     }
 
@@ -47,11 +43,11 @@ public class Settings {
         }
     }
 
-    private File assignRoot(String[] args) {
+    private String assignRoot(String[] args) {
         if (flagFound(args, "-d")) {
-            return new File(stripEntry(argAfterFlag(args, "-d")));
+            return stripEntry(argAfterFlag(args, "-d"));
         } else {
-            return new File("public");
+            return "public";
         }
     }
 

@@ -11,7 +11,7 @@ public class SettingsTest extends TestCase {
 
         Settings settings = new Settings(args);
 
-        assertEquals("public", settings.getRoot().getName());
+        assertEquals("public", settings.getRoot());
         assertEquals(7500, settings.getPort());
     }
 
@@ -22,7 +22,7 @@ public class SettingsTest extends TestCase {
 
         Settings settings = new Settings(args);
 
-        assertEquals("src", settings.getRoot().getName());
+        assertEquals("src", settings.getRoot());
         assertEquals(5000, settings.getPort());
     }
 
@@ -35,7 +35,7 @@ public class SettingsTest extends TestCase {
 
         Settings settings = new Settings(args);
 
-        assertEquals("src", settings.getRoot().getName());
+        assertEquals("src", settings.getRoot());
         assertEquals(7500, settings.getPort());
     }
 

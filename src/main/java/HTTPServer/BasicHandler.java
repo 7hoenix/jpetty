@@ -5,15 +5,9 @@ import java.io.*;
 public class BasicHandler implements Handler {
     private Settings settings;
     private DataStorage dataStore;
-    private Router2 router;
 
-    public BasicHandler(Settings settings, DataStorage dataStore) {
+    public BasicHandler(Settings settings) {
         this.settings = settings;
-        this.dataStore = dataStore;
-    }
-
-    public BasicHandler(Router2 router) {
-        this.router = router;
     }
 
     public BasicHandler(String root) {
@@ -23,7 +17,7 @@ public class BasicHandler implements Handler {
 
     public Response handle(Request request) throws IOException {
         if (request != null) {
-            return router.route(request);
+            return new FileHandler(settings).handle(request);
         } else {
             return new Response(400);
         }

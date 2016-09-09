@@ -1,9 +1,4 @@
-package CobSpecApp;
-
-import HTTPServer.Handler;
-import HTTPServer.Request;
-import HTTPServer.Response;
-import HTTPServer.Settings;
+package HTTPServer;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,55 +9,58 @@ import java.nio.file.Paths;
 public class FileHandler implements Handler {
     private Settings settings;
 
-    public FileHandler() {
-        this(new Settings());
-    }
-
     public FileHandler(Settings settings) {
         this.settings = settings;
     }
 
     public Response handle(Request request) throws IOException {
-        if (getCurrentFile(request).isDirectory()) {
-            return handleDirectory(request);
-        } else if (getCurrentFile(request).isFile()) {
-            return handleFile(getCurrentFile(request));
+        if (FileHelper.findFile(settings.getRoot(), request.getPath()).exists()) {
+            return handleFileRequest(request);
         } else {
             return new Response(404);
         }
     }
 
-    private File getCurrentFile(Request request) {
-        return new File(settings.getRoot().concat(request.getPath()));
-    }
-
-    private Response handleDirectory(Request request) throws IOException {
-        File index = new File(getCurrentFile(request).getPath().concat("/index.html"));
-        if (index.exists() && settings.getAutoIndex()) {
-            return handleFile(index);
+    private Response handleFileRequest(Request request) throws IOException {
+        if (FileHelper.findFile(settings.getRoot(), request.getPath()).isDirectory()) {
+            return handleDirectory(request);
         } else {
-            return generateDirectoryResponse(getCurrentFile(request), request);
+            return handleFile(FileHelper.findFile(settings.getRoot(), request.getPath()));
         }
     }
 
     private Response handleFile(File currentFile) throws IOException {
         return new Response(200)
-                .setHeader("Content-Type", findContentType(currentFile))
-                .setHeader("Content-Length", new String(String.valueOf(findContentLength(currentFile))))
-                .setBody(readFile(currentFile));
+                .setHeader("Content-Type", FileHelper.findFileType(currentFile))
+                .setHeader("Content-Length", new String(String.valueOf(FileHelper.findFileLength(currentFile))))
+                .setBody(FileHelper.readFile(currentFile));
     }
 
-    private byte[] readFile(File currentFile) throws IOException {
-        return Files.readAllBytes(Paths.get(currentFile.getPath()));
+    private Response handleDirectory(Request request) throws IOException {
+        File index = FileHelper.findFile(settings.getRoot(), request.getPath().concat("/index.html"));
+        if (index.exists() && settings.getAutoIndex()) {
+            return handleFile(index);
+        } else {
+            return generateDirectoryResponse(request);
+        }
     }
 
-    private int findContentLength(File currentFile) throws IOException {
-        return readFile(currentFile).length;
-    }
 
-    private String findContentType(File currentFile) {
-        return URLConnection.guessContentTypeFromName(currentFile.getName());
-    }
+//    private File FileHelper.findFile(settings.getRoot(), request.getPath()) {
+//        return new File(settings.getRoot().getPath().concat(request.getPath()));
+//    }
+
+//    private byte[] readFile(File currentFile) throws IOException {
+//        return Files.readAllBytes(Paths.get(currentFile.getPath()));
+//    }
+
+//    private int findContentLength(File currentFile) throws IOException {
+//        return readFile(currentFile).length;
+//    }
+//
+//    private String findContentType(File currentFile) {
+//        return URLConnection.guessContentTypeFromName(currentFile.getName());
+//    }
 
     private String findRoute(File currentFile) {
         String route = currentFile.getPath().replaceFirst(settings.getRoot(), "");
@@ -73,7 +71,8 @@ public class FileHandler implements Handler {
         }
     }
 
-    private Response generateDirectoryResponse(File currentFile, Request request) throws IOException {
+    private Response generateDirectoryResponse(Request request) throws IOException {
+        File currentFile = FileHelper.findFile(settings.getRoot(), request.getPath());
         String body = "<!DOCTYPE html><html lang=\"en\"><body>";
         File[] filesInDir = currentFile.listFiles(pathname -> !pathname.isHidden());
         String links = "";
