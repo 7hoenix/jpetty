@@ -45,16 +45,16 @@ public class ConnectionTest extends TestCase {
         assertEquals(true, socket.isWritten());
     }
 
-    public void test_it_is_runnable() throws Exception {
-        MockSocket socket = getMockSocket("GET /");
-        Connection connection = new Connection(socket);
-
-        connection.run();
-
-        assertEquals(true, socket.isRead());
-        assertEquals(true, socket.isWritten());
-        assertEquals(false, socket.isOpen());
-    }
+//    public void test_it_is_runnable() throws Exception {
+//        MockSocket socket = getMockSocket("GET /");
+//        Connection connection = new Connection(socket);
+//
+//        connection.run();
+//
+//        assertEquals(true, socket.isRead());
+//        assertEquals(true, socket.isWritten());
+//        assertEquals(false, socket.isOpen());
+//    }
 
     private MockSocket getMockSocket(String line) {
         InputStream input = new ByteArrayInputStream((line +  " HTTP/1.1\r\n\r\n").getBytes());

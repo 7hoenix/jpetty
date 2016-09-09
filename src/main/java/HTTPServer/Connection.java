@@ -7,6 +7,12 @@ public class Connection implements Runnable, Closeable {
     private Connectable socket;
     private Setup settings;
     private DataStorage dataStore;
+    private Router2 router;
+
+    public Connection(Connectable socket, Router2 router) {
+        this.socket = socket;
+        this.router = router;
+    }
 
     public Connection(Connectable socket) {
         this(socket, new Setup(), new DataStore());
@@ -20,10 +26,11 @@ public class Connection implements Runnable, Closeable {
 
     public void run() {
         Request request = read();
-        Handler handler = new BasicHandler(settings, dataStore);
+//        Handler handler = new BasicHandler(router);
         Response response = null;
         try {
-            response = handler.handle(request);
+//            response = handler.handle(request);
+            response = router.route(request);
         } catch (IOException e) {
             e.printStackTrace();
         }

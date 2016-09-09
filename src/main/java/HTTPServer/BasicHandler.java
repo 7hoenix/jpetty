@@ -8,10 +8,15 @@ import java.util.Map;
 public class BasicHandler implements Handler {
     private Setup settings;
     private DataStorage dataStore;
+    private Router2 router;
 
     public BasicHandler(Setup settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
+    }
+
+    public BasicHandler(Router2 router) {
+        this.router = router;
     }
 
     public BasicHandler(String root) {
@@ -24,10 +29,7 @@ public class BasicHandler implements Handler {
 
     public Response handle(Request request) throws IOException {
         if (request != null) {
-            Map routes = CobSpecRoutes.generate(settings, dataStore);
-            Router router = new Router(routes);
-            Handler handler = router.route(request);
-            return handler.handle(request);
+            return router.route(request);
         } else {
             return new Response(400);
         }

@@ -23,17 +23,7 @@ public class Router2Test extends TestCase {
         assertEquals(handler, router.get("/", "OPTIONS"));
     }
 
-    public void test_it_can_handle_a_request_by_routing_it_to_the_proper_route() throws Exception {
-        Router2 router = new Router2()
-                .add("/", "GET", new MockHandler(200));
-        Request request = new Request("/", "GET");
-
-        Response response = router.route(request);
-
-        assertEquals(200, response.getStatusCode());
-    }
-
-    public void test_it_returns_error_handler_with_404_if_route_is_not_found() throws Exception {
+    public void test_it_returns_error_handler_with_404_if_route_and_resource_is_not_found() throws Exception {
         Router2 router = new Router2();
         Request request = new Request("/", "GET");
 

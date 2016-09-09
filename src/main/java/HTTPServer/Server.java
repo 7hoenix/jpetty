@@ -1,5 +1,7 @@
 package HTTPServer;
 
+import CobSpecApp.CobSpecRoutes;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
@@ -7,19 +9,22 @@ import java.util.concurrent.Executors;
 
 public class Server {
     private ServerConnectable serverConnection;
-    private Setup settings;
 
     public static void main(String[] args) throws IOException {
+//        return updatedRouter.route(request);
         Setup settings = new Setup(args);
+        DataStorage dataStore = new DataStore();
+        Router2 router = new Router2();
+        Router2 updatedRouter = CobSpecRoutes.generate(router, settings, dataStore);
+
         ServerSocket serverSocket = new ServerSocket(settings.getPort());
-        ServerConnectable serverConnection = new ServerSocketWrapper(serverSocket, settings);
-        Server server = new Server(serverConnection, settings);
+        ServerConnectable serverConnection = new ServerSocketWrapper(serverSocket, updatedRouter);
+        Server server = new Server(serverConnection);
         server.run();
     }
 
-    public Server(ServerConnectable serverConnection, Setup settings) {
+    public Server(ServerConnectable serverConnection) {
         this.serverConnection = serverConnection;
-        this.settings = settings;
     }
 
     public void run() throws IOException {
