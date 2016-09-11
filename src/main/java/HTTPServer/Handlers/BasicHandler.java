@@ -17,7 +17,7 @@ public class BasicHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        if (request.getPath().contains("/logs")) {
+        if (request != null && request.getPath().contains("/logs")) {
             return new AuthorizationHandler(settings, log).handle(request);
         } else if (request != null) {
             return new FileSystemHandler(settings, router).handle(request);
