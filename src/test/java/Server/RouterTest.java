@@ -1,33 +1,54 @@
 package Server;
 
-import CobSpecApp.MockHandler;
 import HTTPServer.*;
-import HTTPServer.RequestParser;
+import HTTPServer.Handlers.Handler;
 import junit.framework.TestCase;
 
-import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-
 public class RouterTest extends TestCase {
-    public void test_it_routes_to_the_expected_handler() throws Exception {
-        Request request = new RequestParser().parse(new ByteArrayInputStream("GET / HTTP/1.1\r\n\r\n".getBytes()));
-        HashMap supportedRoutes = new HashMap();
-        MockHandler mockHandler = new MockHandler(new Setup(new String[0]));
-        supportedRoutes.put("GET", mockHandler);
-        Router router = new Router(supportedRoutes);
+    public void test_it_can_add_a_route() throws Exception {
+        Handler handler = new MockHandler(200);
 
-        Handler handler = router.route(request);
+        Router router = new Router().add("/", "GET", handler);
 
-        assertEquals(handler, mockHandler);
+        assertEquals(handler, router.getHandler(new Request("/", "GET")));
     }
 
-    public void test_it_returns_the_error_handler_with_404_if_route_is_not_found() throws Exception {
-        Request request = new Request("GET", "/");
-        HashMap supportedRoutes = new HashMap();
-        Router router = new Router(supportedRoutes);
+    public void test_it_can_assign_multiple_routes_if_handed_an_array_of_actions() throws Exception {
+        Handler handler = new MockHandler(200);
+        String[] actions = new String[] {"GET", "POST", "OPTIONS"};
 
-        Handler handler = router.route(request);
+        Router router = new Router().add("/", actions, handler);
 
-        assertEquals(404, handler.handle(request).getStatusCode());
+        assertEquals(handler, router.getHandler(new Request("/", "GET")));
+        assertEquals(handler, router.getHandler(new Request("/", "POST")));
+        assertEquals(handler, router.getHandler(new Request("/", "OPTIONS")));
+    }
+
+    public void test_it_returns_error_handler_with_404_if_route_and_resource_is_not_found() throws Exception {
+        Router router = new Router();
+
+        Response response = router.route(new Request("/cake", "GET"));
+
+        assertEquals(404, response.getStatusCode());
+    }
+
+    public void test_it_can_return_valid_actions_for_a_route() throws Exception {
+        Handler handler = new MockHandler(200);
+        String[] actions = new String[] {"GET", "POST"};
+        Router router = new Router().add("/", actions, handler);
+
+        assertEquals("POST,GET,OPTIONS", router.getValidActions("/"));
+    }
+
+    private class MockHandler implements Handler {
+        private int statusCode;
+
+        public MockHandler(int statusCode) {
+            this.statusCode = statusCode;
+        }
+
+        public Response handle(Request request) {
+            return new Response(statusCode);
+        }
     }
 }

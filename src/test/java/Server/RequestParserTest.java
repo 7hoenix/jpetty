@@ -15,7 +15,7 @@ public class RequestParserTest extends TestCase {
         Request request = parser.parse(inputStream);
 
         assertEquals("GET", request.getAction());
-        assertEquals("/", request.getRoute());
+        assertEquals("/", request.getPath());
     }
 
     public void test_it_parses_any_headers_and_puts_them_in_the_request_object() throws Exception {

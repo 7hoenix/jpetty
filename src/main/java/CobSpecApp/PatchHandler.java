@@ -1,20 +1,21 @@
 package CobSpecApp;
 
 import HTTPServer.*;
+import HTTPServer.Handlers.Handler;
 
 import java.io.IOException;
 
 public class PatchHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public PatchHandler(Setup settings, DataStorage dataStore) {
+    public PatchHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }
 
     public Response handle(Request request) throws IOException {
-        dataStore.store("PATCH", request.getRoute());
+        dataStore.store("PATCH", request.getPath());
         if (request.getHeader("If-Match") != null && request.getHeader("If-Match").equals("dc50a0d27dda2eee9f65644cd7e4c9cf11de8bec")) {
             dataStore.store("file-contents", "patched content");
             return new Response(204);

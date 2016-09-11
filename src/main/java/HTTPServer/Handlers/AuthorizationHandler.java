@@ -1,24 +1,28 @@
-package CobSpecApp;
+package HTTPServer.Handlers;
 
-import HTTPServer.*;
+import HTTPServer.Request;
+import HTTPServer.Response;
+import HTTPServer.Settings;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Base64;
 
 public class AuthorizationHandler implements Handler {
-    private Setup settings;
-    private DataStorage dataStore;
+    private Settings settings;
+    private ArrayList<String> log;
 
-    public AuthorizationHandler(Setup settings, DataStorage dataStore) {
+    public AuthorizationHandler(Settings settings, ArrayList<String> log) {
         this.settings = settings;
-        this.dataStore = dataStore;
+        this.log = log;
     }
 
     public Response handle(Request request) throws UnsupportedEncodingException {
         if (requestIsAuthorized(request)) {
-            String body = "GET " + dataStore.retrieve("GET") + " HTTP/1.1\r\n" +
-                    "PUT " + dataStore.retrieve("PUT") + " HTTP/1.1\r\n" +
-                    "HEAD " + dataStore.retrieve("HEAD") + " HTTP/1.1\r\n";
+            String body = "";
+            for (String entry : log) {
+                body += entry + "\r\n";
+            }
             return new Response(200).setBody(body.getBytes());
         } else {
             return new Response(401).setHeader("WWW-Authenticate", "Basic realm=\"jphoenx personal server\"");

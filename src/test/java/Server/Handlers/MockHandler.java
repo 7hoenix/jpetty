@@ -1,13 +1,13 @@
-package CobSpecApp;
+package Server.Handlers;
 
 import HTTPServer.Handlers.Handler;
 import HTTPServer.Request;
 import HTTPServer.Response;
 
-public class ErrorHandler implements Handler {
+public class MockHandler implements Handler {
     private int statusCode;
 
-    public ErrorHandler(int statusCode) {
+    public MockHandler(int statusCode) {
         this.statusCode = statusCode;
     }
 

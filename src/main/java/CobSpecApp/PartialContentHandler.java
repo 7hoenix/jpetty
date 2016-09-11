@@ -1,6 +1,7 @@
 package CobSpecApp;
 
 import HTTPServer.*;
+import HTTPServer.Handlers.Handler;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -9,10 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PartialContentHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public PartialContentHandler(Setup settings, DataStorage dataStore) {
+    public PartialContentHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }
@@ -89,7 +90,7 @@ public class PartialContentHandler implements Handler {
     }
 
     private File currentFile(Request request) {
-        return new File(settings.getRoot().getPath().concat(request.getRoute()));
+        return new File(settings.getRoot().getPath().concat(request.getPath()));
     }
 
     private byte[] readFile(File currentFile) throws IOException {

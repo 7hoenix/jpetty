@@ -1,12 +1,13 @@
 package CobSpecApp;
 
 import HTTPServer.*;
+import HTTPServer.Handlers.Handler;
 import junit.framework.TestCase;
 
 public class PatchHandlerTest extends TestCase {
     public void test_it_can_patch_data() throws Exception {
         Request request = new Request("PATCH", "/patch-content.txt");
-        Handler handler = new PatchHandler(new Setup(), new DataStore());
+        Handler handler = new PatchHandler(new Settings(), new DataStore());
 
         Response response = handler.handle(request);
 
@@ -17,7 +18,7 @@ public class PatchHandlerTest extends TestCase {
     public void test_it_can_update_the_file_contents_with_a_given_shaw() throws Exception {
         Request requestPatch1 = new Request("PATCH", "/patch-content.txt")
                 .setHeader("If-Match", "dc50a0d27dda2eee9f65644cd7e4c9cf11de8bec");
-        Handler handler = new PatchHandler(new Setup(), new DataStore());
+        Handler handler = new PatchHandler(new Settings(), new DataStore());
         Response response = handler.handle(requestPatch1);
         assertEquals(204, response.getStatusCode());
 

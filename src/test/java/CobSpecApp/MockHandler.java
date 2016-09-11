@@ -1,15 +1,15 @@
 package CobSpecApp;
 
-import HTTPServer.Handler;
+import HTTPServer.Handlers.Handler;
 import HTTPServer.Request;
 import HTTPServer.Response;
-import HTTPServer.Setup;
+import HTTPServer.Settings;
 
 public class MockHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private boolean called;
 
-    public MockHandler(Setup settings) {
+    public MockHandler(Settings settings) {
         this.settings = settings;
         this.called = false;
     }

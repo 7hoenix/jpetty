@@ -2,28 +2,29 @@ package HTTPServer;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Connection implements Runnable, Closeable {
     private Connectable socket;
-    private Setup settings;
-    private DataStorage dataStore;
+    private Router router;
+    private ArrayList<String> log;
 
     public Connection(Connectable socket) {
-        this(socket, new Setup(), new DataStore());
+        this(socket, new Router(), new ArrayList<>());
     }
 
-    public Connection(Connectable socket, Setup settings, DataStorage dataStore) {
+    public Connection(Connectable socket, Router router, ArrayList<String> log) {
         this.socket = socket;
-        this.settings = settings;
-        this.dataStore = dataStore;
+        this.router = router;
+        this.log = log;
     }
 
     public void run() {
         Request request = read();
-        Handler handler = new BasicHandler(settings, dataStore);
+        log.add(request.getLine());
         Response response = null;
         try {
-            response = handler.handle(request);
+            response = router.route(request);
         } catch (IOException e) {
             e.printStackTrace();
         }

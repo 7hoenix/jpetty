@@ -12,7 +12,7 @@ public class RequestParser {
         byte[] fullRequest = parseResult(inputStream);
         Map<String, String> headers = findHeaders(fullRequest);
         Map<String, String> params = findParams(fullRequest);
-        return new Request(findAction(fullRequest), findRoute(fullRequest))
+        return new Request(findPath(fullRequest), findAction(fullRequest))
                 .setHeaders(headers)
                 .setParams(params);
     }
@@ -99,7 +99,7 @@ public class RequestParser {
         return findHeader(fullRequest).split(" ")[1];
     }
 
-    private String findRoute(byte[] fullRequest) {
+    private String findPath(byte[] fullRequest) {
         String query = findQuery(fullRequest);
         if (query.contains("?")) {
             return query.split("\\?")[0];

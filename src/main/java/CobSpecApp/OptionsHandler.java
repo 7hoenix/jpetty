@@ -1,25 +1,22 @@
 package CobSpecApp;
 
 import HTTPServer.*;
+import HTTPServer.Handlers.Handler;
 
 public class OptionsHandler implements Handler {
-    private Setup settings;
+    private Settings settings;
     private DataStorage dataStore;
 
-    public OptionsHandler(Setup settings) {
+    public OptionsHandler(Settings settings) {
         this.settings = settings;
     }
 
-    public OptionsHandler(Setup settings, DataStorage dataStore) {
+    public OptionsHandler(Settings settings, DataStorage dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }
 
     public Response handle(Request request) {
-        if (request.getRoute().equals("/method_options")) {
-            return new Response(200).setHeader("Allow", "GET,HEAD,POST,OPTIONS,PUT");
-        } else {
-            return new Response(200).setHeader("Allow", "GET,OPTIONS,PUT");
-        }
+        return new Response(200);
     }
 }

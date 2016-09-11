@@ -2,20 +2,18 @@ package HTTPServer;
 
 import java.io.File;
 
-public class Setup {
-    private String[] args;
+public class Settings {
     private File root;
     private int port;
     private boolean autoIndex;
 
-    public Setup(String[] args) {
-        this.args = args;
+    public Settings(String[] args) {
         this.port = assignPort(args);
         this.root = assignRoot(args);
         this.autoIndex = assignAutoIndex(args);
     }
 
-    public Setup() {
+    public Settings() {
         this(new String[0]);
     }
 
