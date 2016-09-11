@@ -4,6 +4,7 @@ import CobSpecApp.CobSpecRoutes;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,11 +14,11 @@ public class Server {
     public static void main(String[] args) throws IOException {
         Settings settings = new Settings(args);
         DataStorage dataStore = new DataStore();
-        Router2 router = CobSpecRoutes.generate(new Router2(settings), settings, dataStore);
-        Router2 updatedRouter = StaticRoutes.generate(router, settings, dataStore);
+        ArrayList<String> log = new ArrayList<>();
+        Router router = CobSpecRoutes.generate(new Router(settings, dataStore, log));
 
         ServerSocket serverSocket = new ServerSocket(settings.getPort());
-        ServerConnectable serverConnection = new ServerSocketWrapper(serverSocket, updatedRouter);
+        ServerConnectable serverConnection = new ServerSocketWrapper(serverSocket, router, log);
         Server server = new Server(serverConnection);
         server.run();
     }

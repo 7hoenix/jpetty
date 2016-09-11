@@ -1,6 +1,7 @@
 package CobSpecApp;
 
 import HTTPServer.*;
+import HTTPServer.Handlers.Handler;
 
 public class TeapotHandler implements Handler {
     private Settings settings;

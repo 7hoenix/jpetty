@@ -8,8 +8,8 @@ import java.nio.file.Paths;
 
 public class FileHelper {
 
-    public static File findFile(String root, String path) {
-        return new File(root.concat(path));
+    public static File findFile(File root, String path) {
+        return new File(root.getPath().concat(path));
     }
 
     public static byte[] readFile(File currentFile) throws IOException {
@@ -17,20 +17,11 @@ public class FileHelper {
     }
 
     public static int findFileLength(File currentFile) throws IOException {
-        return (isValidTarget(currentFile)) ? readFile(currentFile).length : 0;
+        return (isValidTarget(currentFile)) ? (int) Files.size(currentFile.toPath()) : 0;
     }
 
     public static String findFileType(File currentFile) {
         return (isValidTarget(currentFile)) ? URLConnection.guessContentTypeFromName(currentFile.getName()) : "";
-    }
-
-    public static String findRoute(File currentFile, String root) {
-        String route = currentFile.getPath().replaceFirst(root, "");
-        if (route.isEmpty()) {
-            return "/";
-        } else {
-            return route;
-        }
     }
 
     private static boolean isValidTarget(File currentFile) {

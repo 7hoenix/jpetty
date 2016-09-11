@@ -1,6 +1,6 @@
 package CobSpecApp;
 
-import HTTPServer.Handler;
+import HTTPServer.Handlers.Handler;
 import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.Settings;

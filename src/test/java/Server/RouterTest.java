@@ -1,13 +1,14 @@
 package Server;
 
 import HTTPServer.*;
+import HTTPServer.Handlers.Handler;
 import junit.framework.TestCase;
 
-public class Router2Test extends TestCase {
+public class RouterTest extends TestCase {
     public void test_it_can_add_a_route() throws Exception {
         Handler handler = new MockHandler(200);
 
-        Router2 router = new Router2().add("/", "GET", handler);
+        Router router = new Router().add("/", "GET", handler);
 
         assertEquals(handler, router.getHandler(new Request("/", "GET")));
     }
@@ -16,7 +17,7 @@ public class Router2Test extends TestCase {
         Handler handler = new MockHandler(200);
         String[] actions = new String[] {"GET", "POST", "OPTIONS"};
 
-        Router2 router = new Router2().add("/", actions, handler);
+        Router router = new Router().add("/", actions, handler);
 
         assertEquals(handler, router.getHandler(new Request("/", "GET")));
         assertEquals(handler, router.getHandler(new Request("/", "POST")));
@@ -24,11 +25,19 @@ public class Router2Test extends TestCase {
     }
 
     public void test_it_returns_error_handler_with_404_if_route_and_resource_is_not_found() throws Exception {
-        Router2 router = new Router2();
+        Router router = new Router();
 
         Response response = router.route(new Request("/cake", "GET"));
 
         assertEquals(404, response.getStatusCode());
+    }
+
+    public void test_it_can_return_valid_actions_for_a_route() throws Exception {
+        Handler handler = new MockHandler(200);
+        String[] actions = new String[] {"GET", "POST"};
+        Router router = new Router().add("/", actions, handler);
+
+        assertEquals("POST,GET,OPTIONS", router.getValidActions("/"));
     }
 
     private class MockHandler implements Handler {

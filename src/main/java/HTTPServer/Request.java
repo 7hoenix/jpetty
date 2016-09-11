@@ -36,6 +36,10 @@ public class Request {
         return new Request(this.path, action, this.headers, this.params);
     }
 
+    public String getLine() {
+        return this.action + " " + this.path + " HTTP/1.1";
+    }
+
     public Request setHeader(String fieldName, String fieldValue) {
         Map<String, String> updatedHeaders = new HashMap<>(headers);
         updatedHeaders.put(fieldName, fieldValue);
@@ -66,5 +70,10 @@ public class Request {
         Map<String, String> updatedParams = new HashMap<>(this.params);
         updatedParams.putAll(params);
         return new Request(this.path, this.action, this.headers, updatedParams);
+    }
+
+    public Map<String, String> getParams() {
+        Map<String, String> paramsCopy = new HashMap<>(this.params);
+        return paramsCopy;
     }
 }

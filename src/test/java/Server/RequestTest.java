@@ -102,4 +102,24 @@ public class RequestTest extends TestCase {
         assertEquals("1", updatedRequest.getParam("a"));
         assertEquals("2", updatedRequest.getParam("b"));
     }
+
+    public void test_it_can_return_its_params_as_a_map() throws Exception {
+        Request request = new Request("/", "GET");
+        Map params = new HashMap<String, String>();
+        params.put("a", "1");
+        params.put("b", "2");
+        Request updatedRequest = request.setParams(params);
+
+        Map myParams = updatedRequest.getParams();
+
+        assertEquals("1", myParams.get("a"));
+        assertEquals("2", myParams.get("b"));
+        assertNotSame(myParams, params);
+    }
+
+    public void test_it_can_return_its_line() throws Exception {
+        Request request = new Request("/", "GET");
+
+        assertEquals("GET / HTTP/1.1", request.getLine());
+    }
 }

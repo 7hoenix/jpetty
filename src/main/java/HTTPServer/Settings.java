@@ -1,7 +1,9 @@
 package HTTPServer;
 
+import java.io.File;
+
 public class Settings {
-    private String root;
+    private File root;
     private int port;
     private boolean autoIndex;
 
@@ -15,7 +17,7 @@ public class Settings {
         this(new String[0]);
     }
 
-    public String getRoot() {
+    public File getRoot() {
        return root;
     }
 
@@ -43,11 +45,11 @@ public class Settings {
         }
     }
 
-    private String assignRoot(String[] args) {
+    private File assignRoot(String[] args) {
         if (flagFound(args, "-d")) {
-            return stripEntry(argAfterFlag(args, "-d"));
+            return new File(stripEntry(argAfterFlag(args, "-d")));
         } else {
-            return "public";
+            return new File("public");
         }
     }
 

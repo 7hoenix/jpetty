@@ -1,6 +1,7 @@
 package CobSpecApp;
 
 import HTTPServer.*;
+import HTTPServer.Handlers.Handler;
 
 public class OptionsHandler implements Handler {
     private Settings settings;
@@ -16,10 +17,6 @@ public class OptionsHandler implements Handler {
     }
 
     public Response handle(Request request) {
-        if (request.getPath().equals("/method_options")) {
-            return new Response(200).setHeader("Allow", "GET,HEAD,POST,OPTIONS,PUT");
-        } else {
-            return new Response(200).setHeader("Allow", "GET,OPTIONS,PUT");
-        }
+        return new Response(200);
     }
 }
