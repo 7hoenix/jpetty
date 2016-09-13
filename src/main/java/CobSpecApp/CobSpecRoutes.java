@@ -12,7 +12,8 @@ public class CobSpecRoutes {
                 .add("/partial_content.txt", "GET", new PartialContentHandler(router.getSettings(), router.getDataStore()))
                 .add("/coffee", "GET", new TeapotHandler(router.getSettings(), router.getDataStore()))
                 .add("/tea", "GET", new TeapotHandler(router.getSettings(), router.getDataStore()))
-                .add("/parameters", "GET", new ParameterHandler(router.getSettings(), router.getDataStore()));
+                .add("/parameters", "GET", new ParameterHandler(router.getSettings(), router.getDataStore()))
+                .add("/patch-content.txt", "GET", new ETagHandler(router.getSettings(), router.getDataStore()));
         return updatedRouter;
     }
 }

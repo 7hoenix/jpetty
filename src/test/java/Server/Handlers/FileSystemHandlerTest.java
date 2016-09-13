@@ -48,6 +48,7 @@ public class FileSystemHandlerTest extends TestCase {
 
         String innerHtml = "" +
                 createLink("/fakeDirectory", "fakeDirectory") +
+                createLink("/patch-content.txt", "patch-content.txt") +
                 createLink("/thing.txt", "thing.txt");
         assertEquals(wrapHtml(innerHtml), new String(response.getBody(), "UTF-8"));
         assertEquals("text/html", response.getHeader("Content-Type"));
