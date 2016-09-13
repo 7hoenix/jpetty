@@ -10,10 +10,11 @@ import java.util.Map;
 public class RequestParser {
     public Request parse(InputStream inputStream) throws IOException {
         byte[] fullRequest = parseResult(inputStream);
-        Map<String, String> headers = findHeaders(fullRequest);
+        Map<String, String> headers = RequestHeaderParser.parseHeaders(fullRequest);
+        Map<String, String> parsedLine = RequestHeaderParser.parseLine(fullRequest);
         Map<String, String> params = findParams(fullRequest);
         String body = findBody(fullRequest);
-        return new Request(findPath(fullRequest), findAction(fullRequest))
+        return new Request(parsedLine.get("path"), parsedLine.get("action"))
                 .setHeaders(headers)
                 .setParams(params)
                 .setBody(body);
