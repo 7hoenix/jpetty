@@ -17,8 +17,22 @@ public class FileHandler implements Handler {
     public Response handle(Request request) throws IOException {
         if (request.getAction().contains("GET")) {
             return handleGet(request);
+        } else if (request.getAction().contains("PATCH")) {
+            return handlePatch(request);
         } else {
             return new Response(405);
+        }
+    }
+
+    private Response handlePatch(Request request) throws IOException {
+        String eTag = request.getHeader("If-Match");
+        File currentFile = FileHelper.findFile(settings.getRoot(), request.getPath());
+        String currentDigest = FileHelper.findFileDigest(currentFile);
+        if (eTag.toUpperCase().equals(currentDigest)) {
+            FileHelper.changeFile(currentFile, request.getBody());
+            return new Response(204);
+        } else {
+            return new Response(400);
         }
     }
 

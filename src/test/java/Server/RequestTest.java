@@ -122,4 +122,11 @@ public class RequestTest extends TestCase {
 
         assertEquals("GET / HTTP/1.1", request.getLine());
     }
+
+    public void test_it_can_assign_its_body() throws Exception {
+        Request request = new Request("/", "GET")
+                .setBody("cake");
+
+        assertEquals("cake", request.getBody());
+    }
 }

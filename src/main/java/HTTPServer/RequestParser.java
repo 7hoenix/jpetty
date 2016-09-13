@@ -12,9 +12,11 @@ public class RequestParser {
         byte[] fullRequest = parseResult(inputStream);
         Map<String, String> headers = findHeaders(fullRequest);
         Map<String, String> params = findParams(fullRequest);
+        String body = findBody(fullRequest);
         return new Request(findPath(fullRequest), findAction(fullRequest))
                 .setHeaders(headers)
-                .setParams(params);
+                .setParams(params)
+                .setBody(body);
     }
 
     private Map<String, String> findParams(byte[] input) throws IOException {
@@ -50,7 +52,8 @@ public class RequestParser {
                 break;
         }
         result.flush();
-        return result.toByteArray();
+        byte[] otherResult = result.toByteArray();
+        return otherResult;
     }
 
     private String findHeader(byte[] fullRequest) {
