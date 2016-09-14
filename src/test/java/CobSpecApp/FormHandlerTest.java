@@ -1,6 +1,7 @@
 package CobSpecApp;
 
 import HTTPServer.*;
+import HTTPServer.Parsers.RequestParser;
 import junit.framework.TestCase;
 
 import java.io.ByteArrayInputStream;

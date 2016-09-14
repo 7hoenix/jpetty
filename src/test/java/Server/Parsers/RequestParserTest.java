@@ -1,6 +1,6 @@
-package Server;
+package Server.Parsers;
 
-import HTTPServer.RequestParser;
+import HTTPServer.Parsers.RequestParser;
 import HTTPServer.Request;
 import junit.framework.TestCase;
 
@@ -37,14 +37,5 @@ public class RequestParserTest extends TestCase {
 
         assertEquals("1", request.getParam("a"));
         assertEquals("2", request.getParam("b"));
-    }
-
-    public void test_it_parses_a_post_request_properly_by_parsing_params_out_of_body() throws Exception {
-        InputStream inputStream = new ByteArrayInputStream(("POST / HTTP/1.1\r\n\r\na=fat%20cat").getBytes());
-        RequestParser parser = new RequestParser();
-
-        Request request = parser.parse(inputStream);
-
-        assertEquals("fat cat", request.getParam("a"));
     }
 }
