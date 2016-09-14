@@ -1,5 +1,7 @@
 package HTTPServer;
 
+import HTTPServer.Parsers.RequestParser;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.ArrayList;

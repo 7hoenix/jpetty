@@ -1,6 +1,6 @@
-package Server;
+package Server.Parsers;
 
-import HTTPServer.ParserHelper;
+import HTTPServer.Parsers.ParserHelper;
 import junit.framework.TestCase;
 
 public class ParserHelperTest extends TestCase {

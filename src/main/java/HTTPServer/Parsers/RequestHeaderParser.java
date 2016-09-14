@@ -1,0 +1,27 @@
+package HTTPServer.Parsers;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class RequestHeaderParser {
+    public final static String CR  = "" + (char) 0x0D;
+    public final static String LF  = "" + (char) 0x0A;
+    public final static String CRLF  = CR + LF;
+
+    public Map<String, String> parse(byte[] rawRequest) {
+        String header = ParserHelper.parseQuery(rawRequest, CRLF + CRLF);
+        String[] rawHeaders = ParserHelper.splitOnParameter(header, CRLF);
+        return separateHeaders(rawHeaders);
+    }
+
+    private static Map<String, String> separateHeaders(String[] rawHeaders) {
+        Map<String, String> headers = new HashMap<>();
+        for(String rawHeader : rawHeaders) {
+            if (rawHeader.contains(": ")) {
+                String[] headerAndValue = ParserHelper.splitOnParameter(rawHeader, ": ");
+                headers.put(headerAndValue[0], headerAndValue[1]);
+            }
+        }
+        return headers;
+    }
+}

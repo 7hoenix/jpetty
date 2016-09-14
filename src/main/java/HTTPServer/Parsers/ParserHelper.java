@@ -1,4 +1,4 @@
-package HTTPServer;
+package HTTPServer.Parsers;
 
 import java.util.ArrayList;
 
@@ -25,6 +25,15 @@ public class ParserHelper {
     }
 
     public static String[] splitOnParameter(String input, String splitQuery) {
-        return (input != null && splitQuery != null) ? input.split(splitQuery) : new String[0];
+        return (input != null && splitQuery != null && input.contains(splitQuery)) ? input.split(splitQuery) : new String[0];
+    }
+
+    public static String splitOnParameter(String input, String splitQuery, int indexToTry) {
+        if (input.contains(splitQuery)) {
+            if (input.split(splitQuery).length > indexToTry) {
+                return input.split(splitQuery)[indexToTry];
+            }
+        }
+        return input;
     }
 }
