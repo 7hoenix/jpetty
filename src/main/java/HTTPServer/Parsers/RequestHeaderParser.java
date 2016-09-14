@@ -3,11 +3,7 @@ package HTTPServer.Parsers;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestHeaderParser {
-    public final static String CR  = "" + (char) 0x0D;
-    public final static String LF  = "" + (char) 0x0A;
-    public final static String CRLF  = CR + LF;
-
+public class RequestHeaderParser extends BasicRequestParser {
     public Map<String, String> parse(byte[] rawRequest) {
         String header = ParserHelper.parseQuery(rawRequest, CRLF + CRLF);
         String[] rawHeaders = ParserHelper.splitOnParameter(header, CRLF);

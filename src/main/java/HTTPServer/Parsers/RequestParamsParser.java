@@ -5,11 +5,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestParamsParser {
-    public final static String CR  = "" + (char) 0x0D;
-    public final static String LF  = "" + (char) 0x0A;
-    public final static String CRLF  = CR + LF;
-
+public class RequestParamsParser extends BasicRequestParser {
     public Map<String, String> parse(byte[] rawRequest) throws UnsupportedEncodingException {
         if (rawRequest == null)
             return new HashMap<>();
