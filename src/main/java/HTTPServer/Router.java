@@ -11,21 +11,19 @@ import java.util.Map;
 public class Router {
     private Map<String, Map<String, Handler>> routes;
     private Settings settings;
-    private DataStorage dataStore;
     private ArrayList<String> log;
 
     public Router() {
-        this(new HashMap<String, Map<String, Handler>>(), new Settings(), new DataStore(), new ArrayList<>());
+        this(new HashMap<String, Map<String, Handler>>(), new Settings(), new ArrayList<>());
     }
 
-    public Router(Settings settings, DataStorage dataStore, ArrayList<String> log) {
-        this(new HashMap<String, Map<String, Handler>>(), settings, dataStore, log);
+    public Router(Settings settings, ArrayList<String> log) {
+        this(new HashMap<String, Map<String, Handler>>(), settings, log);
     }
 
-    private Router(Map routes, Settings settings, DataStorage dataStore, ArrayList<String> log) {
+    private Router(Map routes, Settings settings, ArrayList<String> log) {
         this.routes = routes;
         this.settings = settings;
-        this.dataStore = dataStore;
         this.log = log;
     }
 
@@ -39,10 +37,6 @@ public class Router {
 
     public Handler getHandler(Request request) {
         return (routeIsPresent(request)) ? routes.get(request.getPath()).get(request.getAction()) : null;
-    }
-
-    public DataStorage getDataStore() {
-        return this.dataStore;
     }
 
     public Settings getSettings() {
@@ -64,7 +58,7 @@ public class Router {
         Map updatedRoutes = new HashMap(this.routes);
         routes.put(action, handler);
         updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes, this.settings, this.dataStore, this.log);
+        return new Router(updatedRoutes, this.settings, this.log);
     }
 
     public Router add(String path, String[] actions, Handler handler) {
@@ -74,7 +68,7 @@ public class Router {
             routes.put(action, handler);
         }
         updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes, this.settings, this.dataStore, this.log);
+        return new Router(updatedRoutes, this.settings, this.log);
     }
 
     private boolean routeIsPresent(Request request) {

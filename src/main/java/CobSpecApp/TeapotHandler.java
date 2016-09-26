@@ -5,9 +5,9 @@ import HTTPServer.Handlers.Handler;
 
 public class TeapotHandler implements Handler {
     private Settings settings;
-    private DataStorage dataStore;
+    private Repository dataStore;
 
-    public TeapotHandler(Settings settings, DataStorage dataStore) {
+    public TeapotHandler(Settings settings, Repository dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

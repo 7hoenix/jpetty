@@ -7,9 +7,9 @@ import java.io.*;
 
 public class FormHandler implements Handler {
     private Settings settings;
-    private DataStorage dataStore;
+    private Repository dataStore;
 
-    public FormHandler(Settings settings, DataStorage dataStore) {
+    public FormHandler(Settings settings, Repository dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

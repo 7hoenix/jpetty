@@ -1,8 +1,10 @@
-package HTTPServer;
+package CobSpecApp;
+
+import CobSpecApp.Repository;
 
 import java.util.HashMap;
 
-public class DataStore implements DataStorage {
+public class DataStore implements Repository {
     private HashMap<String, String> dataBank;
 
     public DataStore() {

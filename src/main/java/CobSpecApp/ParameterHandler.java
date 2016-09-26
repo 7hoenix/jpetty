@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class ParameterHandler implements Handler {
     private Settings settings;
-    private DataStorage dataStore;
+    private Repository dataStore;
 
-    public ParameterHandler(Settings settings, DataStorage dataStore) {
+    public ParameterHandler(Settings settings, Repository dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

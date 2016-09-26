@@ -11,9 +11,9 @@ import java.util.Map;
 
 public class PartialContentHandler implements Handler {
     private Settings settings;
-    private DataStorage dataStore;
+    private Repository dataStore;
 
-    public PartialContentHandler(Settings settings, DataStorage dataStore) {
+    public PartialContentHandler(Settings settings, Repository dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

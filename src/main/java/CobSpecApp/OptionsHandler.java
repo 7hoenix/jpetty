@@ -5,13 +5,13 @@ import HTTPServer.Handlers.Handler;
 
 public class OptionsHandler implements Handler {
     private Settings settings;
-    private DataStorage dataStore;
+    private Repository dataStore;
 
     public OptionsHandler(Settings settings) {
         this.settings = settings;
     }
 
-    public OptionsHandler(Settings settings, DataStorage dataStore) {
+    public OptionsHandler(Settings settings, Repository dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

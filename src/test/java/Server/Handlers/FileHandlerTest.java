@@ -1,5 +1,6 @@
 package Server.Handlers;
 
+import CobSpecApp.DataStore;
 import CobSpecApp.ETagHandler;
 import HTTPServer.*;
 import HTTPServer.Handlers.FileHandler;

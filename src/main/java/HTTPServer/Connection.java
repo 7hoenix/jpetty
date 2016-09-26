@@ -7,16 +7,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Connection implements Runnable, Closeable {
-    private Connectable socket;
+    private Connectable connectable;
     private Router router;
     private ArrayList<String> log;
 
-    public Connection(Connectable socket) {
-        this(socket, new Router(), new ArrayList<>());
+    public Connection(Connectable connectable) {
+        this(connectable, new Router(), new ArrayList<>());
     }
 
-    public Connection(Connectable socket, Router router, ArrayList<String> log) {
-        this.socket = socket;
+    public Connection(Connectable connectable, Router router, ArrayList<String> log) {
+        this.connectable = connectable;
         this.router = router;
         this.log = log;
     }
@@ -37,7 +37,7 @@ public class Connection implements Runnable, Closeable {
     public Request read() {
         Request request = null;
         try {
-            request = new RequestParser().parse(socket.getInputStream());
+            request = new RequestParser().parse(connectable.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,7 +46,7 @@ public class Connection implements Runnable, Closeable {
 
     public void write(Response response) {
         try {
-            socket.getOutputStream().write(new ResponseFormatter().formatResponse(response));
+            connectable.getOutputStream().write(new ResponseFormatter().formatResponse(response));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -54,7 +54,7 @@ public class Connection implements Runnable, Closeable {
 
     public void close() {
         try {
-            socket.close();
+            connectable.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

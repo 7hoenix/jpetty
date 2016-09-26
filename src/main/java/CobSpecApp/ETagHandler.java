@@ -8,9 +8,9 @@ import java.io.IOException;
 
 public class ETagHandler implements Handler {
     private Settings settings;
-    private DataStorage dataStore;
+    private Repository dataStore;
 
-    public ETagHandler(Settings settings, DataStorage dataStore) {
+    public ETagHandler(Settings settings, Repository dataStore) {
         this.settings = settings;
         this.dataStore = dataStore;
     }

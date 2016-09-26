@@ -9,14 +9,14 @@ import java.util.Map;
 
 public class RedirectHandler implements Handler {
     private Settings settings;
-    private DataStorage dataStore;
+    private Repository dataStore;
     private Map<String, String> redirections;
 
-    public RedirectHandler(Settings settings, DataStorage dataStore) {
+    public RedirectHandler(Settings settings, Repository dataStore) {
         this(settings, new HashMap<>(), dataStore);
     }
 
-    public RedirectHandler(Settings settings, Map<String, String> redirections, DataStorage dataStore) {
+    public RedirectHandler(Settings settings, Map<String, String> redirections, Repository dataStore) {
         this.settings = settings;
         this.redirections = addDefaultRedirections(redirections);
         this.dataStore = dataStore;
