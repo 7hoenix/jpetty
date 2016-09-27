@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-public class WrappedConnectableTest extends TestCase {
+public class WrappedSocketTest extends TestCase {
     public void test_it_knows_its_input_and_output_streams() throws Exception {
         OutputStream output = new ByteArrayOutputStream();
         InputStream input = new ByteArrayInputStream("".getBytes());
