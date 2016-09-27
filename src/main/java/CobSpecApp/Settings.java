@@ -1,4 +1,4 @@
-package HTTPServer;
+package CobSpecApp;
 
 import java.io.File;
 
@@ -11,10 +11,6 @@ public class Settings {
         this.port = assignPort(args);
         this.root = assignRoot(args);
         this.autoIndex = assignAutoIndex(args);
-    }
-
-    public Settings() {
-        this(new String[0]);
     }
 
     public File getRoot() {

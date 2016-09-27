@@ -10,12 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PartialContentHandler implements Handler {
-    private Settings settings;
-    private Repository dataStore;
+    private File root;
 
-    public PartialContentHandler(Settings settings, Repository dataStore) {
-        this.settings = settings;
-        this.dataStore = dataStore;
+    public PartialContentHandler(File root) {
+        this.root = root;
     }
 
     public Response handle(Request request) throws IOException {
@@ -90,7 +88,7 @@ public class PartialContentHandler implements Handler {
     }
 
     private File currentFile(Request request) {
-        return new File(settings.getRoot().getPath().concat(request.getPath()));
+        return new File(root.getPath().concat(request.getPath()));
     }
 
     private byte[] readFile(File currentFile) throws IOException {

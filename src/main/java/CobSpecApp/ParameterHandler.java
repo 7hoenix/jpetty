@@ -7,13 +7,6 @@ import java.io.IOException;
 import java.util.Map;
 
 public class ParameterHandler implements Handler {
-    private Settings settings;
-    private Repository dataStore;
-
-    public ParameterHandler(Settings settings, Repository dataStore) {
-        this.settings = settings;
-        this.dataStore = dataStore;
-    }
 
     public Response handle(Request request) throws IOException {
         return new Response(302)

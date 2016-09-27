@@ -6,11 +6,9 @@ import HTTPServer.Handlers.Handler;
 import java.io.*;
 
 public class FormHandler implements Handler {
-    private Settings settings;
     private Repository dataStore;
 
-    public FormHandler(Settings settings, Repository dataStore) {
-        this.settings = settings;
+    public FormHandler(Repository dataStore) {
         this.dataStore = dataStore;
     }
 

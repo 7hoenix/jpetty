@@ -10,40 +10,43 @@ import java.util.Map;
 
 public class Router {
     private Map<String, Map<String, Handler>> routes;
-    private Settings settings;
     private ArrayList<String> log;
+    private boolean autoIndex;
 
     public Router() {
-        this(new HashMap<String, Map<String, Handler>>(), new Settings(), new ArrayList<>());
+        this(new HashMap<String, Map<String, Handler>>(), new ArrayList<>(), false);
     }
 
-    public Router(Settings settings, ArrayList<String> log) {
-        this(new HashMap<String, Map<String, Handler>>(), settings, log);
+    public Router(ArrayList<String> log, boolean autoIndex) {
+        this(new HashMap<String, Map<String, Handler>>(), log, autoIndex);
     }
 
-    private Router(Map routes, Settings settings, ArrayList<String> log) {
+    private Router(Map routes, ArrayList<String> log, boolean autoIndex) {
         this.routes = routes;
-        this.settings = settings;
+        this.autoIndex = autoIndex;
         this.log = log;
     }
 
     public Response route(Request request) throws IOException {
         if (request != null && getHandler(request) != null) {
             return getHandler(request).handle(request);
+        } else if (request != null && request.getAction().contains("OPTIONS")) {
+            return handleOptionsRequest(request);
         } else {
-            return new BasicHandler(settings, this, log).handle(request);
+            return new BasicHandler(log, autoIndex).handle(request);
         }
+    }
+
+    private Response handleOptionsRequest(Request request) {
+        return new Response(200)
+                .setHeader("Allow", getValidActions(request.getPath()));
     }
 
     public Handler getHandler(Request request) {
         return (routeIsPresent(request)) ? routes.get(request.getPath()).get(request.getAction()) : null;
     }
 
-    public Settings getSettings() {
-        return this.settings;
-    }
-
-    public String getValidActions(String path) {
+    private String getValidActions(String path) {
         String actions = "";
         Map actionRoutes = routes.get(path);
         for(Object action : actionRoutes.keySet()) {
@@ -58,7 +61,7 @@ public class Router {
         Map updatedRoutes = new HashMap(this.routes);
         routes.put(action, handler);
         updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes, this.settings, this.log);
+        return new Router(updatedRoutes, this.log, this.autoIndex);
     }
 
     public Router add(String path, String[] actions, Handler handler) {
@@ -68,7 +71,7 @@ public class Router {
             routes.put(action, handler);
         }
         updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes, this.settings, this.log);
+        return new Router(updatedRoutes, this.log, this.autoIndex);
     }
 
     private boolean routeIsPresent(Request request) {

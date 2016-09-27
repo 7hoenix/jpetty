@@ -1,5 +1,6 @@
 package Server.Handlers;
 
+import CobSpecApp.Settings;
 import HTTPServer.*;
 import HTTPServer.Handlers.AuthorizationHandler;
 import HTTPServer.Handlers.Handler;
@@ -11,7 +12,7 @@ import java.util.Base64;
 public class AuthorizationHandlerTest extends TestCase {
     public void test_it_returns_a_401_if_unauthorized() throws Exception {
         Request request = new Request("/logs", "GET");
-        Handler handler = new AuthorizationHandler(new Settings(), new ArrayList<String>());
+        Handler handler = new AuthorizationHandler(new ArrayList<String>());
 
         Response response = handler.handle(request);
 
@@ -26,7 +27,7 @@ public class AuthorizationHandlerTest extends TestCase {
         log.add("HTTP/1.1 GET /log");
         log.add("HTTP/1.1 PUT /these");
         log.add("HTTP/1.1 HEAD /requests");
-        Handler handler = new AuthorizationHandler(new Settings(), log);
+        Handler handler = new AuthorizationHandler(log);
 
         Response response = handler.handle(request);
 

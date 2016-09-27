@@ -6,12 +6,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class FileHandler implements Handler {
-    private Settings settings;
-    private Router router;
+    private File root;
 
-    public FileHandler(Settings settings, Router router) {
-        this.settings = settings;
-        this.router = router;
+    public FileHandler(File root) {
+        this.root = root;
     }
 
     public Response handle(Request request) throws IOException {
@@ -26,7 +24,7 @@ public class FileHandler implements Handler {
 
     private Response handlePatch(Request request) throws IOException {
         String eTag = request.getHeader("If-Match");
-        File currentFile = FileHelper.findFile(settings.getRoot(), request.getPath());
+        File currentFile = FileHelper.findFile(root, request.getPath());
         String currentDigest = FileHelper.findFileDigest(currentFile);
         if (eTag.toUpperCase().equals(currentDigest)) {
             FileHelper.changeFile(currentFile, request.getBody());
@@ -37,7 +35,7 @@ public class FileHandler implements Handler {
     }
 
     private Response handleGet(Request request) throws IOException {
-        File currentFile = FileHelper.findFile(settings.getRoot(), request.getPath());
+        File currentFile = FileHelper.findFile(root, request.getPath());
         return new Response(200)
                 .setHeader("Content-Type", FileHelper.findFileType(currentFile))
                 .setHeader("Content-Length", new String(String.valueOf(FileHelper.findFileLength(currentFile))))

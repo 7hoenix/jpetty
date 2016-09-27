@@ -9,7 +9,7 @@ import java.io.ByteArrayInputStream;
 public class FormHandlerTest extends TestCase {
     public void test_it_returns_an_html_form_when_form_is_get() throws Exception {
         Request request = new RequestParser().parse(new ByteArrayInputStream("GET /form HTTP/1.1\r\n\r\n".getBytes()));
-        FormHandler handler = new FormHandler(new Settings(new String[0]), new DataStore());
+        FormHandler handler = new FormHandler(new DataStore());
 
         Response response = handler.handle(request);
 
@@ -19,7 +19,7 @@ public class FormHandlerTest extends TestCase {
 
     public void test_it_changes_the_given_data_store_if_given_a_post_request() throws Exception {
         Repository dataStore = new DataStore();
-        FormHandler handler = new FormHandler(new Settings(new String[0]), dataStore);
+        FormHandler handler = new FormHandler(dataStore);
         Request request = new RequestParser().parse(new ByteArrayInputStream(("POST /form HTTP/1.1\r\n\r\n" +
                 "data=fat%20cat").getBytes()));
 
@@ -32,7 +32,7 @@ public class FormHandlerTest extends TestCase {
         Repository dataStore = new DataStore();
         dataStore.store("data", "cake yo");
         Request request = new RequestParser().parse(new ByteArrayInputStream("GET /form HTTP/1.1\r\n\r\n".getBytes()));
-        FormHandler handler = new FormHandler(new Settings(new String[0]), dataStore);
+        FormHandler handler = new FormHandler(dataStore);
 
         Response response = handler.handle(request);
 
@@ -44,7 +44,7 @@ public class FormHandlerTest extends TestCase {
         Repository dataStore = new DataStore();
         dataStore.store("data", "cake yo");
         Request request = new Request("/form", "PUT").setParam("data", "pie yo");
-        FormHandler handler = new FormHandler(new Settings(new String[0]), dataStore);
+        FormHandler handler = new FormHandler(dataStore);
 
         handler.handle(request);
 
@@ -55,7 +55,7 @@ public class FormHandlerTest extends TestCase {
         Repository dataStore = new DataStore();
         dataStore.store("data", "cake yo");
         Request request = new Request("/form", "DELETE");
-        FormHandler handler = new FormHandler(new Settings(new String[0]), dataStore);
+        FormHandler handler = new FormHandler(dataStore);
 
         handler.handle(request);
 

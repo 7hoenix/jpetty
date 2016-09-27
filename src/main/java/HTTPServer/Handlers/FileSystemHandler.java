@@ -6,42 +6,35 @@ import java.io.File;
 import java.io.IOException;
 
 public class FileSystemHandler implements Handler {
-    private Settings settings;
-    private Router router;
+    private File root;
+    private boolean autoIndex;
 
-    public FileSystemHandler(Settings settings, Router router) {
-        this.settings = settings;
-        this.router = router;
+    public FileSystemHandler(File root, boolean autoIndex) {
+        this.root = root;
+        this.autoIndex = autoIndex;
     }
 
     public Response handle(Request request) throws IOException {
-        if (request.getAction().contains("OPTIONS")) {
-            return handleOptionsRequest(request);
-        } else if (FileHelper.findFile(settings.getRoot(), request.getPath()).exists()) {
+        if (FileHelper.findFile(root, request.getPath()).exists()) {
             return handleFileRequest(request);
         } else {
             return new Response(404);
         }
     }
 
-    private Response handleOptionsRequest(Request request) {
-        return new Response(200)
-                .setHeader("Allow", router.getValidActions(request.getPath()));
-    }
-
     private Response handleFileRequest(Request request) throws IOException {
-        if (FileHelper.findFile(settings.getRoot(), request.getPath()).isDirectory()) {
+        if (FileHelper.findFile(root, request.getPath()).isDirectory()) {
             return handleDirectory(request);
         } else {
-            return new FileHandler(settings, router).handle(request);
+            return new FileHandler(root).handle(request);
         }
     }
 
     private Response handleDirectory(Request request) throws IOException {
-        File index = FileHelper.findFile(settings.getRoot(), request.getPath().concat("/index.html"));
-        if (index.exists() && settings.getAutoIndex()) {
+        File index = FileHelper.findFile(root, request.getPath().concat("/index.html"));
+        if (index.exists() && autoIndex) {
             Request updatedRequest = request.setPath(request.getPath().concat("/index.html"));
-            return new FileHandler(settings, router).handle(updatedRequest);
+            return new FileHandler(root).handle(updatedRequest);
         } else {
             return generateDirectoryResponse(request);
         }
@@ -57,7 +50,7 @@ public class FileSystemHandler implements Handler {
     private String generateLinks(Request request) {
         String links = "";
         links = generateLinkUp(links, request);
-        File[] filesInDir = FileHelper.findFile(settings.getRoot(), request.getPath())
+        File[] filesInDir = FileHelper.findFile(root, request.getPath())
                 .listFiles(pathname -> !pathname.isHidden());
         for (File file : filesInDir) {
             String path = request.getPath();
@@ -71,7 +64,7 @@ public class FileSystemHandler implements Handler {
     }
 
     private String generateLinkUp(String links, Request request) {
-        File currentFile = FileHelper.findFile(settings.getRoot(), request.getPath());
+        File currentFile = FileHelper.findFile(root, request.getPath());
         if ((currentFile.getParent() != null)) {
             links = links.concat(createLink("..", ".."));
         }

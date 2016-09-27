@@ -2,18 +2,15 @@ package HTTPServer.Handlers;
 
 import HTTPServer.Request;
 import HTTPServer.Response;
-import HTTPServer.Settings;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Base64;
 
 public class AuthorizationHandler implements Handler {
-    private Settings settings;
     private ArrayList<String> log;
 
-    public AuthorizationHandler(Settings settings, ArrayList<String> log) {
-        this.settings = settings;
+    public AuthorizationHandler(ArrayList<String> log) {
         this.log = log;
     }
 

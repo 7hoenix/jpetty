@@ -2,7 +2,6 @@ package CobSpecApp;
 
 import HTTPServer.Request;
 import HTTPServer.Response;
-import HTTPServer.Settings;
 import junit.framework.TestCase;
 
 public class OptionsHandlerTest extends TestCase {
@@ -11,7 +10,7 @@ public class OptionsHandlerTest extends TestCase {
         Request headRequest = new Request("/method_options", "HEAD");
         Request postRequest = new Request("/method_options", "POST");
         Request putRequest = new Request("/method_options", "PUT");
-        OptionsHandler handler = new OptionsHandler(new Settings(new String[0]));
+        OptionsHandler handler = new OptionsHandler();
 
         Response getResponse = handler.handle(getRequest);
         Response headResponse = handler.handle(headRequest);

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class BasicHandlerTest extends TestCase {
     public void test_it_handles_not_valid() throws Exception {
         Request request = new Request("/cake", "GET");
-        Handler handler = new BasicHandler(new Settings(), new Router(), new ArrayList<>());
+        Handler handler = new BasicHandler(new ArrayList<>(), false);
 
         Response response = handler.handle(request);
 

@@ -13,7 +13,7 @@ public class CobSpecClient {
         Settings settings = new Settings(args);
         Repository dataStore = new DataStore();
         ArrayList<String> log = new ArrayList<>();
-        Router router = CobSpecRoutes.generate(new Router(settings, log), dataStore);
+        Router router = CobSpecRoutes.generate(new Router(log, settings.getAutoIndex()), settings, dataStore);
         ServerSocket serverSocket = new ServerSocket(settings.getPort());
         ConnectionManager serverConnection = new WrappedServerSocket(serverSocket, router, log);
         Server server = new Server(serverConnection);

@@ -11,7 +11,7 @@ public class CobSpecClientTest extends TestCase {
         Settings settings = new Settings(new String[0]);
         Repository dataStore = new DataStore();
         ArrayList<String> log = new ArrayList<>();
-        Router router = CobSpecRoutes.generate(new Router(settings, log), dataStore);
+        Router router = CobSpecRoutes.generate(new Router(), settings, dataStore);
         ServerSocket serverSocket = new ServerSocket(settings.getPort());
         ConnectionManager serverConnection = new WrappedServerSocket(serverSocket, router, log);
         MockServer server = new MockServer(serverConnection);

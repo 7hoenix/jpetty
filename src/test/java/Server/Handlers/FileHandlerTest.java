@@ -1,18 +1,19 @@
 package Server.Handlers;
 
-import CobSpecApp.DataStore;
 import CobSpecApp.ETagHandler;
 import HTTPServer.*;
 import HTTPServer.Handlers.FileHandler;
 import HTTPServer.Handlers.Handler;
 import junit.framework.TestCase;
 
+import java.io.File;
+
 public class FileHandlerTest extends TestCase {
     public void test_it_handles_method_not_allowed_differently_for_different_file_types() throws Exception {
         Request getRequest = new Request("/thing.txt", "GET");
         Request putRequest = new Request("/thing.txt", "PUT");
         Request purgeRequest = new Request("/thing.txt", "PURGE");
-        Handler handler = new FileHandler(new Settings(new String[] {"-d", "otherPublic"}), new Router());
+        Handler handler = new FileHandler(new File("otherPublic"));
 
         Response getResponse = handler.handle(getRequest);
         Response putResponse = handler.handle(putRequest);
@@ -25,8 +26,8 @@ public class FileHandlerTest extends TestCase {
 
     public void test_it_changes_the_content_if_passed_a_sha_that_matches_the_current_file_contents() throws Exception {
         Request getRequest = new Request("/patch-content.txt", "GET");
-        Handler getHandler = new ETagHandler(new Settings(), new DataStore());
-        Handler handler = new FileHandler(new Settings(), new Router());
+        Handler getHandler = new ETagHandler(new File("public"));
+        Handler handler = new FileHandler(new File("public"));
 
         Response getResponse1 = getHandler.handle(getRequest);
 

@@ -4,10 +4,12 @@ import HTTPServer.*;
 import HTTPServer.Handlers.Handler;
 import junit.framework.TestCase;
 
+import java.io.File;
+
 public class PartialContentTest extends TestCase {
     public void test_it_returns_a_partial_number_of_bytes_from_a_requested_file() throws Exception {
         Request request = new Request("/geoffs-sweet-site/test.txt", "GET").setHeader("Range", "bytes=0-4");
-        Handler handler = new PartialContentHandler(new Settings(), new DataStore());
+        Handler handler = new PartialContentHandler(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -18,7 +20,7 @@ public class PartialContentTest extends TestCase {
 
     public void test_it_returns_the_final_number_of_bytes_counting_from_the_end() throws Exception {
         Request request = new Request("/geoffs-sweet-site/test.txt", "GET").setHeader("Range", "bytes=-5");
-        Handler handler = new PartialContentHandler(new Settings(), new DataStore());
+        Handler handler = new PartialContentHandler(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -29,7 +31,7 @@ public class PartialContentTest extends TestCase {
 
     public void test_it_returns_a_block_of_bytes_from_the_center_of_the_file() throws Exception {
         Request request = new Request("/geoffs-sweet-site/test.txt", "GET").setHeader("Range", "bytes=15-22");
-        Handler handler = new PartialContentHandler(new Settings(), new DataStore());
+        Handler handler = new PartialContentHandler(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -40,7 +42,7 @@ public class PartialContentTest extends TestCase {
 
     public void test_it_returns_a_block_of_bytes_from_start_to_end_of_file_if_no_last_value_given() throws Exception {
         Request request = new Request("/geoffs-sweet-site/test.txt", "GET").setHeader("Range", "bytes=15-");
-        Handler handler = new PartialContentHandler(new Settings(), new DataStore());
+        Handler handler = new PartialContentHandler(new File("public"));
 
         Response response = handler.handle(request);
 

@@ -32,12 +32,25 @@ public class RouterTest extends TestCase {
         assertEquals(404, response.getStatusCode());
     }
 
-    public void test_it_can_return_valid_actions_for_a_route() throws Exception {
-        Handler handler = new MockHandler(200);
-        String[] actions = new String[] {"GET", "POST"};
-        Router router = new Router().add("/", actions, handler);
+    public void test_it_returns_a_listing_of_the_methods_that_will_work_on_a_resource() throws Exception {
+        Request request = new Request("/method_options", "OPTIONS");
+        Router router = new Router()
+                .add("/method_options", new String[] {"GET", "HEAD", "POST", "PUT"}, new MockHandler(200));
 
-        assertEquals("POST,GET,OPTIONS", router.getValidActions("/"));
+        Response response = router.route(request);
+
+        assertEquals(200, response.getStatusCode());
+        assertEquals("HEAD,POST,GET,PUT,OPTIONS", response.getHeader("Allow"));
+    }
+
+    public void test_it_returns_options_by_default() throws Exception {
+        Request request = new Request("/method_options2", "OPTIONS");
+        Router router = new Router().add("/method_options2", "PUT", new MockHandler(200));
+
+        Response response = router.route(request);
+
+        assertEquals(200, response.getStatusCode());
+        assertEquals("PUT,OPTIONS", response.getHeader("Allow"));
     }
 
     private class MockHandler implements Handler {
