@@ -1,17 +1,16 @@
 package HTTPServer;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Router implements Handler {
-    private Map<String, Map<String, Handler>> routes;
+    private Route[] routes;
 
     public Router() {
-        this(new HashMap<String, Map<String, Handler>>());
+        this(new Route[0]);
     }
 
-    private Router(Map routes) {
+    private Router(Route[] routes) {
         this.routes = routes;
     }
 
@@ -32,39 +31,31 @@ public class Router implements Handler {
     }
 
     public Handler getRoute(Request request) {
-        return (routeIsPresent(request)) ? routes.get(request.getPath()).get(request.getAction()) : null;
+        for(Route route : routes) {
+            if (route.isAMatch(request.getPath(), request.getAction())) {
+                return route.get(request.getPath(), request.getAction());
+            }
+        }
+        return null;
     }
 
     private String getValidActions(String path) {
-        String actions = "";
-        Map actionRoutes = routes.get(path);
-        for(Object action : actionRoutes.keySet()) {
-            actions += action + ",";
+        List<String> actions = new ArrayList<>();
+        for(Route route : routes) {
+            if (route.getPath().equals(path)) {
+                actions.add(route.getAction());
+            }
         }
-        actions += "OPTIONS";
-        return actions;
+        actions.add("OPTIONS");
+        return String.join(",", actions);
     }
 
     public Router setRoute(String path, String action, Handler handler) {
-        Map routes = new HashMap<String, Handler>();
-        Map updatedRoutes = new HashMap(this.routes);
-        routes.put(action, handler);
-        updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes);
-    }
-
-    public Router setRoute(String path, String[] actions, Handler handler) {
-        Map routes = new HashMap<String, Handler>();
-        Map updatedRoutes = new HashMap(this.routes);
-        for(String action : actions) {
-            routes.put(action, handler);
-        }
-        updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes);
-    }
-
-    private boolean routeIsPresent(Request request) {
-        return (routes.get(request.getPath()) != null &&
-                routes.get(request.getPath()).get(request.getAction()) != null);
+        Route route = new Route().setPath(path).setAction(action).setHandler(handler);
+        List<Route> updatedRoutes = Arrays.asList(routes);
+        List<Route> tempList = new ArrayList<>(updatedRoutes);
+        tempList.add(route);
+        Route[] tempArray = new Route[tempList.size()];
+        return new Router(tempList.toArray(tempArray));
     }
 }

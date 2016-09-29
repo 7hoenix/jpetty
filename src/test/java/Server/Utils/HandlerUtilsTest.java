@@ -11,4 +11,10 @@ public class HandlerUtilsTest extends TestCase {
         assertEquals(302, response.getStatusCode());
         assertEquals("http://google.com", response.getHeader("Location"));
     }
+
+    public void test_it_generates_a_forbidden_response() throws Exception {
+        Response response = HandlerUtils.forbidden();
+
+        assertEquals(403, response.getStatusCode());
+    }
 }
