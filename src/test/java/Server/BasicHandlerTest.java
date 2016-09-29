@@ -12,6 +12,6 @@ public class BasicHandlerTest extends TestCase {
 
         Response response = handler.handle(request);
 
-        assertEquals(500, response.getStatusCode());
+        assertEquals(404, response.getStatusCode());
     }
 }
