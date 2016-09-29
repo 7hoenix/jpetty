@@ -42,7 +42,7 @@ public class Route {
     }
 
     private boolean matchesPath(String path) {
-        return (path.equals(this.path) || Pattern.matches(this.path, path)) ? true : false;
+        return path.equals(this.path) || Pattern.matches(this.path, path);
     }
 
     public boolean isAMatch(String path, String action) {
