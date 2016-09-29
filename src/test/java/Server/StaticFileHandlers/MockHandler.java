@@ -1,6 +1,6 @@
-package Server.Handlers;
+package Server.StaticFileHandlers;
 
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
 import HTTPServer.Request;
 import HTTPServer.Response;
 

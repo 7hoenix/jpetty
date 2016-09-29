@@ -1,7 +1,4 @@
-package HTTPServer.Handlers;
-
-import HTTPServer.Request;
-import HTTPServer.Response;
+package HTTPServer;
 
 import java.io.IOException;
 

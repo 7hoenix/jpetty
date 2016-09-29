@@ -6,17 +6,17 @@ import java.util.ArrayList;
 
 public class WrappedServerSocket implements ConnectionManager {
     private ServerSocket serverSocket;
-    private Router router;
+    private Handler handler;
     private ArrayList<String> log;
 
-    public WrappedServerSocket(ServerSocket serverSocket, Router router, ArrayList<String> log) {
+    public WrappedServerSocket(ServerSocket serverSocket, Handler handler, ArrayList<String> log) {
         this.serverSocket = serverSocket;
-        this.router = router;
+        this.handler = handler;
         this.log = log;
     }
 
     public Connection acceptConnection() throws IOException {
-        return new Connection(new WrappedSocket(serverSocket.accept()), router, log);
+        return new Connection(new WrappedSocket(serverSocket.accept()), handler, log);
     }
 
     public boolean isListening() {

@@ -1,7 +1,7 @@
-package CobSpecApp;
+package HTTPServer.StaticFileHandlers;
 
 import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
 
 import java.io.*;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package CobSpecApp;
+package HTTPServer;
 
 public interface Repository {
     void store(String key, String value);

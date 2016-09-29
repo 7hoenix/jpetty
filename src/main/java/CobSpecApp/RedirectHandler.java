@@ -1,7 +1,8 @@
 package CobSpecApp;
 
 import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
+import HTTPServer.Utils.HandlerUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -14,7 +15,6 @@ public class RedirectHandler implements Handler {
     }
 
     public Response handle(Request request) throws IOException {
-        return new Response(302)
-                .setHeader("Location", redirections.get(request.getPath()));
+        return HandlerUtils.redirect(redirections.get(request.getPath()));
     }
 }

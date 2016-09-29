@@ -1,6 +1,6 @@
 package CobSpecApp;
 
-import CobSpecApp.Repository;
+import HTTPServer.Repository;
 
 import java.util.HashMap;
 

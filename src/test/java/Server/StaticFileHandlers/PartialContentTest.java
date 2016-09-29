@@ -1,7 +1,8 @@
-package CobSpecApp;
+package Server.StaticFileHandlers;
 
 import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
+import HTTPServer.StaticFileHandlers.PartialContentHandler;
 import junit.framework.TestCase;
 
 import java.io.File;

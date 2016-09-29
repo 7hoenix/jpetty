@@ -1,7 +1,7 @@
 package CobSpecApp;
 
 import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
 
 public class TeapotHandler implements Handler {
     public Response handle(Request request) {

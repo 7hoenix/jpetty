@@ -1,7 +1,7 @@
 package CobSpecApp;
 
 import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
 import junit.framework.TestCase;
 
 public class TeapotHandlerTest extends TestCase {

@@ -1,7 +1,7 @@
 package CobSpecApp;
 
 import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
 
 import java.io.IOException;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
 public class ParameterHandler implements Handler {
 
     public Response handle(Request request) throws IOException {
-        return new Response(302)
+        return new Response(200)
                 .setBody(findParams(request));
     }
 

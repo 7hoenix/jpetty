@@ -1,39 +1,28 @@
 package HTTPServer;
 
-import HTTPServer.Handlers.BasicHandler;
-import HTTPServer.Handlers.Handler;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Router {
+public class Router implements Handler {
     private Map<String, Map<String, Handler>> routes;
-    private ArrayList<String> log;
-    private boolean autoIndex;
 
     public Router() {
-        this(new HashMap<String, Map<String, Handler>>(), new ArrayList<>(), false);
+        this(new HashMap<String, Map<String, Handler>>());
     }
 
-    public Router(ArrayList<String> log, boolean autoIndex) {
-        this(new HashMap<String, Map<String, Handler>>(), log, autoIndex);
-    }
-
-    private Router(Map routes, ArrayList<String> log, boolean autoIndex) {
+    private Router(Map routes) {
         this.routes = routes;
-        this.autoIndex = autoIndex;
-        this.log = log;
     }
 
-    public Response route(Request request) throws IOException {
-        if (request != null && getHandler(request) != null) {
-            return getHandler(request).handle(request);
+    @Override
+    public Response handle(Request request) throws IOException {
+        if (request != null && getRoute(request) != null) {
+            return getRoute(request).handle(request);
         } else if (request != null && request.getAction().contains("OPTIONS")) {
             return handleOptionsRequest(request);
         } else {
-            return new BasicHandler(log, autoIndex).handle(request);
+            return new Response(404);
         }
     }
 
@@ -42,7 +31,7 @@ public class Router {
                 .setHeader("Allow", getValidActions(request.getPath()));
     }
 
-    public Handler getHandler(Request request) {
+    public Handler getRoute(Request request) {
         return (routeIsPresent(request)) ? routes.get(request.getPath()).get(request.getAction()) : null;
     }
 
@@ -56,22 +45,22 @@ public class Router {
         return actions;
     }
 
-    public Router add(String path, String action, Handler handler) {
+    public Router setRoute(String path, String action, Handler handler) {
         Map routes = new HashMap<String, Handler>();
         Map updatedRoutes = new HashMap(this.routes);
         routes.put(action, handler);
         updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes, this.log, this.autoIndex);
+        return new Router(updatedRoutes);
     }
 
-    public Router add(String path, String[] actions, Handler handler) {
+    public Router setRoute(String path, String[] actions, Handler handler) {
         Map routes = new HashMap<String, Handler>();
         Map updatedRoutes = new HashMap(this.routes);
         for(String action : actions) {
             routes.put(action, handler);
         }
         updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes, this.log, this.autoIndex);
+        return new Router(updatedRoutes);
     }
 
     private boolean routeIsPresent(Request request) {

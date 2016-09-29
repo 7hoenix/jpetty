@@ -1,46 +1,18 @@
-package HTTPServer.Handlers;
+package HTTPServer.StaticFileHandlers;
 
 import HTTPServer.*;
 
 import java.io.File;
 import java.io.IOException;
 
-public class FileSystemHandler implements Handler {
+public class DirectoryHandler implements Handler {
     private File root;
-    private boolean autoIndex;
 
-    public FileSystemHandler(File root, boolean autoIndex) {
+    public DirectoryHandler(File root) {
         this.root = root;
-        this.autoIndex = autoIndex;
     }
 
     public Response handle(Request request) throws IOException {
-        if (FileHelper.findFile(root, request.getPath()).exists()) {
-            return handleFileRequest(request);
-        } else {
-            return new Response(404);
-        }
-    }
-
-    private Response handleFileRequest(Request request) throws IOException {
-        if (FileHelper.findFile(root, request.getPath()).isDirectory()) {
-            return handleDirectory(request);
-        } else {
-            return new FileHandler(root).handle(request);
-        }
-    }
-
-    private Response handleDirectory(Request request) throws IOException {
-        File index = FileHelper.findFile(root, request.getPath().concat("/index.html"));
-        if (index.exists() && autoIndex) {
-            Request updatedRequest = request.setPath(request.getPath().concat("/index.html"));
-            return new FileHandler(root).handle(updatedRequest);
-        } else {
-            return generateDirectoryResponse(request);
-        }
-    }
-
-    private Response generateDirectoryResponse(Request request) throws IOException {
         String body = "<!DOCTYPE html><html lang=\"en\"><body>";
         String links = generateLinks(request);
         byte[] fullBody = (body + links + "</body></html>").getBytes();

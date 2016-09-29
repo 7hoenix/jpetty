@@ -1,18 +1,18 @@
-package Server.Handlers;
+package Server.StaticFileHandlers;
 
-import CobSpecApp.Settings;
 import HTTPServer.*;
-import HTTPServer.Handlers.FileSystemHandler;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Middleware.StaticFileHandler;
+import HTTPServer.Handler;
 import junit.framework.TestCase;
 
 import java.io.File;
 
-public class FileSystemHandlerTest extends TestCase {
+public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_returns_the_contents_of_a_file() throws Exception {
         Request request = new Request("/fakeDirectory/thingy.html", "GET");
-        Handler handler = new FileSystemHandler(new File("otherPublic"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("otherPublic"));
 
         Response response = handler.handle(request);
 
@@ -23,7 +23,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_reads_a_directory_structure_if_no_index_is_present() throws Exception {
         Request request = new Request("/", "GET");
-        Handler handler = new FileSystemHandler(new File("otherPublic"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("otherPublic"));
 
         Response response = handler.handle(request);
 
@@ -37,7 +38,9 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_handles_a_simple_request() throws Exception {
         Request request = new Request("/", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), true);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"))
+                .setAutoIndex(true);
 
         Response response = handler.handle(request);
 
@@ -48,7 +51,9 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_returns_an_index_if_not_at_root() throws Exception {
         Request request = new Request("/brians", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), true);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"))
+                .setAutoIndex(true);
 
         Response response = handler.handle(request);
 
@@ -59,7 +64,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_handles_a_basic_request() throws Exception {
         Request request = new Request("/brians/index.html", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -68,7 +74,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_handles_indexes_as_slashes() throws Exception {
         Request request = new Request("/brians", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -81,7 +88,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_includes_a_link_to_navigate_up_the_chain() throws Exception {
         Request request = new Request("/brians/ping-pong-equipment/lighting", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -93,7 +101,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_returns_a_listing_of_files_if_given_a_directory() throws Exception {
         Request request = new Request("/games", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -106,7 +115,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_does_not_include_a_link_if_at_root_directory() throws Exception {
         Request request = new Request("/brians/ping-pong-equipment", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -120,7 +130,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_up_links_work_one_level_down() throws Exception {
         Request request = new Request("/brians", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -133,7 +144,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_returns_an_image_with_a_content_length_and_content_type_for_jpg() throws Exception {
         Request request = new Request("/images/hong-kong.jpg", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -144,7 +156,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_returns_a_giffy_with_a_content_length_and_content_type() throws Exception {
         Request request = new Request("/geoffs-sweet-site/samurai-champloo/board.gif", "GET");
-        Handler handler = new FileSystemHandler(new File("public"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("public"));
 
         Response response = handler.handle(request);
 
@@ -155,7 +168,8 @@ public class FileSystemHandlerTest extends TestCase {
 
     public void test_it_can_handle_different_routes() throws Exception {
         Request request = new Request("/", "GET");
-        Handler handler = new FileSystemHandler(new File("src"), false);
+        Handler handler = new StaticFileHandler(new BasicHandler())
+                .setPublicDirectory(new File("src"));
 
         Response response = handler.handle(request);
 

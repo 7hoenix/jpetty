@@ -1,6 +1,6 @@
 package Server;
 
-import CobSpecApp.Repository;
+import HTTPServer.Repository;
 import CobSpecApp.DataStore;
 import junit.framework.TestCase;
 

@@ -1,6 +1,10 @@
 package CobSpecApp;
 
 import HTTPServer.*;
+import HTTPServer.Handler;
+import HTTPServer.Middleware.AuthorizationHandler;
+import HTTPServer.Middleware.LogHandler;
+import HTTPServer.Middleware.StaticFileHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,9 +17,19 @@ public class CobSpecClient {
         Settings settings = new Settings(args);
         Repository dataStore = new DataStore();
         ArrayList<String> log = new ArrayList<>();
-        Router router = CobSpecRoutes.generate(new Router(log, settings.getAutoIndex()), settings, dataStore);
+        Handler handler = CobSpecRoutes.generate(new Router(), dataStore);
+        Handler updatedHandler = new LogHandler(handler)
+                .setLog(log);
+        Handler moarUpdatedHandler = new AuthorizationHandler(updatedHandler)
+                .setUserName("admin")
+                .setPassword("hunter2")
+                .setRealm("jphoenx personal server")
+                .setProtectedRoutes(new String[] {"/logs"});
+        Handler superMoarUpdatedHandler = new StaticFileHandler(moarUpdatedHandler)
+                .setPublicDirectory(settings.getRoot())
+                .setAutoIndex(settings.getAutoIndex());
         ServerSocket serverSocket = new ServerSocket(settings.getPort());
-        ConnectionManager serverConnection = new WrappedServerSocket(serverSocket, router, log);
+        ConnectionManager serverConnection = new WrappedServerSocket(serverSocket, superMoarUpdatedHandler, log);
         Server server = new Server(serverConnection);
         CobSpecClient client = new CobSpecClient(server);
         client.run();

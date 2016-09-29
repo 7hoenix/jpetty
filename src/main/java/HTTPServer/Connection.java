@@ -8,16 +8,12 @@ import java.util.ArrayList;
 
 public class Connection implements Runnable, Closeable {
     private Connectable connectable;
-    private Router router;
+    private Handler handler;
     private ArrayList<String> log;
 
-    public Connection(Connectable connectable) {
-        this(connectable, new Router(), new ArrayList<>());
-    }
-
-    public Connection(Connectable connectable, Router router, ArrayList<String> log) {
+    public Connection(Connectable connectable, Handler handler, ArrayList<String> log) {
         this.connectable = connectable;
-        this.router = router;
+        this.handler = handler;
         this.log = log;
     }
 
@@ -26,7 +22,7 @@ public class Connection implements Runnable, Closeable {
         log.add(request.getLine());
         Response response = null;
         try {
-            response = router.route(request);
+            response = handler.handle(request);
         } catch (IOException e) {
             e.printStackTrace();
         }

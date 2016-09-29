@@ -44,6 +44,7 @@ public class ResponseFormatter {
         messagesByCodes.put(204, "NO CONTENT");
         messagesByCodes.put(404, "NOT FOUND");
         messagesByCodes.put(405, "METHOD NOT ALLOWED");
+        messagesByCodes.put(500, "INTERNAL ERROR");
         return messagesByCodes;
     }
 }
