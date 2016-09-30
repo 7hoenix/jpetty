@@ -1,9 +1,9 @@
 package Server;
 
 import HTTPServer.Connection;
-import HTTPServer.ServerConnectable;
+import HTTPServer.ConnectionManager;
 
-public class MockServerSocket implements ServerConnectable {
+public class MockServerSocket implements ConnectionManager {
     private Connection connection;
     private boolean accepted = false;
     private Integer connectionCount;
@@ -15,7 +15,7 @@ public class MockServerSocket implements ServerConnectable {
     }
 
     @Override
-    public Connection accept()
+    public Connection acceptConnection()
     {
         this.accepted = true;
         connectionCount--;

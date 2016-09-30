@@ -1,6 +1,6 @@
 package Server;
 
-import HTTPServer.Settings;
+import CobSpecApp.Settings;
 import junit.framework.TestCase;
 
 public class SettingsTest extends TestCase {

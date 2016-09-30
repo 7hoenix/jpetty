@@ -1,16 +1,16 @@
 package CobSpecApp;
 
-import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
+import HTTPServer.Repository;
+import HTTPServer.Request;
+import HTTPServer.Response;
 
-import java.io.*;
+import java.io.IOException;
 
 public class FormHandler implements Handler {
-    private Settings settings;
-    private DataStorage dataStore;
+    private Repository dataStore;
 
-    public FormHandler(Settings settings, DataStorage dataStore) {
-        this.settings = settings;
+    public FormHandler(Repository dataStore) {
         this.dataStore = dataStore;
     }
 

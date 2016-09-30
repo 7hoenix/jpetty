@@ -1,19 +1,19 @@
 package Server;
 
-import HTTPServer.DataStorage;
-import HTTPServer.DataStore;
+import CobSpecApp.DataStore;
+import HTTPServer.Repository;
 import junit.framework.TestCase;
 
 public class DataStoreTest extends TestCase {
     public void test_it_stores_and_retrieves_an_entry() throws Exception {
-        DataStorage dataStore = new DataStore();
+        Repository dataStore = new DataStore();
         dataStore.store("cake", "yum");
 
         assertEquals("yum", dataStore.retrieve("cake"));
     }
 
     public void test_it_can_update_an_entry() throws Exception {
-        DataStorage dataStore = new DataStore();
+        Repository dataStore = new DataStore();
         dataStore.store("pie", "yum");
 
         dataStore.update("pie", "moar yum");
@@ -23,7 +23,7 @@ public class DataStoreTest extends TestCase {
     }
 
     public void test_it_can_delete_an_entry_in_the_store() throws Exception {
-        DataStorage dataStore = new DataStore();
+        Repository dataStore = new DataStore();
         dataStore.store("pie", "more yum");
 
         dataStore.remove("pie");

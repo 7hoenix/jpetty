@@ -1,84 +1,63 @@
 package HTTPServer;
 
-import HTTPServer.Handlers.BasicHandler;
-import HTTPServer.Handlers.Handler;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
-public class Router {
-    private Map<String, Map<String, Handler>> routes;
-    private Settings settings;
-    private DataStorage dataStore;
-    private ArrayList<String> log;
+public class Router implements Handler {
+    private Route[] routes;
 
     public Router() {
-        this(new HashMap<String, Map<String, Handler>>(), new Settings(), new DataStore(), new ArrayList<>());
+        this(new Route[0]);
     }
 
-    public Router(Settings settings, DataStorage dataStore, ArrayList<String> log) {
-        this(new HashMap<String, Map<String, Handler>>(), settings, dataStore, log);
-    }
-
-    private Router(Map routes, Settings settings, DataStorage dataStore, ArrayList<String> log) {
+    private Router(Route[] routes) {
         this.routes = routes;
-        this.settings = settings;
-        this.dataStore = dataStore;
-        this.log = log;
     }
 
-    public Response route(Request request) throws IOException {
-        if (request != null && getHandler(request) != null) {
-            return getHandler(request).handle(request);
+    @Override
+    public Response handle(Request request) throws IOException {
+        if (request != null && getRoute(request) != null) {
+            return getRoute(request).handle(request);
+        } else if (request != null && request.getAction().contains("OPTIONS")) {
+            return handleOptionsRequest(request);
         } else {
-            return new BasicHandler(settings, this, log).handle(request);
+            return new Response(404);
         }
     }
 
-    public Handler getHandler(Request request) {
-        return (routeIsPresent(request)) ? routes.get(request.getPath()).get(request.getAction()) : null;
+    private Response handleOptionsRequest(Request request) {
+        return new Response(200)
+                .setHeader("Allow", getValidActions(request.getPath()));
     }
 
-    public DataStorage getDataStore() {
-        return this.dataStore;
-    }
-
-    public Settings getSettings() {
-        return this.settings;
-    }
-
-    public String getValidActions(String path) {
-        String actions = "";
-        Map actionRoutes = routes.get(path);
-        for(Object action : actionRoutes.keySet()) {
-            actions += action + ",";
+    public Handler getRoute(Request request) {
+        for(Route route : routes) {
+            if (route.isAMatch(request.getPath(), request.getAction())) {
+                return route.get(request.getPath(), request.getAction());
+            }
         }
-        actions += "OPTIONS";
-        return actions;
+        return null;
     }
 
-    public Router add(String path, String action, Handler handler) {
-        Map routes = new HashMap<String, Handler>();
-        Map updatedRoutes = new HashMap(this.routes);
-        routes.put(action, handler);
-        updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes, this.settings, this.dataStore, this.log);
-    }
-
-    public Router add(String path, String[] actions, Handler handler) {
-        Map routes = new HashMap<String, Handler>();
-        Map updatedRoutes = new HashMap(this.routes);
-        for(String action : actions) {
-            routes.put(action, handler);
+    private String getValidActions(String path) {
+        List<String> actions = new ArrayList<>();
+        for(Route route : routes) {
+            if (route.getPath().equals(path)) {
+                actions.add(route.getAction());
+            }
         }
-        updatedRoutes.put(path, routes);
-        return new Router(updatedRoutes, this.settings, this.dataStore, this.log);
+        actions.add("OPTIONS");
+        return String.join(",", actions);
     }
 
-    private boolean routeIsPresent(Request request) {
-        return (routes.get(request.getPath()) != null &&
-                routes.get(request.getPath()).get(request.getAction()) != null);
+    public Router setRoute(String path, String action, Handler handler) {
+        Route route = new Route().setPath(path).setAction(action).setHandler(handler);
+        List<Route> updatedRoutes = Arrays.asList(routes);
+        List<Route> tempList = new ArrayList<>(updatedRoutes);
+        tempList.add(route);
+        Route[] tempArray = new Route[tempList.size()];
+        return new Router(tempList.toArray(tempArray));
     }
 }

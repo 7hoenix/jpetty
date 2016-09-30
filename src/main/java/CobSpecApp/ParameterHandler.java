@@ -1,22 +1,16 @@
 package CobSpecApp;
 
-import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
+import HTTPServer.Request;
+import HTTPServer.Response;
 
 import java.io.IOException;
 import java.util.Map;
 
 public class ParameterHandler implements Handler {
-    private Settings settings;
-    private DataStorage dataStore;
-
-    public ParameterHandler(Settings settings, DataStorage dataStore) {
-        this.settings = settings;
-        this.dataStore = dataStore;
-    }
 
     public Response handle(Request request) throws IOException {
-        return new Response(302)
+        return new Response(200)
                 .setBody(findParams(request));
     }
 

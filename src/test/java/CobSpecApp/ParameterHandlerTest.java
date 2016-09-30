@@ -1,7 +1,8 @@
 package CobSpecApp;
 
-import HTTPServer.*;
-import HTTPServer.Handlers.Handler;
+import HTTPServer.Handler;
+import HTTPServer.Request;
+import HTTPServer.Response;
 import junit.framework.TestCase;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ public class ParameterHandlerTest extends TestCase {
         params.put("variable_1", "cake");
         params.put("variable_2", "nom nom");
         Request request = new Request("/parameters", "GET").setParams(params);
-        Handler handler = new ParameterHandler(new Settings(new String[0]), new DataStore());
+        Handler handler = new ParameterHandler();
 
         Response response = handler.handle(request);
 

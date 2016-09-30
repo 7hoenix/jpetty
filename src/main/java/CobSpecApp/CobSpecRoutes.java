@@ -1,21 +1,35 @@
 package CobSpecApp;
 
+import HTTPServer.Handler;
+import HTTPServer.Repository;
 import HTTPServer.Router;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CobSpecRoutes {
-    public static Router generate(Router router) {
-        Router updatedRouter = router
-                .add("/form", new String[] {"GET", "PUT", "POST", "DELETE"}, new FormHandler(router.getSettings(), router.getDataStore()))
-                .add("/method_options", new String[] {"GET", "HEAD", "POST", "PUT"}, new OptionsHandler(router.getSettings(), router.getDataStore()))
-                .add("/method_options2", new String[] {"GET"}, new OptionsHandler(router.getSettings(), router.getDataStore()))
-                .add("/redirect", "GET", new RedirectHandler(router.getSettings(), router.getDataStore()))
-                .add("/partial_content.txt", "GET", new PartialContentHandler(router.getSettings(), router.getDataStore()))
-                .add("/coffee", "GET", new TeapotHandler(router.getSettings(), router.getDataStore()))
-                .add("/tea", "GET", new TeapotHandler(router.getSettings(), router.getDataStore()))
-                .add("/parameters", "GET", new ParameterHandler(router.getSettings(), router.getDataStore()))
-                .add("/patch-content.txt", "GET", new ETagHandler(router.getSettings(), router.getDataStore()));
+    public static Handler generate(Router router, Repository dataStore) {
+        Handler updatedRouter = router
+                .setRoute("/form", "GET", new FormHandler(dataStore))
+                .setRoute("/form", "PUT", new FormHandler(dataStore))
+                .setRoute("/form", "POST", new FormHandler(dataStore))
+                .setRoute("/form", "DELETE", new FormHandler(dataStore))
+                .setRoute("/method_options", "GET", new OptionsHandler())
+                .setRoute("/method_options", "HEAD", new OptionsHandler())
+                .setRoute("/method_options", "POST", new OptionsHandler())
+                .setRoute("/method_options", "PUT", new OptionsHandler())
+                .setRoute("/method_options2", "GET", new OptionsHandler())
+                .setRoute("/redirect", "GET", new RedirectHandler(getRedirects()))
+                .setRoute("/coffee", "GET", new TeapotHandler())
+                .setRoute("/tea", "GET", new TeapotHandler())
+                .setRoute("/parameters", "GET", new ParameterHandler())
+                .setRoute("/.*", "GET", new WildCardHandler());
         return updatedRouter;
     }
+
+    private static Map<String, String> getRedirects() {
+        Map redirections = new HashMap<String, String>();
+        redirections.put("/redirect", "http://localhost:5000/");
+        return redirections;
+    }
 }
-
-

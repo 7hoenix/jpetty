@@ -1,7 +1,7 @@
 package Server;
 
-import HTTPServer.ResponseFormatter;
 import HTTPServer.Response;
+import HTTPServer.ResponseFormatter;
 import junit.framework.TestCase;
 
 public class ResponseFormatterTest extends TestCase {
