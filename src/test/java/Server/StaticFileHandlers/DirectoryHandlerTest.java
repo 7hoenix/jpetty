@@ -1,18 +1,26 @@
 package Server.StaticFileHandlers;
 
-import HTTPServer.*;
-import HTTPServer.Middleware.StaticFileHandler;
+import HTTPServer.BasicHandler;
 import HTTPServer.Handler;
+import HTTPServer.Middleware;
+import HTTPServer.Middlewares.StaticFileHandler;
+import HTTPServer.Request;
+import HTTPServer.Response;
 import junit.framework.TestCase;
 
 import java.io.File;
 
 public class DirectoryHandlerTest extends TestCase {
 
+    public void test_it_compiles() throws Exception {
+        assertEquals(1, 1);
+    }
+
     public void test_it_returns_the_contents_of_a_file() throws Exception {
         Request request = new Request("/fakeDirectory/thingy.html", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("otherPublic"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -23,8 +31,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_reads_a_directory_structure_if_no_index_is_present() throws Exception {
         Request request = new Request("/", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("otherPublic"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -38,9 +47,10 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_handles_a_simple_request() throws Exception {
         Request request = new Request("/", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"))
                 .setAutoIndex(true);
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -51,9 +61,10 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_returns_an_index_if_not_at_root() throws Exception {
         Request request = new Request("/brians", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"))
                 .setAutoIndex(true);
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -64,8 +75,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_handles_a_basic_request() throws Exception {
         Request request = new Request("/brians/index.html", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -74,8 +86,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_handles_indexes_as_slashes() throws Exception {
         Request request = new Request("/brians", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -88,8 +101,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_includes_a_link_to_navigate_up_the_chain() throws Exception {
         Request request = new Request("/brians/ping-pong-equipment/lighting", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -101,8 +115,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_returns_a_listing_of_files_if_given_a_directory() throws Exception {
         Request request = new Request("/games", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -115,8 +130,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_does_not_include_a_link_if_at_root_directory() throws Exception {
         Request request = new Request("/brians/ping-pong-equipment", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -130,8 +146,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_up_links_work_one_level_down() throws Exception {
         Request request = new Request("/brians", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -144,8 +161,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_returns_an_image_with_a_content_length_and_content_type_for_jpg() throws Exception {
         Request request = new Request("/images/hong-kong.jpg", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -156,8 +174,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_returns_a_giffy_with_a_content_length_and_content_type() throws Exception {
         Request request = new Request("/geoffs-sweet-site/samurai-champloo/board.gif", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -168,8 +187,9 @@ public class DirectoryHandlerTest extends TestCase {
 
     public void test_it_can_handle_different_routes() throws Exception {
         Request request = new Request("/", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("src"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 

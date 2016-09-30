@@ -1,10 +1,11 @@
 package Server.Middleware;
 
+import HTTPServer.BasicHandler;
 import HTTPServer.Handler;
-import HTTPServer.Middleware.LogHandler;
+import HTTPServer.Middleware;
+import HTTPServer.Middlewares.LogHandler;
 import HTTPServer.Request;
 import HTTPServer.Response;
-import Server.StaticFileHandlers.MockHandler;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -16,10 +17,12 @@ public class LogTest extends TestCase {
         log.add("HTTP/1.1 GET /log");
         log.add("HTTP/1.1 PUT /these");
         log.add("HTTP/1.1 HEAD /requests");
-        Handler handler = new LogHandler(new MockHandler(404))
+        Middleware logger = new LogHandler()
                 .setLog(log);
+        Handler logHandler = logger.apply(new BasicHandler());
 
-        Response response = handler.handle(request);
+
+        Response response = logHandler.handle(request);
 
         assertEquals(200, response.getStatusCode());
         String expected = "HTTP/1.1 GET /log\r\n" + "HTTP/1.1 PUT /these\r\n" + "HTTP/1.1 HEAD /requests\r\n";

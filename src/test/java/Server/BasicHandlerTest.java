@@ -1,8 +1,9 @@
 package Server;
 
-import HTTPServer.*;
-import HTTPServer.Handler;
 import HTTPServer.BasicHandler;
+import HTTPServer.Handler;
+import HTTPServer.Request;
+import HTTPServer.Response;
 import junit.framework.TestCase;
 
 public class BasicHandlerTest extends TestCase {

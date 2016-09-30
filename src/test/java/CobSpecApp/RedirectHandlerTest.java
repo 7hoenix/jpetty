@@ -1,7 +1,8 @@
 package CobSpecApp;
 
-import HTTPServer.*;
 import HTTPServer.Handler;
+import HTTPServer.Request;
+import HTTPServer.Response;
 import junit.framework.TestCase;
 
 import java.util.HashMap;

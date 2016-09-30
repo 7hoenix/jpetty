@@ -2,7 +2,8 @@ package Server.Middleware;
 
 import HTTPServer.BasicHandler;
 import HTTPServer.Handler;
-import HTTPServer.Middleware.StaticFileHandler;
+import HTTPServer.Middleware;
+import HTTPServer.Middlewares.StaticFileHandler;
 import HTTPServer.Request;
 import HTTPServer.Response;
 import junit.framework.TestCase;
@@ -19,8 +20,9 @@ public class StaticTest extends TestCase {
         Path tempPath = Paths.get(tempFile.getAbsolutePath());
         Files.write(tempPath, "Important Content".getBytes());
         Request request = new Request("/" + tempPath.getFileName(), "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(tempDir);
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -33,9 +35,10 @@ public class StaticTest extends TestCase {
         File tempFile = File.createTempFile("file", ".txt", tempDir);
         File tempFile2 = File.createTempFile("file", ".jpeg", tempDir);
         Request request = new Request("/", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(tempDir)
                 .setAutoIndex(true);
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -48,8 +51,9 @@ public class StaticTest extends TestCase {
         Request getRequest = new Request("/thing.txt", "GET");
         Request putRequest = new Request("/thing.txt", "PUT");
         Request purgeRequest = new Request("/thing.txt", "PURGE");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("otherPublic"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response getResponse = handler.handle(getRequest);
         Response putResponse = handler.handle(putRequest);
@@ -62,8 +66,9 @@ public class StaticTest extends TestCase {
 
     public void test_it_changes_the_content_if_passed_a_sha_that_matches_the_current_file_contents() throws Exception {
         Request getRequest = new Request("/patch-content.txt", "GET");
-        Handler handler = new StaticFileHandler(new BasicHandler())
+        Middleware staticFileMiddleware = new StaticFileHandler()
                 .setPublicDirectory(new File("public"));
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response getResponse1 = handler.handle(getRequest);
 

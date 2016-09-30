@@ -3,8 +3,6 @@ package Server;
 import HTTPServer.Response;
 import junit.framework.TestCase;
 
-import java.util.HashMap;
-
 public class ResponseTest extends TestCase {
     public void test_it_returns_the_status_code() throws Exception {
         Response response = new Response(200);

@@ -1,9 +1,11 @@
 package CobSpecApp;
 
-import HTTPServer.*;
 import HTTPServer.Handler;
+import HTTPServer.Repository;
+import HTTPServer.Request;
+import HTTPServer.Response;
 
-import java.io.*;
+import java.io.IOException;
 
 public class FormHandler implements Handler {
     private Repository dataStore;

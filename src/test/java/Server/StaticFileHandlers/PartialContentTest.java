@@ -1,7 +1,8 @@
 package Server.StaticFileHandlers;
 
-import HTTPServer.*;
 import HTTPServer.Handler;
+import HTTPServer.Request;
+import HTTPServer.Response;
 import HTTPServer.StaticFileHandlers.PartialContentHandler;
 import junit.framework.TestCase;
 

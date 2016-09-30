@@ -1,6 +1,8 @@
 package Server;
 
-import HTTPServer.*;
+import HTTPServer.Connectable;
+import HTTPServer.Connection;
+import HTTPServer.Server;
 import Server.StaticFileHandlers.MockHandler;
 import junit.framework.TestCase;
 

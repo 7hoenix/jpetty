@@ -1,7 +1,7 @@
 package Server;
 
-import HTTPServer.Repository;
 import CobSpecApp.DataStore;
+import HTTPServer.Repository;
 import junit.framework.TestCase;
 
 public class DataStoreTest extends TestCase {

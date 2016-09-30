@@ -1,31 +1,42 @@
-package HTTPServer.Middleware;
+package HTTPServer.Middlewares;
 
 import HTTPServer.Handler;
+import HTTPServer.Middleware;
 import HTTPServer.Request;
 import HTTPServer.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class LogHandler implements Handler {
-    private Handler handler;
+public class LogHandler implements Middleware {
     private ArrayList<String> log;
 
-    public LogHandler(Handler handler) {
-        this(handler, new ArrayList<>());
+    public LogHandler() {
+        this(new ArrayList<>());
     }
 
-    private LogHandler(Handler handler, ArrayList<String> log) {
-        this.handler = handler;
+    private LogHandler(ArrayList<String> log) {
         this.log = log;
     }
 
     public LogHandler setLog(ArrayList<String> log) {
-        return new LogHandler(this.handler, log);
+        return new LogHandler(log);
+    }
+
+    @Override
+    public Handler apply(Handler h) {
+        Handler applied = (request) -> {
+            if (request.getPath().contains("/logs")) {
+                return this.handle(request);
+            } else {
+               return h.handle(request);
+            }
+        };
+        return applied;
     }
 
     public Response handle(Request request) throws IOException {
-        return (request.getPath().contains("/logs")) ? getRecent() : this.handler.handle(request);
+        return getRecent();
     }
 
     private Response getRecent() {

@@ -1,7 +1,8 @@
 package Server.Middleware;
 
 import HTTPServer.Handler;
-import HTTPServer.Middleware.AuthorizationHandler;
+import HTTPServer.Middleware;
+import HTTPServer.Middlewares.AuthorizationHandler;
 import HTTPServer.Request;
 import HTTPServer.Response;
 import Server.StaticFileHandlers.MockHandler;
@@ -13,11 +14,12 @@ public class AuthorizationTest extends TestCase {
     public void test_it_intercepts_a_protected_route_and_returns_a_401() throws Exception {
         Request request = new Request("/logs", "GET");
         Handler basicHandler = new MockHandler(200);
-        Handler authHandler = new AuthorizationHandler(basicHandler)
+        Middleware auth = new AuthorizationHandler()
                 .setUserName("passwordIsTaco")
                 .setPassword("taco")
                 .setRealm("jphoenx")
                 .setProtectedRoutes(new String[] {"/logs"});
+        Handler authHandler = auth.apply(basicHandler);
 
         Response response = authHandler.handle(request);
 
@@ -30,11 +32,12 @@ public class AuthorizationTest extends TestCase {
         Request request = new Request("/", "GET")
                 .setHeader("Authorization", "basic " + encoded);
         Handler basicHandler = new MockHandler(200);
-        Handler authHandler = new AuthorizationHandler(basicHandler)
+        Middleware auth = new AuthorizationHandler()
                 .setUserName("admin")
                 .setPassword("hunter2")
                 .setRealm("jphoenx")
                 .setProtectedRoutes(new String[] {"/"});
+        Handler authHandler = auth.apply(basicHandler);
 
         Response response = authHandler.handle(request);
 

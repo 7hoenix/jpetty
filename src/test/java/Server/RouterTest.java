@@ -1,11 +1,10 @@
 package Server;
 
-import HTTPServer.Router;
-import HTTPServer.*;
 import HTTPServer.Handler;
+import HTTPServer.Request;
+import HTTPServer.Response;
+import HTTPServer.Router;
 import junit.framework.TestCase;
-
-import java.util.regex.Pattern;
 
 public class RouterTest extends TestCase {
     public void test_it_can_add_a_route() throws Exception {

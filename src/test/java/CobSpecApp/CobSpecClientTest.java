@@ -1,7 +1,10 @@
 package CobSpecApp;
 
-import HTTPServer.*;
+import HTTPServer.ConnectionManager;
 import HTTPServer.Handler;
+import HTTPServer.Repository;
+import HTTPServer.Router;
+import HTTPServer.WrappedServerSocket;
 import junit.framework.TestCase;
 
 import java.net.ServerSocket;

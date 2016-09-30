@@ -1,6 +1,7 @@
-package HTTPServer.Middleware;
+package HTTPServer.Middlewares;
 
 import HTTPServer.Handler;
+import HTTPServer.Middleware;
 import HTTPServer.Request;
 import HTTPServer.Response;
 import HTTPServer.StaticFileHandlers.DirectoryHandler;
@@ -12,39 +13,43 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StaticFileHandler implements Handler {
-    private Handler handler;
+public class StaticFileHandler implements Middleware {
     private File staticPath;
     private boolean autoIndex;
 
-    public StaticFileHandler(Handler handler) {
-        this(handler, new File("/public"), false);
+    public StaticFileHandler() {
+        this(new File("/public"), false);
     }
 
-    private StaticFileHandler(Handler handler, File staticPath, boolean autoIndex) {
-        this.handler = handler;
+    private StaticFileHandler(File staticPath, boolean autoIndex) {
         this.staticPath = staticPath;
         this.autoIndex = autoIndex;
     }
 
     public StaticFileHandler setPublicDirectory(File staticPath) {
-        return new StaticFileHandler(this.handler, staticPath, this.autoIndex);
+        return new StaticFileHandler(staticPath, this.autoIndex);
     }
 
     public StaticFileHandler setAutoIndex(boolean autoIndex) {
-        return new StaticFileHandler(this.handler, this.staticPath, autoIndex);
+        return new StaticFileHandler(this.staticPath, autoIndex);
     }
+
+    @Override
+    public Handler apply(Handler handler) {
+        Handler applied = (request) -> {
+            File currentFile = new File(staticPath, request.getPath());
+            if (currentFile.exists()) {
+                return this.handle(request);
+            } else {
+                return handler.handle(request);
+            }
+        };
+        return applied;
+    }
+
 
     public Response handle(Request request) throws IOException {
         File currentFile = new File(staticPath, request.getPath());
-        if (currentFile.exists()) {
-            return handleFile(request, currentFile);
-        } else {
-            return this.handler.handle(request);
-        }
-    }
-
-    private Response handleFile(Request request, File currentFile) throws IOException {
         if (currentFile.isDirectory()) {
             return handleDirectory(request);
         } else if (supportedActions().get(request.getAction()) != null) {
@@ -73,4 +78,5 @@ public class StaticFileHandler implements Handler {
         supported.put("PATCH", new PatchHandler(staticPath));
         return supported;
     }
+
 }

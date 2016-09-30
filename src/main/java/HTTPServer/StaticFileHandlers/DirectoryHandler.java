@@ -1,6 +1,9 @@
 package HTTPServer.StaticFileHandlers;
 
-import HTTPServer.*;
+import HTTPServer.FileHelper;
+import HTTPServer.Handler;
+import HTTPServer.Request;
+import HTTPServer.Response;
 
 import java.io.File;
 import java.io.IOException;
