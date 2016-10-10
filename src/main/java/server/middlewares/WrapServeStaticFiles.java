@@ -36,7 +36,7 @@ public class WrapServeStaticFiles implements Middleware {
 
     @Override
     public Handler apply(Handler handler) {
-        Handler applied = (request) -> {
+        return (request) -> {
             File currentFile = new File(staticPath, request.getPath());
             if (currentFile.exists()) {
                 return serveStaticFile(request);
@@ -44,7 +44,6 @@ public class WrapServeStaticFiles implements Middleware {
                 return handler.handle(request);
             }
         };
-        return applied;
     }
 
     public Response serveStaticFile(Request request) throws IOException {
