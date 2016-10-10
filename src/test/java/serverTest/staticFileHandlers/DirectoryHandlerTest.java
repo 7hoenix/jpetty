@@ -16,7 +16,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/fakeDirectory/thingy.html", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("otherPublic"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -29,7 +29,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("otherPublic"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -46,7 +46,7 @@ public class DirectoryHandlerTest extends TestCase {
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"))
                 .setAutoIndex(true);
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -60,7 +60,7 @@ public class DirectoryHandlerTest extends TestCase {
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"))
                 .setAutoIndex(true);
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -73,7 +73,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/brians/index.html", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -84,7 +84,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/brians", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -99,7 +99,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/brians/ping-pong-equipment/lighting", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -113,7 +113,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/games", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -128,7 +128,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/brians/ping-pong-equipment", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -144,7 +144,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/brians", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -159,7 +159,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/images/hong-kong.jpg", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -172,7 +172,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/geoffs-sweet-site/samurai-champloo/board.gif", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -185,7 +185,7 @@ public class DirectoryHandlerTest extends TestCase {
         Request request = new Request("/", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("src"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 

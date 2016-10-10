@@ -35,7 +35,7 @@ public class WrapServeStaticFiles implements Middleware {
     }
 
     @Override
-    public Handler myApply(Handler handler) {
+    public Handler apply(Handler handler) {
         Handler applied = (request) -> {
             File currentFile = new File(staticPath, request.getPath());
             if (currentFile.exists()) {

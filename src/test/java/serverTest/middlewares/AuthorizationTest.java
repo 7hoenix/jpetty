@@ -19,7 +19,7 @@ public class AuthorizationTest extends TestCase {
                 .setPassword("taco")
                 .setRealm("jphoenx")
                 .setProtectedRoutes(new String[] {"/logs"});
-        Handler authHandler = auth.myApply(basicHandler);
+        Handler authHandler = auth.apply(basicHandler);
 
         Response response = authHandler.handle(request);
 
@@ -37,7 +37,7 @@ public class AuthorizationTest extends TestCase {
                 .setPassword("hunter2")
                 .setRealm("jphoenx")
                 .setProtectedRoutes(new String[] {"/"});
-        Handler authHandler = auth.myApply(basicHandler);
+        Handler authHandler = auth.apply(basicHandler);
 
         Response response = authHandler.handle(request);
 

@@ -12,7 +12,7 @@ public class ApplicationBuilder {
     }
 
     public ApplicationBuilder use(Middleware middleware) {
-        this.application = middleware.myApply(application);
+        this.application = middleware.apply(application);
         return this;
     }
 

@@ -19,7 +19,7 @@ public class LogTest extends TestCase {
         log.add("HTTP/1.1 HEAD /requests");
         Middleware logger = new WrapRequestLog()
                 .setLog(log);
-        Handler logHandler = logger.myApply(new BasicHandler());
+        Handler logHandler = logger.apply(new BasicHandler());
 
 
         Response response = logHandler.handle(request);

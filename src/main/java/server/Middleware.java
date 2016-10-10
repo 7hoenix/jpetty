@@ -1,5 +1,5 @@
 package server;
 
 public interface Middleware {
-    Handler myApply(Handler handler);
+    Handler apply(Handler handler);
 }

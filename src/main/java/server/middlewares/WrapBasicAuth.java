@@ -43,7 +43,7 @@ public class WrapBasicAuth implements Middleware {
     }
 
     @Override
-    public Handler myApply(Handler h) {
+    public Handler apply(Handler h) {
         return (request) -> {
             if (isAuthorized(request)) {
                 return h.handle(request);

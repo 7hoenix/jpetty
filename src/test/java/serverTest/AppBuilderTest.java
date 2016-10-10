@@ -34,14 +34,14 @@ public class AppBuilderTest extends TestCase {
 
     public class MockMiddleware implements Middleware {
         @Override
-        public Handler myApply(Handler handler) {
+        public Handler apply(Handler handler) {
             return new MockHandler(160);
         }
     }
 
     public class MockMiddleware2 implements Middleware {
         @Override
-        public Handler myApply(Handler handler) {
+        public Handler apply(Handler handler) {
             return new MockHandler(260);
         }
     }

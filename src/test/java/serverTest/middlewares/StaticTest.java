@@ -22,7 +22,7 @@ public class StaticTest extends TestCase {
         Request request = new Request("/" + tempPath.getFileName(), "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(tempDir);
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -38,7 +38,7 @@ public class StaticTest extends TestCase {
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(tempDir)
                 .setAutoIndex(true);
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
 
@@ -53,7 +53,7 @@ public class StaticTest extends TestCase {
         Request purgeRequest = new Request("/thing.txt", "PURGE");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("otherPublic"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response getResponse = handler.handle(getRequest);
         Response putResponse = handler.handle(putRequest);
@@ -68,7 +68,7 @@ public class StaticTest extends TestCase {
         Request getRequest = new Request("/patch-content.txt", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
                 .setPublicDirectory(new File("public"));
-        Handler handler = staticFileMiddleware.myApply(new BasicHandler());
+        Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response getResponse1 = handler.handle(getRequest);
 

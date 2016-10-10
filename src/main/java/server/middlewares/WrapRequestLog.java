@@ -22,7 +22,7 @@ public class WrapRequestLog implements Middleware {
     }
 
     @Override
-    public Handler myApply (Handler h) {
+    public Handler apply(Handler h) {
         return (request) -> {
             if (request.getPath().contains("/logs")) {
                 return getRecent();
