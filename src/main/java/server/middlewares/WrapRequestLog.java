@@ -27,6 +27,7 @@ public class WrapRequestLog implements Middleware {
             if (request.getPath().contains("/logs")) {
                 return getRecent();
             } else {
+               log.add(request.getLine());
                return h.handle(request);
             }
         };

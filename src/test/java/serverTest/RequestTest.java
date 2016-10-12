@@ -129,4 +129,15 @@ public class RequestTest extends TestCase {
 
         assertEquals("cake", request.getBody());
     }
+
+    public void test_it_returns_a_map_of_its_headers() throws Exception {
+        Request request = new Request("/", "GET")
+                .setHeader("Content-Length", "5")
+                .setHeader("Content-Type", "text/html");
+
+        Map<String, String> headers = request.getHeaders();
+
+        assertEquals("5", headers.get("Content-Length"));
+        assertEquals("text/html", headers.get("Content-Type"));
+    }
 }
