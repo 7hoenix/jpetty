@@ -22,7 +22,6 @@ public class Request {
         this.body = body;
     }
 
-
     public String getPath() {
         return path;
     }
@@ -51,6 +50,11 @@ public class Request {
 
     public String getHeader(String fieldName) {
         return headers.get(fieldName);
+    }
+
+    public Map<String, String> getHeaders() {
+        Map<String, String> headers = new HashMap<>(this.headers);
+        return headers;
     }
 
     public Request setParam(String paramName, String paramValue) {
