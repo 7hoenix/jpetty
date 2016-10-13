@@ -17,7 +17,7 @@ public class WrapRequestLog implements Middleware {
         this.log = log;
     }
 
-    public WrapRequestLog setLog(ArrayList<String> log) {
+    public WrapRequestLog withLog(ArrayList<String> log) {
         return new WrapRequestLog(log);
     }
 

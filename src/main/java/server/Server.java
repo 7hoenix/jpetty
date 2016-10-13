@@ -12,7 +12,7 @@ public class Server {
     }
 
     public void run() throws IOException {
-        ExecutorService fixedPool = Executors.newFixedThreadPool(1);
+        ExecutorService fixedPool = Executors.newFixedThreadPool(20);
         while (serverConnection.isListening() == true) {
             Connection connection = serverConnection.acceptConnection();
             fixedPool.submit(connection);

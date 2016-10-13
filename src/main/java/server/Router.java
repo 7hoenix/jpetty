@@ -2,19 +2,14 @@ package server;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Router implements Handler {
-    private Route[] routes;
+    private List<Route> routes;
 
-    public Router() {
-        this(new Route[0]);
-    }
+    public Router() { this(new ArrayList<>()); }
 
-    private Router(Route[] routes) {
-        this.routes = routes;
-    }
+    private Router(List<Route> routes) { this.routes = routes; }
 
     @Override
     public Response handle(Request request) throws IOException {
@@ -53,11 +48,9 @@ public class Router implements Handler {
     }
 
     public Router setRoute(String path, String action, Handler handler) {
-        Route route = new Route().setPath(path).setAction(action).setHandler(handler);
-        List<Route> updatedRoutes = Arrays.asList(routes);
-        List<Route> tempList = new ArrayList<>(updatedRoutes);
-        tempList.add(route);
-        Route[] tempArray = new Route[tempList.size()];
-        return new Router(tempList.toArray(tempArray));
+        Route route = new Route().withPath(path).withAction(action).withHandler(handler);
+        List<Route> updatedRoutes = new ArrayList<>(this.routes);
+        updatedRoutes.add(route);
+        return new Router(updatedRoutes);
     }
 }

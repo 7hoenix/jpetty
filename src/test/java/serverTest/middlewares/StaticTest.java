@@ -21,7 +21,7 @@ public class StaticTest extends TestCase {
         Files.write(tempPath, "Important Content".getBytes());
         Request request = new Request("/" + tempPath.getFileName(), "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
-                .setPublicDirectory(tempDir);
+                .withPublicDirectory(tempDir);
         Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
@@ -36,8 +36,8 @@ public class StaticTest extends TestCase {
         File tempFile2 = File.createTempFile("file", ".jpeg", tempDir);
         Request request = new Request("/", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
-                .setPublicDirectory(tempDir)
-                .setAutoIndex(true);
+                .withPublicDirectory(tempDir)
+                .withAutoIndex(true);
         Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response response = handler.handle(request);
@@ -52,7 +52,7 @@ public class StaticTest extends TestCase {
         Request putRequest = new Request("/thing.txt", "PUT");
         Request purgeRequest = new Request("/thing.txt", "PURGE");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
-                .setPublicDirectory(new File("otherPublic"));
+                .withPublicDirectory(new File("otherPublic"));
         Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response getResponse = handler.handle(getRequest);
@@ -67,7 +67,7 @@ public class StaticTest extends TestCase {
     public void test_it_changes_the_content_if_passed_a_sha_that_matches_the_current_file_contents() throws Exception {
         Request getRequest = new Request("/patch-content.txt", "GET");
         Middleware staticFileMiddleware = new WrapServeStaticFiles()
-                .setPublicDirectory(new File("public"));
+                .withPublicDirectory(new File("public"));
         Handler handler = staticFileMiddleware.apply(new BasicHandler());
 
         Response getResponse1 = handler.handle(getRequest);

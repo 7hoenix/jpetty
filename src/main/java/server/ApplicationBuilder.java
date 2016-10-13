@@ -7,7 +7,7 @@ public class ApplicationBuilder {
         this.application = application;
     }
 
-    public static ApplicationBuilder setHandler(Handler application) {
+    public static ApplicationBuilder forHandler(Handler application) {
         return new ApplicationBuilder(application);
     }
 

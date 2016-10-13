@@ -26,19 +26,19 @@ public class WrapBasicAuth implements Middleware {
         this.protectedRoutes = protectedRoutes;
     }
 
-    public WrapBasicAuth setUserName(String userName) {
+    public WrapBasicAuth withUserName(String userName) {
         return new WrapBasicAuth(userName, this.password, this.realm, this.protectedRoutes);
     }
 
-    public WrapBasicAuth setPassword(String password) {
+    public WrapBasicAuth withPassword(String password) {
         return new WrapBasicAuth(this.userName, password, this.realm, this.protectedRoutes);
     }
 
-    public WrapBasicAuth setRealm(String realm) {
+    public WrapBasicAuth withRealm(String realm) {
         return new WrapBasicAuth(this.userName, this.password, realm, this.protectedRoutes);
     }
 
-    public WrapBasicAuth setProtectedRoutes(String[] protectedRoutes) {
+    public WrapBasicAuth withProtectedRoutes(String[] protectedRoutes) {
         return new WrapBasicAuth(this.userName, this.password, this.realm, protectedRoutes);
     }
 

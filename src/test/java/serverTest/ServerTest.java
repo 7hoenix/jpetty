@@ -7,9 +7,8 @@ import server.Server;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
 
-public class HTTPServerTest extends TestCase {
+public class ServerTest extends TestCase {
     public void test_it_writes_to_the_output_stream() throws Exception {
         Connection connection = new OtherConnection(new MockSocket(new ByteArrayInputStream("".getBytes()), new ByteArrayOutputStream()));
         MockServerSocket serverSocket = new MockServerSocket(connection, 1);

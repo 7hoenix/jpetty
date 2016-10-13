@@ -15,10 +15,10 @@ public class AuthorizationTest extends TestCase {
         Request request = new Request("/logs", "GET");
         Handler basicHandler = new MockHandler(200);
         Middleware auth = new WrapBasicAuth()
-                .setUserName("passwordIsTaco")
-                .setPassword("taco")
-                .setRealm("jphoenx")
-                .setProtectedRoutes(new String[] {"/logs"});
+                .withUserName("passwordIsTaco")
+                .withPassword("taco")
+                .withRealm("jphoenx")
+                .withProtectedRoutes(new String[] {"/logs"});
         Handler authHandler = auth.apply(basicHandler);
 
         Response response = authHandler.handle(request);
@@ -33,10 +33,10 @@ public class AuthorizationTest extends TestCase {
                 .setHeader("Authorization", "basic " + encoded);
         Handler basicHandler = new MockHandler(200);
         Middleware auth = new WrapBasicAuth()
-                .setUserName("admin")
-                .setPassword("hunter2")
-                .setRealm("jphoenx")
-                .setProtectedRoutes(new String[] {"/"});
+                .withUserName("admin")
+                .withPassword("hunter2")
+                .withRealm("jphoenx")
+                .withProtectedRoutes(new String[] {"/"});
         Handler authHandler = auth.apply(basicHandler);
 
         Response response = authHandler.handle(request);

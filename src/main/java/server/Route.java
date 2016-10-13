@@ -17,15 +17,15 @@ public class Route {
         this.handler = handler;
     }
 
-    public Route setPath(String path) {
+    public Route withPath(String path) {
         return new Route(path, this.action, this.handler);
     }
 
-    public Route setAction(String action) {
+    public Route withAction(String action) {
         return new Route(this.path, action, this.handler);
     }
 
-    public Route setHandler(Handler handler) {
+    public Route withHandler(Handler handler) {
         return new Route(this.path, this.action, handler);
     }
 

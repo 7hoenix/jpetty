@@ -26,11 +26,11 @@ public class WrapServeStaticFiles implements Middleware {
         this.autoIndex = autoIndex;
     }
 
-    public WrapServeStaticFiles setPublicDirectory(File staticPath) {
+    public WrapServeStaticFiles withPublicDirectory(File staticPath) {
         return new WrapServeStaticFiles(staticPath, this.autoIndex);
     }
 
-    public WrapServeStaticFiles setAutoIndex(boolean autoIndex) {
+    public WrapServeStaticFiles withAutoIndex(boolean autoIndex) {
         return new WrapServeStaticFiles(this.staticPath, autoIndex);
     }
 
